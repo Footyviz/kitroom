@@ -14,9 +14,9 @@
     "@footyviz/components": "*"
   },
   "devDependencies": {
-    "@storybook/web-components": "^8.4.7",
-    "@storybook/web-components-vite": "^8.4.7",
-    "storybook": "^8.4.7",
-    "vite": "^5.4.0"
+    "@storybook/web-components": "^10.3.5",
+    "@storybook/web-components-vite": "^10.3.5",
+    "storybook": "^10.3.5",
+    "vite": "^8.0.10"
   }
 }
