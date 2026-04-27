@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" font-family="Geist, Inter, system-ui, sans-serif">
+  <text x="0" y="30" font-size="28" font-weight="600" letter-spacing="-0.7" fill="currentColor">FootyViz</text>
+  <path d="M 138 24 Q 146 10, 158 14" stroke="#C6F24E" stroke-width="1.75" fill="none" stroke-linecap="round"></path>
+  <circle cx="158" cy="14" r="2.4" fill="#C6F24E"></circle>
+</svg>
