@@ -1,0 +1,29 @@
+/* ============================================================
+   FootyViz Design System — Self-hosted fonts
+   ============================================================
+   Loads the Geist + Geist Mono variable fonts from this package.
+
+   This file is intended for in-monorepo consumers (Storybook,
+   future apps in this repo). It is NOT included in the npm
+   package's `files` whitelist, so external consumers will not
+   receive it. Those consumers should load Geist + Geist Mono
+   themselves — see README.md for the Google Fonts snippet.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist-VariableFont_wght.ttf') format('truetype-variations'),
+       url('../fonts/Geist-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('../fonts/GeistMono-VariableFont_wght.ttf') format('truetype-variations'),
+       url('../fonts/GeistMono-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
