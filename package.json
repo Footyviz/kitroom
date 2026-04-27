@@ -10,9 +10,14 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.31.0"
   }
 }

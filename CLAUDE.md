@@ -27,6 +27,8 @@ npm run storybook            # dev server, port 6006
 npm run build:storybook      # static build → packages/storybook/storybook-static/
 npm run build                # fans out to all workspaces (--if-present)
 npm pack -w <pkg> --dry-run  # check publish boundary
+npx changeset                # record a pending change (markdown in .changeset/)
+npm run version-packages     # consume changesets → bump versions + update CHANGELOGs
 ```
 
 `predev` / `prebuild` hooks in `@footyviz/storybook` build `@footyviz/components` first so its `dist/` exists when Storybook resolves the workspace dep. If you change components and want the new code in Storybook, restart `npm run storybook` (no HMR across the boundary yet).
@@ -69,10 +71,25 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 - `"files": [...]` on every package — npm only publishes paths listed there. We use this to keep dev assets (fonts, `fonts.css`) in the repo without shipping them.
 - `"private": true` on `@footyviz/tokens` and `@footyviz/storybook` — neither is intended to publish to the registry today (tokens may flip to public later).
 
+## Releasing & deploying
+
+**Changesets (versioning + CHANGELOG only — no publish wired today).**
+
+- Each meaningful change adds a markdown file under `.changeset/` via `npx changeset`. Commit the file with the change. Includes `@footyviz/components` and `@footyviz/tokens`; `@footyviz/storybook` is in the `ignore` list (it's an internal showcase, not a release artifact).
+- When ready to cut versions, run `npm run version-packages`. Changesets bumps `package.json` versions and writes `CHANGELOG.md` in each affected package, then deletes the consumed changesets. Commit and push.
+- Publishing to npm is intentionally not wired. To enable it later: flip a package's `private: true` to `false`, add a `release` script (`changeset publish`), add a `release.yml` workflow, and add `NPM_TOKEN` as a repo secret.
+
+**Storybook → GitHub Pages.**
+
+- `.github/workflows/deploy-storybook.yml` runs on every push to `main` (and `workflow_dispatch`). It builds Storybook with `STORYBOOK_BASE_PATH=/kitroom/` and force-pushes the static site to the `kitroom` branch as a single orphan commit (`force_orphan: true`, so the branch never accumulates history).
+- Pages is configured in repo Settings → Pages to serve from `kitroom` / `(root)`. Deployed URL: <https://footyviz.github.io/kitroom/>.
+- Subpath base path is wired through `viteFinal` in `packages/storybook/.storybook/main.ts` — only set when the `STORYBOOK_BASE_PATH` env var is present, so local `npm run storybook` is unaffected. To deploy under a different subpath (e.g. repo rename), change one env var in the workflow.
+
 ## What's been done (PR history)
 
 - [#1](https://github.com/Footyviz/kitroom/pull/1) — Initial monorepo scaffold + Storybook 10 + `<fv-button>` example.
 - [#2](https://github.com/Footyviz/kitroom/pull/2) — `@footyviz/tokens` package: tokens, fonts, brand SVGs, Foundations / Tokens story in Storybook.
+- [#3](https://github.com/Footyviz/kitroom/pull/3) — `CLAUDE.md` context doc.
 
 ## Known follow-ups (not yet done)
 
