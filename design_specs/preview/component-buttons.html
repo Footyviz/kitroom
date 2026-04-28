@@ -1,0 +1,152 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 15px;
+    border-radius:12px;
+    font-family:var(--font-sans);font-size:14px;font-weight:500;line-height:1;
+    cursor:pointer;white-space:nowrap;
+    border:1px solid #DDDAD0;
+    background:#FFFFFF;color:#1A1A18;
+    box-shadow:0 1px 0 rgba(0,0,0,.03);
+    transition:background .16s,border-color .16s,color .16s,transform .1s,box-shadow .16s;
+  }
+  .btn:active{transform:translateY(1px)}
+
+  /* Primary — ink black */
+  .btn-primary{background:#080807;color:#FAFAF7;border-color:#080807;box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(0,0,0,.18)}
+  .btn-primary:hover{background:#2E2D29;border-color:#2E2D29}
+
+  /* Cream — hat tan, the warm accent */
+  .btn-cream{background:#F1E4C3;color:#3A2A10;border-color:#E3D3A7;box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 1px 0 rgba(58,42,16,.08)}
+  .btn-cream:hover{background:#EBD9A8;border-color:#D9C688}
+
+  /* Secondary — white/card on light */
+  .btn-secondary{background:#FFFFFF;color:#1A1A18;border-color:#DDDAD0}
+  .btn-secondary:hover{background:#F4F3EE}
+
+  /* Outline */
+  .btn-outline{background:transparent;color:#1A1A18;border-color:#BDB9AC}
+  .btn-outline:hover{background:#FAFAF7}
+
+  /* Ghost */
+  .btn-ghost{background:transparent;color:#1A1A18;border-color:transparent}
+  .btn-ghost:hover{background:#F4F3EE;border-color:#EBE9E2}
+
+  /* Destructive — kept monochrome; just a thin negative border */
+  .btn-destructive{background:#FFFFFF;color:#8A1D0E;border-color:#E8BBB2}
+  .btn-destructive:hover{background:#FDF3F1;border-color:#D99B8F}
+
+  /* Sizes */
+  .btn-xs{padding:4px 8px;font-size:11px;border-radius:7px;gap:5px}
+  .btn-sm{padding:6px 11px;font-size:12px;border-radius:9px;gap:6px}
+  .btn-lg{padding:13px 20px;font-size:15px;border-radius:14px;gap:10px}
+  .btn-icon{padding:0;width:32px;height:32px;justify-content:center;border-radius:9px}
+  .btn-icon.btn-lg{width:42px;height:42px;border-radius:12px}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+  .btn svg{flex-shrink:0}
+
+  /* Split */
+  .split{display:inline-flex;border-radius:12px;overflow:hidden;border:1px solid #080807;background:#080807}
+  .split > .btn{border-radius:0;border:0;background:#080807;color:#FAFAF7;padding:9px 14px;box-shadow:none}
+  .split > .btn:hover{background:#1E1E1C;color:#FAFAF7}
+  .split > .btn + .btn{border-left:1px solid rgba(255,255,255,.18)}
+
+  /* Segmented */
+  .seg{display:inline-flex;padding:3px;background:#F4F3EE;border:1px solid #DDDAD0;border-radius:10px;gap:2px}
+  .seg > button{border:1px solid transparent;background:transparent;padding:5px 11px;font-size:12px;font-weight:500;border-radius:7px;color:#6B6860;cursor:pointer;font-family:var(--font-sans)}
+  .seg > button.on{background:#FFFFFF;color:#1A1A18;border-color:#EBE9E2;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+
+  .spin{width:12px;height:12px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:999px;animation:spin .9s linear infinite;opacity:.9}
+  @keyframes spin{to{transform:rotate(1turn)}}
+
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .stack-lbl{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-subtle);min-width:78px}
+  .divider{height:1px;background:var(--border-subtle);margin:2px 0}
+</style>
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui,-apple-system,Segoe UI,sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Buttons · monochrome + cream</div>
+
+  <!-- Hierarchy -->
+  <div class="row">
+    <span class="stack-lbl">Hierarchy</span>
+    <button class="btn btn-primary">Open match</button>
+    <button class="btn btn-cream"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3 19 12 5 21Z" fill="currentColor"/></svg>Watch live</button>
+    <button class="btn btn-secondary">Compare sides</button>
+    <button class="btn btn-outline">Save match</button>
+    <button class="btn btn-ghost">Dismiss</button>
+    <button class="btn btn-destructive"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>Remove</button>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Sizes -->
+  <div class="row">
+    <span class="stack-lbl">Sizes</span>
+    <button class="btn btn-primary btn-xs">XS</button>
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary btn-lg">Large</button>
+    <button class="btn btn-secondary btn-icon" title="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+    <button class="btn btn-secondary btn-icon btn-lg" title="Notify"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16V11a6 6 0 1 0-12 0v5l-2 3h16l-2-3Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
+  </div>
+  <div class="divider"></div>
+
+  <!-- States (primary) -->
+  <div class="row">
+    <span class="stack-lbl">Primary states</span>
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary" style="background:#2E2D29;border-color:#2E2D29">Hover</button>
+    <button class="btn btn-primary" style="background:#000;border-color:#000;transform:translateY(1px);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)">Pressed</button>
+    <button class="btn btn-primary" style="outline:3px solid rgba(26,26,24,.35);outline-offset:2px">Focus</button>
+    <button class="btn btn-primary" disabled>Disabled</button>
+    <button class="btn btn-primary"><span class="spin"></span>Loading…</button>
+  </div>
+
+  <div class="row">
+    <span class="stack-lbl">Cream states</span>
+    <button class="btn btn-cream">Default</button>
+    <button class="btn btn-cream" style="background:#EBD9A8;border-color:#D9C688">Hover</button>
+    <button class="btn btn-cream" style="background:#DEC88C;border-color:#C2AC6F;transform:translateY(1px);box-shadow:inset 0 2px 4px rgba(58,42,16,.18)">Pressed</button>
+    <button class="btn btn-cream" style="outline:3px solid rgba(227,211,167,.75);outline-offset:2px">Focus</button>
+    <button class="btn btn-cream" disabled>Disabled</button>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Patterns -->
+  <div class="row">
+    <span class="stack-lbl">Patterns</span>
+    <div class="split">
+      <button class="btn">Notify me</button>
+      <button class="btn" style="padding:9px 10px" title="Options"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    </div>
+    <div class="seg">
+      <button class="on">All</button>
+      <button>Live</button>
+      <button>Today</button>
+      <button>Upcoming</button>
+    </div>
+    <button class="btn btn-secondary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/></svg>Follow<span style="background:var(--neutral-150);color:var(--fg-muted);padding:1px 6px;border-radius:999px;font-size:11px;font-family:var(--font-mono);margin-left:2px;border:1px solid var(--border-subtle)">12.4k</span></button>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Dark surface demo -->
+  <div style="background:#080807;border-radius:14px;padding:16px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <span class="stack-lbl" style="color:#8F8B7E">On dark</span>
+    <button class="btn" style="background:#FAFAF7;color:#080807;border-color:#FAFAF7">Open match</button>
+    <button class="btn btn-cream">Watch live</button>
+    <button class="btn" style="background:transparent;color:#FAFAF7;border-color:#302F2B">Compare sides</button>
+    <button class="btn" style="background:transparent;color:#FAFAF7;border-color:transparent">Dismiss</button>
+    <div class="seg" style="background:#1E1E1C;border-color:#302F2B">
+      <button class="on" style="background:#302F2B;color:#FAFAF7;border-color:#40403B">Live</button>
+      <button style="color:#8F8B7E">Today</button>
+      <button style="color:#8F8B7E">Upcoming</button>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:var(--fg-muted);margin-top:4px;max-width:640px">Monochrome system — ink black for primary actions, cream tan (#F1E4C3, the hat) for the warm attention CTA. All buttons carry a 1px border on every side for edge definition. Destructive is a quiet outlined variant so it sits calmly beside siblings.</div>
+</div>
+</body></html>

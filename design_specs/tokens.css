@@ -7,6 +7,7 @@
    everywhere.
 
    Contents:
+     · Local font faces (Geist, Geist Mono)
      · Color tokens — neutrals, accent, brand, semantic, series
      · Surface tokens (bg / fg / border / shadow) — light + dark
      · Spacing scale (4px base)
@@ -16,18 +17,35 @@
      · Type tokens (families, weights, line-heights, tracking)
      · Type styles (.fv-*)
 
-   Note on fonts:
-     Type styles reference 'Geist' and 'Geist Mono' by name.
-     Loading those families is the consumer's responsibility:
-       · Inside this monorepo, also import '@footyviz/tokens/fonts.css'.
-       · External consumers should load Geist + Geist Mono via
-         Google Fonts (or self-host) — see README.md.
-
    Dark mode:
      · Default mode = light
      · `<html data-theme="dark">` forces dark
      · `<html data-theme="auto">` follows OS preference
    ============================================================ */
+
+/* ---------- FONTS ---------- */
+/* Geist – primary UI. Precise, technical, disappears. */
+/* Geist Mono – all numbers, stats, timestamps, coordinates. */
+/* Sans-serif only. No serif display face. */
+
+/* Brand-uploaded local fonts (variable, full weight axes). */
+@font-face {
+  font-family: 'Geist';
+  src: url('fonts/Geist-VariableFont_wght.ttf') format('truetype-variations'),
+       url('fonts/Geist-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('fonts/GeistMono-VariableFont_wght.ttf') format('truetype-variations'),
+       url('fonts/GeistMono-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ============================================================
    COLOR TOKENS — dual mode
@@ -58,11 +76,6 @@
   --accent-ink:   #1A1405;   /* text on accent */
   --accent-soft:  #F6E6B3;   /* hover tint on light */
   --accent-dim:   #9C7A1E;   /* text-sized accent on light */
-
-  /* ---------- COMPONENT-LEVEL ACCENTS ----------
-     Used by individual controls where the design calls for a hue
-     distinct from the brand straw. Add sparingly; prefer --accent. */
-  --toggle-on:    #E8FF5A;   /* signal lime — user-valued switches (notifications, favorites) */
 
   /* ---------- BRAND SUPPORTING ---------- */
   --brand-navy:   #1E2A44;   /* the net / hat band */
@@ -394,5 +407,9 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+h1 { @extend .fv-h1; }
+h2 { @extend .fv-h2; }
+h3 { @extend .fv-h3; }
 
 ::selection { background: var(--accent); color: var(--accent-ink); }

@@ -1,0 +1,75 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ToggleStories from './fv-toggle.stories';
+
+<Meta of={ToggleStories} />
+
+# fv-toggle
+
+A binary on/off control. Light-DOM, server-renderable, enhanced in
+`connectedCallback`. Use for user-valued switches (notifications,
+favorites, opt-ins) by default; use the `ink` variant for system or
+mode toggles (theme, audio).
+
+## Required HTML
+
+```html
+<fv-toggle aria-checked="false" data-variant="accent">
+  <span data-role="knob"></span>
+</fv-toggle>
+```
+
+The `<span data-role="knob">` child must be present in the server
+output — the component does not generate it. The component sets
+`role="switch"` and `tabindex` on first connection if the server
+omitted them.
+
+## Attributes
+
+| Attribute       | Required | Values                  | Effect                                 |
+|-----------------|----------|-------------------------|----------------------------------------|
+| `aria-checked`  | yes      | `true` `false`          | reflects on/off; toggled on user input |
+| `data-variant`  | no       | `accent` (default) `ink`| chooses on-state hue                   |
+| `data-size`     | no       | `lg`                    | swaps to 48×28 track / 24×24 knob      |
+| `aria-disabled` | no       | `true`                  | dims and ignores click / keyboard      |
+
+The component initializes `aria-checked="false"`, `role="switch"`,
+and `tabindex="0"` (or `-1` when disabled) if any are missing.
+
+## CSS custom properties
+
+None today. Hue is selected via `data-variant`, not via custom
+properties; per-instance dynamic colors aren't supported.
+
+## Tokens used
+
+| Token            | Where                                  |
+|------------------|----------------------------------------|
+| `--neutral-300`  | off-state track background             |
+| `--toggle-on`    | on-state, accent variant (signal lime) |
+| `--neutral-1000` | on-state, ink variant                  |
+| `--radius-full`  | track + knob radius                    |
+| `--dur-fast`     | transition duration                    |
+| `--ease`         | transition timing function             |
+| `--accent`       | `:focus-visible` outline               |
+
+## Events dispatched
+
+| Event    | When                                | Detail                |
+|----------|-------------------------------------|-----------------------|
+| `change` | After a user click / Space / Enter  | `{ checked: boolean }` |
+
+The `change` event bubbles. It does **not** fire when state is set
+programmatically by the server or another component.
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={ToggleStories.Default} />
+<Story of={ToggleStories.Checked} />
+<Story of={ToggleStories.Ink} />
+<Story of={ToggleStories.Large} />
+<Story of={ToggleStories.Disabled} />
+<Story of={ToggleStories.OnDark} />

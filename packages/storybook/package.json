@@ -12,11 +12,15 @@
   },
   "dependencies": {
     "@footyviz/components": "*",
+    "@footyviz/styles": "*",
     "@footyviz/tokens": "*"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
     "@storybook/web-components": "^10.3.5",
     "@storybook/web-components-vite": "^10.3.5",
+    "lit-html": "^3.2.0",
     "storybook": "^10.3.5",
     "vite": "^8.0.10"
   }

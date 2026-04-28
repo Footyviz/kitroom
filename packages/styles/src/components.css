@@ -1,0 +1,11 @@
+/* ============================================================
+   FootyViz Component Styles — global stylesheet
+   ============================================================
+   Single import surface for every <fv-*> component's styles.
+   Per ARCHITECTURE.md: components are light-DOM, so all of
+   their CSS lives here and targets the tag name + data-attrs.
+
+   Add new components by appending an @import below.
+   ============================================================ */
+
+@import './fv-toggle.css';
