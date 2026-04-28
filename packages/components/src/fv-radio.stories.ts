@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import './fv-radio.js';
 
 const meta: Meta = {
@@ -108,6 +108,63 @@ export const SelectingOneDeselectsSiblings: Story = {
     expect(radios[1]?.getAttribute('aria-checked')).toBe('true');
     expect(radios[2]?.getAttribute('aria-checked')).toBe('false');
     expect(lastValue).toBe('b');
+  },
+};
+
+export const CleansUpOnDisconnect: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="host">
+      <fv-radio data-group="cleanup-grp" data-value="x">
+        <span data-role="dot"></span>
+      </fv-radio>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
+    const radio = host.querySelector<HTMLElement>('fv-radio')!;
+
+    await userEvent.click(radio);
+    expect(radio.getAttribute('aria-checked')).toBe('true');
+
+    host.removeChild(radio);
+
+    const spy = fn();
+    document.addEventListener('change', spy);
+    radio.click();
+    expect(spy).not.toHaveBeenCalled();
+    document.removeEventListener('change', spy);
+  },
+};
+
+export const HandlesMissingDot: Story = {
+  render: (): TemplateResult => html`
+    <fv-radio data-group="missing-dot" data-value="x" data-testid="r"></fv-radio>
+  `,
+  play: async ({ canvasElement }) => {
+    // The dot child is documented as required, but the component
+    // must not crash if a server template forgets it.
+    const radio = canvasElement.querySelector<HTMLElement>('[data-testid="r"]')!;
+    await userEvent.click(radio);
+    expect(radio.getAttribute('aria-checked')).toBe('true');
+  },
+};
+
+export const HandlesMissingDataGroup: Story = {
+  render: (): TemplateResult => html`
+    <fv-radio data-value="standalone" data-testid="lone">
+      <span data-role="dot"></span>
+    </fv-radio>
+    <fv-radio data-value="other" data-testid="other">
+      <span data-role="dot"></span>
+    </fv-radio>
+  `,
+  play: async ({ canvasElement }) => {
+    // Without data-group, selecting a radio must not affect any peer.
+    const lone = canvasElement.querySelector<HTMLElement>('[data-testid="lone"]')!;
+    const other = canvasElement.querySelector<HTMLElement>('[data-testid="other"]')!;
+    await userEvent.click(lone);
+    expect(lone.getAttribute('aria-checked')).toBe('true');
+    expect(other.getAttribute('aria-checked')).toBe('false');
   },
 };
 

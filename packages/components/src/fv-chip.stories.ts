@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import './fv-chip.js';
 
 const meta: Meta = {
@@ -108,6 +108,93 @@ export const CloseDispatchesEvent: Story = {
 
     await userEvent.click(closeBtn);
     expect(lastValue).toBe('arsenal');
+  },
+};
+
+export const CloseEventBubbles: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="parent">
+      <fv-chip data-closable data-value="bubbles">
+        Filter
+        <button data-action="close" aria-label="Remove">${xIcon}</button>
+      </fv-chip>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const handler = fn();
+    document.body.addEventListener('close', handler);
+
+    const closeBtn = canvasElement.querySelector<HTMLButtonElement>(
+      '[data-action="close"]',
+    )!;
+    await userEvent.click(closeBtn);
+
+    expect(handler).toHaveBeenCalledOnce();
+    const event = handler.mock.calls[0]![0] as CustomEvent<{ value: string }>;
+    expect(event.detail).toEqual({ value: 'bubbles' });
+    expect(event.bubbles).toBe(true);
+
+    document.body.removeEventListener('close', handler);
+  },
+};
+
+export const NonClosableChipDoesNotDispatchClose: Story = {
+  render: (): TemplateResult => html`
+    <fv-chip data-testid="chip">Status</fv-chip>
+  `,
+  play: async ({ canvasElement }) => {
+    // A chip without a [data-action="close"] child must not throw at
+    // connect time and must not dispatch close on its own click.
+    const chip = canvasElement.querySelector<HTMLElement>('[data-testid="chip"]')!;
+    const spy = fn();
+    document.addEventListener('close', spy);
+    await userEvent.click(chip);
+    expect(spy).not.toHaveBeenCalled();
+    document.removeEventListener('close', spy);
+  },
+};
+
+export const ClosableWithoutCloseButtonDoesNotCrash: Story = {
+  render: (): TemplateResult => html`
+    <!-- Marked closable but the server forgot the close button.
+         The component must not throw — it just dispatches no close events. -->
+    <fv-chip data-closable data-value="orphan" data-testid="chip">No X here</fv-chip>
+  `,
+  play: async ({ canvasElement }) => {
+    const chip = canvasElement.querySelector<HTMLElement>('[data-testid="chip"]')!;
+    const spy = fn();
+    document.addEventListener('close', spy);
+    await userEvent.click(chip);
+    expect(spy).not.toHaveBeenCalled();
+    document.removeEventListener('close', spy);
+  },
+};
+
+export const CleansUpOnDisconnect: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="host">
+      <fv-chip data-closable data-value="cleanup">
+        Filter
+        <button data-action="close" aria-label="Remove">${xIcon}</button>
+      </fv-chip>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
+    const chip = host.querySelector<HTMLElement>('fv-chip')!;
+    const closeBtn = chip.querySelector<HTMLButtonElement>('[data-action="close"]')!;
+
+    // Sanity while connected.
+    let dispatched = 0;
+    chip.addEventListener('close', () => dispatched++);
+    await userEvent.click(closeBtn);
+    expect(dispatched).toBe(1);
+
+    // Disconnect; clicking the now-detached close button should not
+    // re-fire (the component's internal listener is removed).
+    host.removeChild(chip);
+    closeBtn.click();
+    expect(dispatched).toBe(1);
   },
 };
 
