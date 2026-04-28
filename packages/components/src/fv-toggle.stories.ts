@@ -135,6 +135,7 @@ export const TogglesOnClick: Story = {
   `,
   play: async ({ canvasElement }) => {
     const toggle = canvasElement.querySelector<HTMLElement>('fv-toggle')!;
+    // Render template omits aria-checked; the component must initialize it.
     expect(toggle.getAttribute('aria-checked')).toBe('false');
 
     let lastChange: { checked: boolean } | undefined;
@@ -142,10 +143,12 @@ export const TogglesOnClick: Story = {
       lastChange = (e as CustomEvent<{ checked: boolean }>).detail;
     });
 
+    expect(toggle.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('true');
     expect(lastChange).toEqual({ checked: true });
 
+    expect(toggle.getAttribute('aria-checked')).not.toBe('false');
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('false');
     expect(lastChange).toEqual({ checked: false });
@@ -187,6 +190,7 @@ export const CleansUpOnDisconnect: Story = {
     const toggle = host.querySelector<HTMLElement>('fv-toggle')!;
 
     // Sanity: the click handler is wired while connected.
+    expect(toggle.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('true');
 
@@ -199,6 +203,7 @@ export const CleansUpOnDisconnect: Story = {
     document.addEventListener('change', spy);
     toggle.click();
     expect(spy).not.toHaveBeenCalled();
+    // aria-checked must remain "true" — the value carried over the disconnect.
     expect(toggle.getAttribute('aria-checked')).toBe('true');
     document.removeEventListener('change', spy);
   },
@@ -216,9 +221,15 @@ export const RespectsPresetAttributes: Story = {
 </fv-toggle>`),
   play: async ({ canvasElement }) => {
     // The component must not stomp server-supplied attribute values.
+    // Defaults on a fresh connect would be aria-checked="false" and
+    // tabindex="0"; the negative assertions document those defaults.
     const toggle = canvasElement.querySelector<HTMLElement>('[data-testid="t"]')!;
+    expect(toggle.getAttribute('aria-checked')).not.toBe('false');
     expect(toggle.getAttribute('aria-checked')).toBe('true');
+    expect(toggle.getAttribute('tabindex')).not.toBe('0');
     expect(toggle.getAttribute('tabindex')).toBe('-1');
+    // role isn't on the render template, so this also proves the
+    // component populated it on connect.
     expect(toggle.getAttribute('role')).toBe('switch');
   },
 };
@@ -234,6 +245,7 @@ export const HandlesExtraChildren: Story = {
   `,
   play: async ({ canvasElement }) => {
     const toggle = canvasElement.querySelector<HTMLElement>('[data-testid="t"]')!;
+    expect(toggle.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('true');
   },
@@ -250,6 +262,7 @@ export const SurvivesHtmxSwap: Story = {
 
     // Initial instance is enhanced and interactive.
     let toggle = container.querySelector<HTMLElement>('fv-toggle')!;
+    expect(toggle.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('true');
 
@@ -259,9 +272,10 @@ export const SurvivesHtmxSwap: Story = {
 
     // The swapped-in instance should auto-upgrade and behave correctly.
     toggle = container.querySelector<HTMLElement>('fv-toggle')!;
+    // data-variant came from the swap-in HTML; assert it survived parsing.
     expect(toggle.dataset.variant).toBe('ink');
-    expect(toggle.getAttribute('aria-checked')).toBe('true');
-
+    // The meaningful proof that the new instance was upgraded: clicking it
+    // now flips aria-checked from "true" → "false".
     await userEvent.click(toggle);
     expect(toggle.getAttribute('aria-checked')).toBe('false');
   },

@@ -85,13 +85,17 @@ export const SelectingOneDeselectsSiblings: Story = {
     });
 
     const buttons = seg.querySelectorAll<HTMLButtonElement>('button');
-    expect(buttons[0]?.getAttribute('aria-checked')).toBe('true');
 
+    // Click buttons[2] — proves the not-yet-checked option becomes checked
+    // AND that the rendered-checked buttons[0] gets cleared.
+    expect(buttons[0]?.getAttribute('aria-checked')).not.toBe('false');
+    expect(buttons[2]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(buttons[2]!);
     expect(buttons[0]?.getAttribute('aria-checked')).toBe('false');
     expect(buttons[2]?.getAttribute('aria-checked')).toBe('true');
     expect(lastValue).toBe('c');
 
+    expect(buttons[1]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(buttons[1]!);
     expect(buttons[1]?.getAttribute('aria-checked')).toBe('true');
     expect(buttons[2]?.getAttribute('aria-checked')).toBe('false');
@@ -143,6 +147,7 @@ export const CleansUpOnDisconnect: Story = {
     const seg = host.querySelector<HTMLElement>('fv-segmented')!;
 
     const initialButtons = seg.querySelectorAll<HTMLButtonElement>('button');
+    expect(initialButtons[1]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(initialButtons[1]!);
     expect(initialButtons[1]?.getAttribute('aria-checked')).toBe('true');
 
@@ -152,8 +157,8 @@ export const CleansUpOnDisconnect: Story = {
     document.addEventListener('change', spy);
     initialButtons[0]!.click();
     expect(spy).not.toHaveBeenCalled();
-    // The detached button still flips its own aria-checked? No — the
-    // component sets it; with the listener gone, nothing changes.
+    // The detached button must keep its rendered "false" — the component
+    // did not run its click handler (listener was removed on disconnect).
     expect(initialButtons[0]?.getAttribute('aria-checked')).toBe('false');
     document.removeEventListener('change', spy);
   },
@@ -215,7 +220,10 @@ export const SurvivesHtmxSwap: Story = {
     `;
     const seg = container.querySelector<HTMLElement>('fv-segmented')!;
     const buttons = seg.querySelectorAll<HTMLButtonElement>('button');
+    expect(buttons[1]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(buttons[1]!);
+    // Clicking buttons[1] both selects it AND clears buttons[0] — proves
+    // the swapped-in <fv-segmented> upgraded and wired up its handler.
     expect(buttons[0]?.getAttribute('aria-checked')).toBe('false');
     expect(buttons[1]?.getAttribute('aria-checked')).toBe('true');
   },

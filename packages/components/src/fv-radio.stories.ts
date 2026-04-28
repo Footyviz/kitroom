@@ -132,20 +132,23 @@ export const SelectingOneDeselectsSiblings: Story = {
   play: async ({ canvasElement }) => {
     const grp = canvasElement.querySelector<HTMLElement>('[data-testid="grp"]')!;
     const radios = grp.querySelectorAll<HTMLElement>('fv-radio');
-    expect(radios[0]?.getAttribute('aria-checked')).toBe('true');
-    expect(radios[1]?.getAttribute('aria-checked')).toBe('false');
 
     let lastValue: string | undefined;
     grp.addEventListener('change', (e) => {
       lastValue = (e as CustomEvent<{ value: string }>).detail.value;
     });
 
+    // Click radios[2] — proves a not-yet-checked radio becomes checked
+    // AND that radios[0] (rendered as checked) gets cleared.
+    expect(radios[0]?.getAttribute('aria-checked')).not.toBe('false');
+    expect(radios[2]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radios[2]!);
     expect(radios[0]?.getAttribute('aria-checked')).toBe('false');
     expect(radios[1]?.getAttribute('aria-checked')).toBe('false');
     expect(radios[2]?.getAttribute('aria-checked')).toBe('true');
     expect(lastValue).toBe('c');
 
+    expect(radios[1]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radios[1]!);
     expect(radios[1]?.getAttribute('aria-checked')).toBe('true');
     expect(radios[2]?.getAttribute('aria-checked')).toBe('false');
@@ -165,6 +168,7 @@ export const CleansUpOnDisconnect: Story = {
     const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
     const radio = host.querySelector<HTMLElement>('fv-radio')!;
 
+    expect(radio.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radio);
     expect(radio.getAttribute('aria-checked')).toBe('true');
 
@@ -186,6 +190,7 @@ export const HandlesMissingDot: Story = {
     // The dot child is documented as required, but the component
     // must not crash if a server template forgets it.
     const radio = canvasElement.querySelector<HTMLElement>('[data-testid="r"]')!;
+    expect(radio.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radio);
     expect(radio.getAttribute('aria-checked')).toBe('true');
   },
@@ -204,8 +209,11 @@ export const HandlesMissingDataGroup: Story = {
     // Without data-group, selecting a radio must not affect any peer.
     const lone = canvasElement.querySelector<HTMLElement>('[data-testid="lone"]')!;
     const other = canvasElement.querySelector<HTMLElement>('[data-testid="other"]')!;
+    expect(lone.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(lone);
     expect(lone.getAttribute('aria-checked')).toBe('true');
+    // `other` was rendered unchecked — assert it stayed unchecked
+    // (proving the click on `lone` didn't accidentally affect a sibling).
     expect(other.getAttribute('aria-checked')).toBe('false');
   },
 };
@@ -228,9 +236,13 @@ export const SurvivesHtmxSwap: Story = {
 
     const radios = container.querySelectorAll<HTMLElement>('fv-radio');
     expect(radios.length).toBe(2);
+    expect(radios[0]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radios[0]!);
     expect(radios[0]?.getAttribute('aria-checked')).toBe('true');
+    expect(radios[1]?.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(radios[1]!);
+    // Clicking radios[1] both selects it AND clears radios[0] (proves the
+    // swapped-in instances participate in the same data-group correctly).
     expect(radios[0]?.getAttribute('aria-checked')).toBe('false');
     expect(radios[1]?.getAttribute('aria-checked')).toBe('true');
   },

@@ -236,6 +236,7 @@ export const CleansUpOnDisconnect: Story = {
     // Sanity while connected.
     let dispatched = 0;
     chip.addEventListener('close', () => dispatched++);
+    expect(dispatched).toBe(0);
     await userEvent.click(closeBtn);
     expect(dispatched).toBe(1);
 
@@ -243,6 +244,8 @@ export const CleansUpOnDisconnect: Story = {
     // re-fire (the component's internal listener is removed).
     host.removeChild(chip);
     closeBtn.click();
+    // Counter must be UNCHANGED — proves disconnectedCallback removed
+    // the click listener on the close button.
     expect(dispatched).toBe(1);
   },
 };
@@ -270,6 +273,7 @@ export const SurvivesHtmxSwap: Story = {
     chip.addEventListener('close', (e) => {
       lastValue = (e as CustomEvent<{ value: string }>).detail.value;
     });
+    expect(lastValue).toBeUndefined();
     await userEvent.click(closeBtn);
     expect(lastValue).toBe('swapped');
   },

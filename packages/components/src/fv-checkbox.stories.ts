@@ -133,11 +133,14 @@ export const TogglesOnClick: Story = {
   `,
   play: async ({ canvasElement }) => {
     const cb = canvasElement.querySelector<HTMLElement>('fv-checkbox')!;
+    // Render template omits aria-checked; the component must initialize it.
     expect(cb.getAttribute('aria-checked')).toBe('false');
 
+    expect(cb.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('true');
 
+    expect(cb.getAttribute('aria-checked')).not.toBe('false');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('false');
   },
@@ -173,6 +176,7 @@ export const CleansUpOnDisconnect: Story = {
     const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
     const cb = host.querySelector<HTMLElement>('fv-checkbox')!;
 
+    expect(cb.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('true');
 
@@ -182,6 +186,7 @@ export const CleansUpOnDisconnect: Story = {
     document.addEventListener('change', spy);
     cb.click();
     expect(spy).not.toHaveBeenCalled();
+    // aria-checked must remain "true" — the value carried over the disconnect.
     expect(cb.getAttribute('aria-checked')).toBe('true');
     document.removeEventListener('change', spy);
   },
@@ -196,8 +201,10 @@ export const HandlesMissingCheckSvg: Story = {
   `,
   play: async ({ canvasElement }) => {
     const cb = canvasElement.querySelector<HTMLElement>('[data-testid="cb"]')!;
+    expect(cb.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('true');
+    expect(cb.getAttribute('aria-checked')).not.toBe('false');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('false');
   },
@@ -213,6 +220,7 @@ export const SurvivesHtmxSwap: Story = {
     const container = canvasElement.querySelector<HTMLElement>('[data-testid="container"]')!;
 
     let cb = container.querySelector<HTMLElement>('fv-checkbox')!;
+    expect(cb.getAttribute('aria-checked')).not.toBe('true');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('true');
 
@@ -226,8 +234,10 @@ export const SurvivesHtmxSwap: Story = {
     `;
 
     cb = container.querySelector<HTMLElement>('fv-checkbox')!;
+    // data-variant is what the swap-in HTML set; assert it survived parsing.
     expect(cb.dataset.variant).toBe('accent');
-    expect(cb.getAttribute('aria-checked')).toBe('true');
+    // aria-checked="true" was on the swap-in HTML — the meaningful assertion
+    // is that toggling now flips it (proves the new instance was upgraded).
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('false');
   },

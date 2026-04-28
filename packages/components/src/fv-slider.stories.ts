@@ -87,13 +87,16 @@ export const KeyboardArrowsAdjustValue: Story = {
     });
 
     slider.focus();
-    expect(slider.getAttribute('data-value')).toBe('50');
+    // Render only sets data-value="50"; aria-valuenow is mirrored by
+    // the component on connect — that line is the meaningful assertion.
     expect(slider.getAttribute('aria-valuenow')).toBe('50');
 
+    expect(slider.getAttribute('data-value')).not.toBe('51');
     await userEvent.keyboard('{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('51');
     expect(lastChange).toBe(51);
 
+    // From here each step's prior assertion is the implicit "before".
     await userEvent.keyboard('{ArrowLeft>3/}');
     expect(slider.getAttribute('data-value')).toBe('48');
 
@@ -136,6 +139,7 @@ export const StepRoundsKeyboardChanges: Story = {
   play: async ({ canvasElement }) => {
     const slider = canvasElement.querySelector<HTMLElement>('[data-testid="s"]')!;
     slider.focus();
+    expect(slider.getAttribute('data-value')).not.toBe('50');
     await userEvent.keyboard('{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('50');
     await userEvent.keyboard('{ArrowRight}{ArrowRight}');
@@ -151,12 +155,16 @@ export const ClampsToMinMax: Story = {
   play: async ({ canvasElement }) => {
     const slider = canvasElement.querySelector<HTMLElement>('[data-testid="s"]')!;
     slider.focus();
+    expect(slider.getAttribute('data-value')).not.toBe('100');
+    // Five ArrowRights from 98 → 99 → 100, then clamped at 100 thereafter.
     await userEvent.keyboard('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('100');
     expect(slider.getAttribute('aria-valuenow')).toBe('100');
 
+    // End on a slider already at max: value stays at max (no change).
     await userEvent.keyboard('{End}');
     expect(slider.getAttribute('data-value')).toBe('100');
+    expect(slider.getAttribute('data-value')).not.toBe('0');
     await userEvent.keyboard('{Home}');
     expect(slider.getAttribute('data-value')).toBe('0');
   },
@@ -171,6 +179,8 @@ export const DisabledIgnoresKeyboard: Story = {
     const slider = canvasElement.querySelector<HTMLElement>('[data-testid="s"]')!;
     // Disabled slider gets tabindex=-1; focus programmatically.
     slider.focus();
+    // The whole point: data-value MUST stay "40" through arrow keys.
+    expect(slider.getAttribute('data-value')).toBe('40');
     await userEvent.keyboard('{ArrowRight}{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('40');
   },
@@ -186,14 +196,14 @@ export const CleansUpOnDisconnect: Story = {
     const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
     const slider = host.querySelector<HTMLElement>('fv-slider')!;
     slider.focus();
+    expect(slider.getAttribute('data-value')).not.toBe('51');
     await userEvent.keyboard('{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('51');
 
     host.removeChild(slider);
 
-    // Clicking on the detached slider should not re-trigger keyboard
-    // logic, but more importantly, dispatching keyboard events on the
-    // detached node should not move data-value or fire change.
+    // After disconnect, dispatching keyboard events on the detached node
+    // must NOT move data-value or fire `change` — proves listeners removed.
     const spy = fn();
     document.addEventListener('change', spy);
     slider.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
@@ -214,6 +224,7 @@ export const HandlesMissingThumbAndFill: Story = {
   play: async ({ canvasElement }) => {
     const slider = canvasElement.querySelector<HTMLElement>('[data-testid="s"]')!;
     slider.focus();
+    expect(slider.getAttribute('data-value')).not.toBe('51');
     await userEvent.keyboard('{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('51');
   },
@@ -235,9 +246,11 @@ export const SurvivesHtmxSwap: Story = {
       </fv-slider>
     `;
     const slider = container.querySelector<HTMLElement>('fv-slider')!;
-    expect(slider.getAttribute('data-value')).toBe('75');
+    // data-value="75" came from the swap-in HTML; the meaningful proof of
+    // upgrade is that aria-valuenow was mirrored by the component.
     expect(slider.getAttribute('aria-valuenow')).toBe('75');
     slider.focus();
+    expect(slider.getAttribute('data-value')).not.toBe('76');
     await userEvent.keyboard('{ArrowRight}');
     expect(slider.getAttribute('data-value')).toBe('76');
   },

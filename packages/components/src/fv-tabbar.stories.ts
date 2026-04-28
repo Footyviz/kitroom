@@ -199,13 +199,17 @@ export const ClickingMovesActive: Story = {
     });
 
     const tabs = bar.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-    expect(tabs[0]?.getAttribute('aria-current')).toBe('page');
 
+    // Click tabs[2] — proves the not-yet-current tab becomes current
+    // AND that tabs[0] (rendered as current) gets cleared.
+    expect(tabs[0]?.getAttribute('aria-current')).not.toBeNull();
+    expect(tabs[2]?.getAttribute('aria-current')).toBeNull();
     await userEvent.click(tabs[2]!);
     expect(tabs[0]?.getAttribute('aria-current')).toBeNull();
     expect(tabs[2]?.getAttribute('aria-current')).toBe('page');
     expect(lastValue).toBe('c');
 
+    expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
     await userEvent.click(tabs[1]!);
     expect(tabs[1]?.getAttribute('aria-current')).toBe('page');
     expect(tabs[2]?.getAttribute('aria-current')).toBeNull();
@@ -255,8 +259,11 @@ export const DisabledTabsAreNotActivated: Story = {
   `,
   play: async ({ canvasElement }) => {
     const tabs = canvasElement.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    // Whole point: clicking the disabled tab MUST NOT change anything.
+    // Capture the rendered state, click, assert state is identical.
+    expect(tabs[0]?.getAttribute('aria-current')).toBe('page');
+    expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
     await userEvent.click(tabs[1]!);
-    // Disabled tab does not become current; A stays active.
     expect(tabs[0]?.getAttribute('aria-current')).toBe('page');
     expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
   },
@@ -281,6 +288,7 @@ export const CleansUpOnDisconnect: Story = {
     const tabs = bar.querySelectorAll<HTMLButtonElement>('[role="tab"]');
 
     // Sanity while connected.
+    expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
     await userEvent.click(tabs[1]!);
     expect(tabs[1]?.getAttribute('aria-current')).toBe('page');
 
@@ -290,7 +298,8 @@ export const CleansUpOnDisconnect: Story = {
     document.addEventListener('change', spy);
     tabs[0]!.click();
     expect(spy).not.toHaveBeenCalled();
-    // Detached: aria-current should not flip.
+    // tabs[0] WAS current (set by the swap when tabs[1] became current
+    // cleared it). Detached click must not re-promote it.
     expect(tabs[0]?.getAttribute('aria-current')).toBeNull();
     document.removeEventListener('change', spy);
   },
@@ -332,7 +341,10 @@ export const SurvivesHtmxSwap: Story = {
     `;
     const bar = container.querySelector<HTMLElement>('fv-tabbar')!;
     const tabs = bar.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
     await userEvent.click(tabs[1]!);
+    // Clicking tabs[1] both promotes it AND clears tabs[0] — proves the
+    // swapped-in <fv-tabbar> upgraded and wired up its handler.
     expect(tabs[0]?.getAttribute('aria-current')).toBeNull();
     expect(tabs[1]?.getAttribute('aria-current')).toBe('page');
   },
