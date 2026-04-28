@@ -1,0 +1,77 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as IconTextStories from './fv-icon-text.stories';
+
+<Meta of={IconTextStories} />
+
+# fv-icon-text
+
+A light-DOM layout primitive that composes an icon with a text label.
+Used as a building block for higher-level controls (tab bar, chips with
+icons, future composites). Pure CSS-driven layout — the component
+registers a class only so the global `:not(:defined)` FOUC rule applies.
+
+The component **does not** generate icons or labels. Both children are
+expected to be present in the server-rendered HTML.
+
+## Required HTML
+
+```html
+<fv-icon-text data-direction="column">
+  <svg data-role="icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+  <span data-role="label">Live</span>
+</fv-icon-text>
+```
+
+## Attributes
+
+| Attribute        | Required | Values                          | Effect                        |
+|------------------|----------|---------------------------------|-------------------------------|
+| `data-direction` | no       | `column` (default) `row`        | flex direction                |
+| `data-align`     | no       | `center` (default) `start` `end`| cross-axis alignment          |
+| `data-gap`       | no       | `xs` `sm` `md` `lg` (or unset)  | gap between icon and label    |
+
+## Roles for child elements
+
+| Selector              | Used by                        |
+|-----------------------|--------------------------------|
+| `[data-role="icon"]`  | the icon element (any tag)     |
+| `[data-role="label"]` | the label element (any tag)    |
+
+Both children are optional structurally — if either is missing, the
+component does nothing (no errors). Stylesheet rules just have nothing
+to target.
+
+## Tokens used
+
+| Token         | Where                            |
+|---------------|----------------------------------|
+| `--font-sans` | label font family                |
+| `--fw-medium` | label font weight                |
+
+Other geometry uses literal pixel values tuned for the tabbar use case;
+adjust per consumer with `data-gap` or per-instance CSS.
+
+## Events dispatched
+
+None.
+
+## Composition example
+
+```html
+<a href="/live" role="tab" data-value="live" aria-current="page">
+  <fv-icon-text data-direction="column">
+    <svg data-role="icon" …></svg>
+    <span data-role="label">Live</span>
+  </fv-icon-text>
+  <span data-role="indicator"></span>
+</a>
+```
+
+`fv-icon-text` and the parent `<a role="tab">` know nothing about each
+other. They upgrade independently.
+
+## Stories
+
+<Story of={IconTextStories.Default} />
+<Story of={IconTextStories.Horizontal} />
+<Story of={IconTextStories.Playground} />

@@ -8,6 +8,7 @@ type ToggleArgs = {
   disabled: boolean;
   variant: 'accent' | 'ink';
   size: 'default' | 'lg';
+  label: string;
 };
 
 const meta: Meta<ToggleArgs> = {
@@ -26,6 +27,7 @@ const meta: Meta<ToggleArgs> = {
       options: ['default', 'lg'],
       description: 'data-size',
     },
+    label: { control: 'text', description: 'Visible label (sibling of the toggle in the wrapping <label>)' },
   },
 };
 export default meta;
@@ -44,31 +46,31 @@ const src = (code: string) => ({
 // Build the literal HTML a server template would emit for the current args.
 // Used both as the snippet (via parameters.docs.source.transform) and as
 // the basis for the live render so the two never drift.
-const toggleHtml = (args: ToggleArgs, label: string): string => {
+const toggleHtml = (args: ToggleArgs): string => {
   const attrs: string[] = [`aria-checked="${args.checked ? 'true' : 'false'}"`];
   if (args.disabled) attrs.push('aria-disabled="true"');
   if (args.variant !== 'accent') attrs.push(`data-variant="${args.variant}"`);
   if (args.size !== 'default') attrs.push(`data-size="${args.size}"`);
   return `<label>
   <fv-toggle ${attrs.join(' ')}><span data-role="knob"></span></fv-toggle>
-  ${label}
+  ${args.label}
 </label>`;
 };
 
-// Per-story `parameters: dynamicSrc(label)` makes the "Show code" panel
-// re-derive its HTML whenever a control is tweaked.
-const dynamicSrc = (label: string) => ({
+// `parameters: dynamicSrc()` makes the "Show code" panel re-derive its
+// HTML whenever any control is tweaked.
+const dynamicSrc = () => ({
   docs: {
     source: {
       language: 'html' as const,
-      transform: (_: string, ctx: { args: ToggleArgs }) => toggleHtml(ctx.args, label),
+      transform: (_: string, ctx: { args: ToggleArgs }) => toggleHtml(ctx.args),
     },
   },
 });
 
 // Live lit-html render that mirrors toggleHtml (kept side-by-side so a
 // reviewer can verify they agree).
-const renderToggle = (args: ToggleArgs, label: string): TemplateResult => html`
+const renderToggle = (args: ToggleArgs): TemplateResult => html`
   <label style="${labelStyle}">
     <fv-toggle
       aria-checked="${args.checked ? 'true' : 'false'}"
@@ -76,38 +78,26 @@ const renderToggle = (args: ToggleArgs, label: string): TemplateResult => html`
       data-variant="${args.variant !== 'accent' ? args.variant : nothing}"
       data-size="${args.size !== 'default' ? args.size : nothing}"
     ><span data-role="knob"></span></fv-toggle>
-    ${label}
+    ${args.label}
   </label>
 `;
 
 export const Default: Story = {
-  args: { checked: false, disabled: false, variant: 'accent', size: 'default' },
-  render: (args) => renderToggle(args, 'Auto-play highlights'),
-  parameters: dynamicSrc('Auto-play highlights'),
-};
-
-export const Checked: Story = {
-  args: { checked: true, disabled: false, variant: 'accent', size: 'default' },
-  render: (args) => renderToggle(args, 'Notifications'),
-  parameters: dynamicSrc('Notifications'),
-};
-
-export const Ink: Story = {
-  args: { checked: true, disabled: false, variant: 'ink', size: 'default' },
-  render: (args) => renderToggle(args, 'Dark mode'),
-  parameters: dynamicSrc('Dark mode'),
-};
-
-export const Large: Story = {
-  args: { checked: true, disabled: false, variant: 'accent', size: 'lg' },
-  render: (args) => renderToggle(args, 'Live alerts'),
-  parameters: dynamicSrc('Live alerts'),
+  args: { checked: false, disabled: false, variant: 'accent', size: 'default', label: 'Auto-play highlights' },
+  render: renderToggle,
+  parameters: dynamicSrc(),
 };
 
 export const Disabled: Story = {
-  args: { checked: false, disabled: true, variant: 'accent', size: 'default' },
-  render: (args) => renderToggle(args, 'Stadium audio'),
-  parameters: dynamicSrc('Stadium audio'),
+  args: { checked: false, disabled: true, variant: 'accent', size: 'default', label: 'Stadium audio' },
+  render: renderToggle,
+  parameters: dynamicSrc(),
+};
+
+export const Playground: Story = {
+  args: { checked: true, disabled: false, variant: 'accent', size: 'default', label: 'Notifications' },
+  render: renderToggle,
+  parameters: dynamicSrc(),
 };
 
 export const OnDark: Story = {

@@ -6,6 +6,7 @@ import './fv-radio.js';
 type RadioArgs = {
   checked: boolean;
   disabled: boolean;
+  label: string;
 };
 
 const meta: Meta<RadioArgs> = {
@@ -14,6 +15,7 @@ const meta: Meta<RadioArgs> = {
   argTypes: {
     checked: { control: 'boolean', description: 'aria-checked' },
     disabled: { control: 'boolean', description: 'aria-disabled' },
+    label: { control: 'text', description: 'Visible label (sibling of the radio in the wrapping <label>)' },
   },
 };
 export default meta;
@@ -26,7 +28,7 @@ const src = (code: string) => ({
   docs: { source: { code, language: 'html' as const } },
 });
 
-const radioHtml = (args: RadioArgs, label: string, value = 'all'): string => {
+const radioHtml = (args: RadioArgs, value = 'all'): string => {
   const attrs: string[] = [`data-group="comps"`, `data-value="${value}"`];
   if (args.checked) attrs.unshift('aria-checked="true"');
   if (args.disabled) attrs.push('aria-disabled="true"');
@@ -34,20 +36,20 @@ const radioHtml = (args: RadioArgs, label: string, value = 'all'): string => {
   <fv-radio ${attrs.join(' ')}>
     <span data-role="dot"></span>
   </fv-radio>
-  ${label}
+  ${args.label}
 </label>`;
 };
 
-const dynamicSrc = (label: string, value?: string) => ({
+const dynamicSrc = (value?: string) => ({
   docs: {
     source: {
       language: 'html' as const,
-      transform: (_: string, ctx: { args: RadioArgs }) => radioHtml(ctx.args, label, value),
+      transform: (_: string, ctx: { args: RadioArgs }) => radioHtml(ctx.args, value),
     },
   },
 });
 
-const renderRadio = (args: RadioArgs, label: string, group: string, value = 'all'): TemplateResult => html`
+const renderRadio = (args: RadioArgs, group: string, value = 'all'): TemplateResult => html`
   <label style="${labelStyle}${args.disabled ? '; color: var(--fg-subtle);' : ''}">
     <fv-radio
       aria-checked="${args.checked ? 'true' : nothing}"
@@ -57,20 +59,14 @@ const renderRadio = (args: RadioArgs, label: string, group: string, value = 'all
     >
       <span data-role="dot"></span>
     </fv-radio>
-    ${label}
+    ${args.label}
   </label>
 `;
 
 export const Default: Story = {
-  args: { checked: false, disabled: false },
-  render: (args) => renderRadio(args, 'All comps', 'story-default'),
-  parameters: dynamicSrc('All comps'),
-};
-
-export const Checked: Story = {
-  args: { checked: true, disabled: false },
-  render: (args) => renderRadio(args, 'All comps', 'story-checked'),
-  parameters: dynamicSrc('All comps'),
+  args: { checked: false, disabled: false, label: 'All comps' },
+  render: (args) => renderRadio(args, 'story-default'),
+  parameters: dynamicSrc(),
 };
 
 export const Group: Story = {
@@ -120,9 +116,15 @@ export const Group: Story = {
 };
 
 export const Disabled: Story = {
-  args: { checked: false, disabled: true },
-  render: (args) => renderRadio(args, 'Champions League (premium)', 'story-disabled', 'ucl'),
-  parameters: dynamicSrc('Champions League (premium)', 'ucl'),
+  args: { checked: false, disabled: true, label: 'Champions League (premium)' },
+  render: (args) => renderRadio(args, 'story-disabled', 'ucl'),
+  parameters: dynamicSrc('ucl'),
+};
+
+export const Playground: Story = {
+  args: { checked: true, disabled: false, label: 'All comps' },
+  render: (args) => renderRadio(args, 'story-playground'),
+  parameters: dynamicSrc(),
 };
 
 export const SelectingOneDeselectsSiblings: Story = {

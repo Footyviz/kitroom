@@ -84,18 +84,18 @@ export const Default: Story = {
   },
 };
 
-export const TwoOptions: Story = {
-  args: { selected: 'followed' },
+export const Playground: Story = {
+  args: { selected: 'today' },
   argTypes: {
-    selected: { control: { type: 'inline-radio' }, options: ['all', 'followed'] },
+    selected: { control: { type: 'inline-radio' }, options: ['live', 'today', 'upcoming'] },
   },
-  render: (args) => renderSegmented(args, 'Match scope', matchScope),
+  render: (args) => renderSegmented(args, 'Match filter', matchFilter),
   parameters: {
     docs: {
       source: {
         language: 'html',
         transform: (_: string, ctx: { args: SegmentedArgs }) =>
-          segmentedHtml(ctx.args, 'Match scope', matchScope),
+          segmentedHtml(ctx.args, 'Match filter', matchFilter),
       },
     },
   },

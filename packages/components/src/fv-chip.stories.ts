@@ -17,6 +17,7 @@ type ChipVariant =
 
 type ChipArgs = {
   variant: ChipVariant;
+  text: string;
 };
 
 const meta: Meta<ChipArgs> = {
@@ -28,6 +29,7 @@ const meta: Meta<ChipArgs> = {
       options: ['default', 'mono', 'strong', 'accent', 'info', 'warn', 'neg', 'pos', 'outline', 'live'],
       description: 'data-variant — chooses hue / typography / animation',
     },
+    text: { control: 'text', description: 'Chip label text (text content)' },
   },
 };
 export default meta;
@@ -51,44 +53,36 @@ const xIconHtml = `<svg width="8" height="8" viewBox="0 0 8 8" fill="none" strok
       <path d="M1 1l6 6M7 1L1 7"/>
     </svg>`;
 
-// Default variant has no data-variant attribute; "live" capitalizes its
-// label. Other variants take their text as-is from the story body.
-const labelForVariant = (v: ChipVariant): string => {
-  switch (v) {
-    case 'live': return 'LIVE';
-    case 'strong': return 'FT';
-    case 'mono': return "73'";
-    case 'accent': return 'Trending';
-    case 'info': return 'VAR review';
-    case 'warn': return 'Delay';
-    case 'neg': return 'Red card';
-    case 'pos': return 'Goal';
-    case 'outline': return '+ Add filter';
-    default: return 'Premier League';
-  }
-};
-
 const chipHtml = (args: ChipArgs): string => {
-  const text = labelForVariant(args.variant);
-  if (args.variant === 'default') return `<fv-chip>${text}</fv-chip>`;
-  return `<fv-chip data-variant="${args.variant}">${text}</fv-chip>`;
+  if (args.variant === 'default') return `<fv-chip>${args.text}</fv-chip>`;
+  return `<fv-chip data-variant="${args.variant}">${args.text}</fv-chip>`;
 };
 
-export const Default: Story = {
-  args: { variant: 'default' },
-  render: (args) => html`
-    <fv-chip data-variant="${args.variant !== 'default' ? args.variant : nothing}">
-      ${labelForVariant(args.variant)}
-    </fv-chip>
-  `,
-  parameters: {
-    docs: {
-      source: {
-        language: 'html',
-        transform: (_: string, ctx: { args: ChipArgs }) => chipHtml(ctx.args),
-      },
+const renderChip = (args: ChipArgs): TemplateResult => html`
+  <fv-chip data-variant="${args.variant !== 'default' ? args.variant : nothing}">
+    ${args.text}
+  </fv-chip>
+`;
+
+const dynamicSrc = () => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: ChipArgs }) => chipHtml(ctx.args),
     },
   },
+});
+
+export const Default: Story = {
+  args: { variant: 'default', text: 'Premier League' },
+  render: renderChip,
+  parameters: dynamicSrc(),
+};
+
+export const Playground: Story = {
+  args: { variant: 'live', text: 'LIVE' },
+  render: renderChip,
+  parameters: dynamicSrc(),
 };
 
 export const StatusVariants: Story = {

@@ -1,0 +1,86 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as RadioGroupStories from './fv-radio-group.stories';
+
+<Meta of={RadioGroupStories} />
+
+# fv-radio-group
+
+A thin coordinator over `<fv-radio>` children. Owns
+`data-selected-value`; keeps each child's `aria-checked` in sync.
+Emits a bubbling `change` event when the selection moves
+(programmatic changes only — child clicks already produce a bubbling
+`change` from the radio itself).
+
+The group does **not** import `<fv-radio>`. It identifies its children
+by querying `:scope > [data-value]`, so the same coordinator works for
+any future child variant.
+
+## Required HTML
+
+```html
+<fv-radio-group data-selected-value="all" aria-label="Competition filter">
+  <label>
+    <fv-radio data-value="all" aria-checked="true">
+      <span data-role="dot"></span>
+    </fv-radio>
+    All comps
+  </label>
+  <label>
+    <fv-radio data-value="followed" aria-checked="false">
+      <span data-role="dot"></span>
+    </fv-radio>
+    Followed only
+  </label>
+</fv-radio-group>
+```
+
+The server should render `aria-checked` correctly on each radio (the
+group will reconcile on connect anyway, but matching reduces the FOUC
+window between parse and upgrade).
+
+## Attributes
+
+| Attribute              | On    | Required | Effect                                       |
+|------------------------|-------|----------|----------------------------------------------|
+| `data-selected-value`  | host  | yes      | identifies the currently-checked child       |
+| `aria-label`           | host  | yes      | accessible name for the radiogroup           |
+| `data-direction`       | host  | no       | `row` lays children horizontally             |
+| `data-value`           | child | yes      | identifies each option                       |
+| `aria-checked`         | child | optional | server-set initial state; group reconciles   |
+
+## Coordination
+
+| Direction | Mechanism |
+|-----------|-----------|
+| Parent → children (state push) | Setting `data-selected-value` triggers `attributeChangedCallback`, which broadcasts `aria-checked` onto each direct-descendant `[data-value]` child. |
+| Children → parent (user click) | `fv-radio` dispatches a bubbling `change` event with `{ value }`. The group listens, updates its own `data-selected-value` (which re-runs the broadcast), and suppresses its own self-emit so consumers see exactly one `change` per click. |
+
+## Events dispatched
+
+| Event    | When                                        | Detail              |
+|----------|---------------------------------------------|---------------------|
+| `change` | After PROGRAMMATIC `data-selected-value` set | `{ value: string }` |
+
+For user clicks, listen to the bubbling `change` from the inner
+`<fv-radio>` instead — it fires exactly once and carries the same
+`{ value }` payload.
+
+## Tokens used
+
+| Token         | Where                  |
+|---------------|------------------------|
+| `--font-sans` | label font family      |
+| `--fg`        | label color            |
+
+## Composition
+
+`fv-radio-group` and `fv-radio` are independent custom elements
+registered at app startup. Neither imports the other. They communicate
+via the public DOM contract only — `data-value` on children,
+`aria-checked` written by the group, and the `change` event bubbling
+up.
+
+## Stories
+
+<Story of={RadioGroupStories.Default} />
+<Story of={RadioGroupStories.Playground} />

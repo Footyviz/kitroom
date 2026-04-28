@@ -1,0 +1,43 @@
+/* ============================================================
+   <fv-icon-text> — light-DOM layout primitive
+   ============================================================
+   Composes an icon and a label into a stack (column) or row.
+   Used wherever a control needs glyph + caption side-by-side
+   (tabbar tabs, segmented buttons with icons, future composites).
+   ============================================================ */
+
+fv-icon-text {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+fv-icon-text[data-direction="row"] {
+  flex-direction: row;
+}
+
+fv-icon-text[data-align="start"]  { align-items: flex-start; }
+fv-icon-text[data-align="end"]    { align-items: flex-end; }
+
+fv-icon-text[data-gap="xs"]  { gap: 2px; }
+fv-icon-text[data-gap="sm"]  { gap: 4px; }
+fv-icon-text[data-gap="md"]  { gap: 8px; }
+fv-icon-text[data-gap="lg"]  { gap: 12px; }
+
+fv-icon-text [data-role="icon"] {
+  flex-shrink: 0;
+}
+
+fv-icon-text [data-role="label"] {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+fv-icon-text[data-direction="row"] [data-role="label"] {
+  font-size: 13px;
+}

@@ -1,7 +1,9 @@
 export { FvButton } from './fv-button.js';
 export { FvCheckbox } from './fv-checkbox.js';
 export { FvChip } from './fv-chip.js';
+export { FvIconText } from './fv-icon-text.js';
 export { FvRadio } from './fv-radio.js';
+export { FvRadioGroup } from './fv-radio-group.js';
 export { FvSegmented } from './fv-segmented.js';
 export { FvSlider } from './fv-slider.js';
 export { FvTabbar } from './fv-tabbar.js';

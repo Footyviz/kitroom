@@ -23,8 +23,6 @@ fv-tabbar > [role="tab"] {
   flex: 1;
   color: var(--fg-muted);
   text-decoration: none;
-  font-size: 10px;
-  font-weight: var(--fw-medium);
   padding: 0;
   background: transparent;
   border: 0;
@@ -32,8 +30,13 @@ fv-tabbar > [role="tab"] {
   transition: color var(--dur-fast) var(--ease);
 }
 
+/* Each tab now nests <fv-icon-text> for the icon + label pair, and the
+   indicator is the second child. Active tab promotes to bolder color. */
 fv-tabbar > [role="tab"][aria-current="page"] {
   color: var(--fg);
+}
+
+fv-tabbar > [role="tab"][aria-current="page"] [data-role="label"] {
   font-weight: var(--fw-semibold);
 }
 

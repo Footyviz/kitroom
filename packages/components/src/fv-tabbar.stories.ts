@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
+import './fv-icon-text.js';
 import './fv-tabbar.js';
 
 type TabValue = 'live' | 'fixtures' | 'observe' | 'follow' | 'you';
@@ -99,8 +100,10 @@ const tabbarHtml = (
         : `<button type="button" role="tab" data-value="${t.value}"${current}>`;
       const close = use === 'a' ? '</a>' : '</button>';
       return `  ${open}
-    ${t.iconHtml}
-    <span data-role="label">${t.label}</span>
+    <fv-icon-text>
+      ${t.iconHtml}
+      <span data-role="label">${t.label}</span>
+    </fv-icon-text>
     <span data-role="indicator"></span>
   ${close}`;
     })
@@ -119,13 +122,16 @@ const renderTabbar = (
   <fv-tabbar aria-label="${ariaLabel}">
     ${tabs.map((t) => {
       const current = t.value === args.current ? 'page' : nothing;
+      const inner = html`
+        <fv-icon-text>
+          ${t.icon}
+          <span data-role="label">${t.label}</span>
+        </fv-icon-text>
+        <span data-role="indicator"></span>
+      `;
       return use === 'a'
-        ? html`<a href="${t.href}" role="tab" data-value="${t.value}" aria-current="${current}">
-            ${t.icon}<span data-role="label">${t.label}</span><span data-role="indicator"></span>
-          </a>`
-        : html`<button type="button" role="tab" data-value="${t.value}" aria-current="${current}">
-            ${t.icon}<span data-role="label">${t.label}</span><span data-role="indicator"></span>
-          </button>`;
+        ? html`<a href="${t.href}" role="tab" data-value="${t.value}" aria-current="${current}">${inner}</a>`
+        : html`<button type="button" role="tab" data-value="${t.value}" aria-current="${current}">${inner}</button>`;
     })}
   </fv-tabbar>
 `;
@@ -145,12 +151,6 @@ export const Default: Story = {
   parameters: dynamicSrc('Main navigation', 'a'),
 };
 
-export const FixturesActive: Story = {
-  args: { current: 'fixtures' },
-  render: (args) => renderTabbar(args, 'Main navigation', 'a', TABS),
-  parameters: dynamicSrc('Main navigation', 'a'),
-};
-
 export const ButtonTabs: Story = {
   args: { current: 'live' },
   argTypes: {
@@ -158,6 +158,12 @@ export const ButtonTabs: Story = {
   },
   render: (args) => renderTabbar(args, 'Section', 'button', TABS.slice(0, 3)),
   parameters: dynamicSrc('Section', 'button', TABS.slice(0, 3)),
+};
+
+export const Playground: Story = {
+  args: { current: 'fixtures' },
+  render: (args) => renderTabbar(args, 'Main navigation', 'a', TABS),
+  parameters: dynamicSrc('Main navigation', 'a'),
 };
 
 export const ClickingMovesActive: Story = {

@@ -83,18 +83,6 @@ export const Default: Story = {
   parameters: dynamicSrc('Volume'),
 };
 
-export const Empty: Story = {
-  args: { value: 0, min: 0, max: 100, step: 1, disabled: false },
-  render: (args) => renderSlider(args, 'Empty'),
-  parameters: dynamicSrc('Empty'),
-};
-
-export const Full: Story = {
-  args: { value: 100, min: 0, max: 100, step: 1, disabled: false },
-  render: (args) => renderSlider(args, 'Full'),
-  parameters: dynamicSrc('Full'),
-};
-
 export const CustomRange: Story = {
   args: { value: 40, min: 0, max: 120, step: 5, disabled: false },
   render: (args) => renderSlider(args, 'Match minute'),
@@ -105,6 +93,17 @@ export const Disabled: Story = {
   args: { value: 40, min: 0, max: 100, step: 1, disabled: true },
   render: (args) => renderSlider(args, 'Disabled'),
   parameters: dynamicSrc('Disabled'),
+};
+
+export const Playground: Story = {
+  args: { value: 50, min: 0, max: 100, step: 1, disabled: false },
+  render: (args) => html`
+    <div style="display:inline-flex;align-items:center;gap:10px">
+      ${renderSlider(args, 'Volume')}
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg-muted)">${args.value}</span>
+    </div>
+  `,
+  parameters: dynamicSrc('Volume'),
 };
 
 export const KeyboardArrowsAdjustValue: Story = {
