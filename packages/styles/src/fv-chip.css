@@ -1,0 +1,180 @@
+/* ============================================================
+   <fv-chip> — light-DOM label / badge / token
+   ============================================================
+   Variants via data-variant on the host. Default looks like a
+   physical token (white surface, hairline border, top highlight).
+   ============================================================ */
+
+fv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  background: var(--neutral-0);
+  color: var(--neutral-800);
+  border: 1px solid var(--neutral-200);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+fv-chip [data-role="dot"] {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+fv-chip[data-variant="mono"] {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+fv-chip[data-variant="strong"] {
+  background: var(--neutral-1000);
+  color: var(--neutral-50);
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+fv-chip[data-variant="accent"] {
+  background: var(--toggle-on);
+  color: #1A1F00;
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 0 rgba(10, 19, 0, 0.18);
+}
+
+fv-chip[data-variant="info"] {
+  background: #EAF3FB;
+  color: #1D4F7A;
+  border-color: #CFE1F1;
+}
+
+fv-chip[data-variant="warn"] {
+  background: #FFF6DD;
+  color: #6E4E00;
+  border-color: #F5E3A8;
+}
+
+fv-chip[data-variant="neg"] {
+  background: #FDE8E4;
+  color: #84190D;
+  border-color: #F5C8BF;
+}
+
+fv-chip[data-variant="pos"] {
+  background: #E5F3DD;
+  color: #2F5214;
+  border-color: #C9E4B8;
+}
+
+fv-chip[data-variant="outline"] {
+  background: transparent;
+  box-shadow: none;
+  border: 1px dashed var(--neutral-300);
+  color: var(--neutral-500);
+}
+
+/* Closable: a [data-action="close"] child rendered by the server. */
+fv-chip[data-closable] {
+  padding-right: 4px;
+}
+
+fv-chip [data-action="close"] {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+}
+
+fv-chip[data-variant="strong"] [data-action="close"],
+fv-chip[data-variant="accent"] [data-action="close"] {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Live status: pulsing inner dot. */
+fv-chip[data-variant="live"] {
+  background: var(--toggle-on);
+  color: #1A1F00;
+  border-color: transparent;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  padding: 5px 11px 5px 9px;
+}
+
+fv-chip[data-variant="live"]::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #1A1F00;
+  border-radius: var(--radius-full);
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(10, 19, 0, 0.55);
+  animation: fv-chip-pulse 1.6s infinite;
+}
+
+@keyframes fv-chip-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(10, 19, 0, 0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(10, 19, 0, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(10, 19, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  fv-chip[data-variant="live"]::before { animation: none; }
+}
+
+/* Team chip: with crest disc. */
+fv-chip[data-variant="team"] {
+  padding: 3px 11px 3px 3px;
+}
+
+fv-chip [data-role="crest"] {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: var(--fw-semibold);
+  flex-shrink: 0;
+}
+
+/* Count chip: split with bold inner counter. */
+fv-chip[data-variant="count"] {
+  padding: 0 0 0 10px;
+  gap: 0;
+  overflow: hidden;
+}
+
+fv-chip[data-variant="count"] > span:first-child { padding-right: 8px; }
+
+fv-chip[data-variant="count"] [data-role="count"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--neutral-1000);
+  color: var(--neutral-50);
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+  font-size: 11px;
+}

@@ -8,16 +8,29 @@
     "dev": "storybook dev -p 6006",
     "prebuild": "npm run build -w @footyviz/components",
     "build": "storybook build",
+    "pretest": "npm run build -w @footyviz/components",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf storybook-static"
   },
   "dependencies": {
     "@footyviz/components": "*",
+    "@footyviz/styles": "*",
     "@footyviz/tokens": "*"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/addon-vitest": "^10.3.5",
     "@storybook/web-components": "^10.3.5",
     "@storybook/web-components-vite": "^10.3.5",
+    "@vitest/browser": "^4.1.5",
+    "@vitest/browser-playwright": "^4.1.5",
+    "lit-html": "^3.2.0",
+    "playwright": "^1.59.1",
+    "remark-gfm": "^4.0.0",
     "storybook": "^10.3.5",
-    "vite": "^8.0.10"
+    "vite": "^8.0.10",
+    "vitest": "^4.1.5"
   }
 }

@@ -1,0 +1,81 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TabbarStories from './fv-tabbar.stories';
+
+<Meta of={TabbarStories} />
+
+# fv-tabbar
+
+Bottom-of-screen tab bar. Each tab is a normal `<a>` link (or
+`<button>` for SPA-style navigation). Clicking a tab sets
+`aria-current="page"` on it and clears it on siblings, then
+dispatches `change` with `{ value }`.
+
+The component does **not** prevent default link navigation. For
+htmx-driven tab swaps, wire `hx-get` / `hx-target` on each `<a>`;
+the visual active state updates locally before the swap returns.
+
+## Required HTML
+
+Each tab nests an `<fv-icon-text>` for the icon + label pair, with the
+indicator span as a sibling. fv-tabbar and fv-icon-text are independent
+custom elements — both are registered at app startup, neither imports
+the other.
+
+```html
+<fv-tabbar aria-label="Main navigation">
+  <a href="/live" role="tab" data-value="live" aria-current="page">
+    <fv-icon-text>
+      <svg data-role="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="1.5"/>
+        <path d="M12 5v14"/>
+        <circle cx="12" cy="12" r="2.2"/>
+        <circle cx="12" cy="12" r="4.2" opacity=".35"/>
+      </svg>
+      <span data-role="label">Live</span>
+    </fv-icon-text>
+    <span data-role="indicator"></span>
+  </a>
+  ...
+</fv-tabbar>
+```
+
+The component does not generate tabs, icons, labels, or indicators —
+the server outputs them all. The `[data-role="indicator"]` span is
+the small accent bar shown under the active tab.
+
+## Attributes
+
+| Attribute      | On    | Required | Effect                                       |
+|----------------|-------|----------|----------------------------------------------|
+| `aria-label`   | host  | yes      | accessible name for the tablist              |
+| `role`         | host  | auto     | set to `tablist` on connection               |
+| `role="tab"`   | child | yes      | identifies a navigable tab (a or button)     |
+| `data-value`   | child | yes      | included in the dispatched event             |
+| `aria-current` | child | optional | `"page"` marks the active tab                |
+
+## Tokens used
+
+| Token            | Where                                  |
+|------------------|----------------------------------------|
+| `--bg-elev`      | bar background                         |
+| `--border`       | bar border                             |
+| `--shadow-md`    | bar shadow                             |
+| `--fg`           | active tab text                        |
+| `--fg-muted`     | inactive tab text                      |
+| `--accent`       | active indicator bar + focus outline   |
+
+## Events dispatched
+
+| Event    | When                            | Detail              |
+|----------|---------------------------------|---------------------|
+| `change` | After a tab is activated        | `{ value: string }` |
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={TabbarStories.Default} />
+<Story of={TabbarStories.ButtonTabs} />
+<Story of={TabbarStories.Playground} />

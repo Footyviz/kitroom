@@ -1,0 +1,74 @@
+/* ============================================================
+   <fv-tabbar> — light-DOM bottom navigation
+   ============================================================ */
+
+fv-tabbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 12px 10px 10px;
+  max-width: 380px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-sans);
+}
+
+fv-tabbar > [role="tab"] {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  flex: 1;
+  color: var(--fg-muted);
+  text-decoration: none;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+/* Each tab now nests <fv-icon-text> for the icon + label pair, and the
+   indicator is the second child. Active tab promotes to bolder color. */
+fv-tabbar > [role="tab"][aria-current="page"] {
+  color: var(--fg);
+}
+
+fv-tabbar > [role="tab"][aria-current="page"] [data-role="label"] {
+  font-weight: var(--fw-semibold);
+}
+
+fv-tabbar > [role="tab"][aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+fv-tabbar [data-role="icon"] {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+fv-tabbar [data-role="indicator"] {
+  width: 16px;
+  height: 2px;
+  background: transparent;
+  border-radius: 2px;
+  margin-top: -1px;
+}
+
+fv-tabbar > [role="tab"][aria-current="page"] [data-role="indicator"] {
+  background: var(--accent);
+}
+
+fv-tabbar > [role="tab"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

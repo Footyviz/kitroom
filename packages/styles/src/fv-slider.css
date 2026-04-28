@@ -1,0 +1,66 @@
+/* ============================================================
+   <fv-slider> — light-DOM single-thumb slider
+   ============================================================
+   The component sets fill width and thumb left as inline `style`
+   in JS. This stylesheet provides the geometry, colors, and
+   interaction states.
+   ============================================================ */
+
+fv-slider {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 180px;
+  height: 22px;
+  cursor: pointer;
+  touch-action: none;
+  vertical-align: middle;
+}
+
+fv-slider[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+fv-slider [data-role="track"] {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  background: var(--neutral-200);
+  border-radius: var(--radius-full);
+}
+
+fv-slider [data-role="fill"] {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  background: var(--neutral-1000);
+  border-radius: var(--radius-full);
+  width: 0;
+}
+
+fv-slider [data-role="thumb"] {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: var(--neutral-0);
+  border: 1.5px solid var(--neutral-1000);
+  border-radius: var(--radius-full);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  left: 0;
+}
+
+fv-slider:focus-visible {
+  outline: none;
+}
+
+fv-slider:focus-visible [data-role="thumb"] {
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 1px 3px rgba(0, 0, 0, 0.18);
+}

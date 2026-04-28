@@ -1,0 +1,15 @@
+/* ============================================================
+   FootyViz Base Styles
+   ============================================================
+   Loaded in <head> alongside @footyviz/tokens/tokens.css.
+
+   Holds page-level rules that aren't part of the design contract
+   itself but are required for the component runtime to behave:
+
+     - FOUC prevention for not-yet-upgraded custom elements
+
+   Box-sizing reset and default html/body typography live in
+   tokens.css already.
+   ============================================================ */
+
+:not(:defined) { visibility: hidden; }

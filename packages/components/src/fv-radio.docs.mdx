@@ -1,0 +1,67 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as RadioStories from './fv-radio.stories';
+
+<Meta of={RadioStories} />
+
+# fv-radio
+
+A single radio control. Multiple radios sharing a `data-group` form a
+single-select group: clicking one deselects all others with the same
+`data-group` in the same root, then selects self. No wrapping
+component is required.
+
+## Required HTML
+
+```html
+<div role="radiogroup" aria-label="Competition filter">
+  <fv-radio aria-checked="true" data-group="comps" data-value="all">
+    <span data-role="dot"></span>
+  </fv-radio>
+  <fv-radio data-group="comps" data-value="followed">
+    <span data-role="dot"></span>
+  </fv-radio>
+</div>
+```
+
+The `<span data-role="dot">` child must be present in the server output
+— the component does not generate it.
+
+## Attributes
+
+| Attribute       | Required | Values         | Effect                                |
+|-----------------|----------|----------------|---------------------------------------|
+| `aria-checked`  | yes      | `true` `false` | reflects state                        |
+| `data-group`    | yes      | string         | identifies the single-select group    |
+| `data-value`    | no       | string         | included in the dispatched `change` event |
+| `aria-disabled` | no       | `true`         | dims and ignores click / keyboard     |
+
+The component sets `role="radio"` and `tabindex` on first connection.
+
+## Tokens used
+
+| Token            | Where                            |
+|------------------|----------------------------------|
+| `--neutral-300`  | unchecked border                 |
+| `--neutral-1000` | dot fill                         |
+| `--radius-full`  | circle radius                    |
+| `--accent`       | `:focus-visible` outline         |
+
+## Events dispatched
+
+| Event    | When                          | Detail              |
+|----------|-------------------------------|---------------------|
+| `change` | After this radio is selected  | `{ value: string }` |
+
+The `change` event bubbles, so a parent group container can listen at
+one level. Sibling deselection does not fire `change` events.
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={RadioStories.Default} />
+<Story of={RadioStories.Group} />
+<Story of={RadioStories.Disabled} />
+<Story of={RadioStories.Playground} />

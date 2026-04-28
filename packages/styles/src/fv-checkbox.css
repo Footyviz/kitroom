@@ -1,0 +1,60 @@
+/* ============================================================
+   <fv-checkbox> — light-DOM checkbox
+   ============================================================
+   DOM contract:
+     <fv-checkbox aria-checked="false|true"
+                  [data-variant="ink"|"accent"]>
+       <svg data-role="check" viewBox="0 0 16 16" aria-hidden="true">
+         <polyline points="3 8 7 12 13 4" .../>
+       </svg>
+     </fv-checkbox>
+
+   Default fill is ink (--neutral-1000); accent variant uses --toggle-on
+   for "user-valued" filters (notifications, big-chance highlights).
+   ============================================================ */
+
+fv-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--neutral-300);
+  background: var(--neutral-0);
+  color: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+
+fv-checkbox[aria-checked="true"] {
+  background: var(--neutral-1000);
+  border-color: var(--neutral-1000);
+  color: var(--neutral-50);
+}
+
+fv-checkbox[data-variant="accent"][aria-checked="true"] {
+  background: var(--toggle-on);
+  border-color: var(--toggle-on);
+  color: #1A1F00;
+}
+
+fv-checkbox[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+fv-checkbox [data-role="check"] {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+
+fv-checkbox:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

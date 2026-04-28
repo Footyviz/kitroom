@@ -1,0 +1,43 @@
+/* ============================================================
+   <fv-segmented> — light-DOM single-select pill group
+   ============================================================ */
+
+fv-segmented {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--neutral-100);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-full);
+  gap: 2px;
+}
+
+fv-segmented > button {
+  border: 0;
+  background: transparent;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-full);
+  color: var(--neutral-500);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+fv-segmented > button[aria-checked="true"] {
+  background: var(--neutral-0);
+  color: var(--neutral-800);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+fv-segmented > button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+fv-segmented > button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
