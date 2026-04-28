@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/web-components-vite';
+import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
   stories: [
@@ -8,7 +9,22 @@ const config: StorybookConfig = {
     '../../components/src/**/*.stories.ts',
     '../../components/src/**/*.docs.mdx',
   ],
-  addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
+  addons: [
+    {
+      // GFM tables (the | pipe | dash |---|---| variety) aren't enabled by
+      // default in @storybook/addon-docs's MDX pipeline. Without remark-gfm,
+      // tables in our .docs.mdx files render as raw text.
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
+    '@storybook/addon-a11y',
+  ],
   framework: {
     name: '@storybook/web-components-vite',
     options: {},
