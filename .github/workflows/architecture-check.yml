@@ -1,0 +1,27 @@
+name: Architecture check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  forbidden-patterns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Per ARCHITECTURE.md: light-DOM only. No shadow DOM in new components.
+      # fv-button.ts is grandfathered (predates ARCHITECTURE.md) and is
+      # explicitly excluded until it is rewritten.
+      - name: Forbid attachShadow / shadowrootmode in components
+        run: |
+          set -e
+          matches=$(grep -rn "attachShadow\|shadowrootmode" packages/components/src/ \
+            | grep -v "fv-button.ts" \
+            || true)
+          if [ -n "$matches" ]; then
+            echo "Forbidden shadow-DOM pattern in new code (fv-button.ts grandfathered):"
+            echo "$matches"
+            exit 1
+          fi

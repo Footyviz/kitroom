@@ -59,6 +59,11 @@
   --accent-soft:  #F6E6B3;   /* hover tint on light */
   --accent-dim:   #9C7A1E;   /* text-sized accent on light */
 
+  /* ---------- COMPONENT-LEVEL ACCENTS ----------
+     Used by individual controls where the design calls for a hue
+     distinct from the brand straw. Add sparingly; prefer --accent. */
+  --toggle-on:    #E8FF5A;   /* signal lime — user-valued switches (notifications, favorites) */
+
   /* ---------- BRAND SUPPORTING ---------- */
   --brand-navy:   #1E2A44;   /* the net / hat band */
   --brand-navy-deep: #11182A;

@@ -1,0 +1,20 @@
+{
+  "name": "@footyviz/styles",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./base.css": "./src/base.css",
+    "./components.css": "./src/components.css",
+    "./fv-toggle.css": "./src/fv-toggle.css"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@footyviz/tokens": "*"
+  }
+}
