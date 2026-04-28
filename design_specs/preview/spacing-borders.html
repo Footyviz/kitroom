@@ -1,0 +1,55 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+<style>
+  .wash{background:#F4F3EE;border-radius:12px;padding:28px}
+  .tile{padding:18px;background:#FFFFFF;border-radius:10px;min-height:120px;display:flex;flex-direction:column;justify-content:space-between}
+  .tile .tok{font-family:var(--font-mono);font-size:10px;color:#6B6860;letter-spacing:.02em}
+  .tile .val{font-family:var(--font-mono);font-size:10px;color:#8F8B7E;letter-spacing:.02em;margin-top:2px}
+  .tile .nm{font-family:var(--font-sans);font-size:14px;font-weight:500;color:#1A1A18;margin-top:auto}
+  .swatch-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+  .swatch{width:42px;height:3px;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Borders · three strengths · against tinted background</div>
+
+  <div class="wash">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div class="tile" style="border:1px solid #EBE9E2">
+        <div>
+          <div class="tok">--border-subtle</div>
+          <div class="val">#EBE9E2</div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#EBE9E2"></div>
+          <div class="nm">Same-elevation</div>
+        </div>
+      </div>
+      <div class="tile" style="border:1px solid #DDDAD0">
+        <div>
+          <div class="tok">--border</div>
+          <div class="val">#DDDAD0</div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#DDDAD0"></div>
+          <div class="nm">Default card</div>
+        </div>
+      </div>
+      <div class="tile" style="border:1px solid #C4C0B3">
+        <div>
+          <div class="tok">--border-strong</div>
+          <div class="val">#C4C0B3</div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#C4C0B3"></div>
+          <div class="nm">Focused / selected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:#6B6860;max-width:620px;margin-top:4px">Three border weights shown on white tiles against a tinted surface so each stroke reads cleanly. Subtle for internal dividers and same-elevation groupings, default for card outlines, strong for focus and selection states.</div>
+</div>
+</body></html>
