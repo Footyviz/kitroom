@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import './fv-tabbar.js';
 
 const meta: Meta = {
@@ -143,6 +143,101 @@ export const ClickingMovesActive: Story = {
     expect(tabs[1]?.getAttribute('aria-current')).toBe('page');
     expect(tabs[2]?.getAttribute('aria-current')).toBeNull();
     expect(lastValue).toBe('b');
+  },
+};
+
+export const ChangeEventBubbles: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="parent">
+      <fv-tabbar aria-label="Bubble">
+        <button type="button" role="tab" data-value="a" aria-current="page">
+          <span data-role="label">A</span><span data-role="indicator"></span>
+        </button>
+        <button type="button" role="tab" data-value="b">
+          <span data-role="label">B</span><span data-role="indicator"></span>
+        </button>
+      </fv-tabbar>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const handler = fn();
+    document.body.addEventListener('change', handler);
+
+    const tabs = canvasElement.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    await userEvent.click(tabs[1]!);
+
+    expect(handler).toHaveBeenCalledOnce();
+    const event = handler.mock.calls[0]![0] as CustomEvent<{ value: string }>;
+    expect(event.detail).toEqual({ value: 'b' });
+    expect(event.bubbles).toBe(true);
+
+    document.body.removeEventListener('change', handler);
+  },
+};
+
+export const DisabledTabsAreNotActivated: Story = {
+  render: (): TemplateResult => html`
+    <fv-tabbar aria-label="Disabled" data-testid="bar">
+      <button type="button" role="tab" data-value="a" aria-current="page">
+        <span data-role="label">A</span><span data-role="indicator"></span>
+      </button>
+      <button type="button" role="tab" data-value="b" aria-disabled="true">
+        <span data-role="label">B</span><span data-role="indicator"></span>
+      </button>
+    </fv-tabbar>
+  `,
+  play: async ({ canvasElement }) => {
+    const tabs = canvasElement.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    await userEvent.click(tabs[1]!);
+    // Disabled tab does not become current; A stays active.
+    expect(tabs[0]?.getAttribute('aria-current')).toBe('page');
+    expect(tabs[1]?.getAttribute('aria-current')).toBeNull();
+  },
+};
+
+export const CleansUpOnDisconnect: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="host">
+      <fv-tabbar aria-label="Cleanup">
+        <button type="button" role="tab" data-value="a" aria-current="page">
+          <span data-role="label">A</span><span data-role="indicator"></span>
+        </button>
+        <button type="button" role="tab" data-value="b">
+          <span data-role="label">B</span><span data-role="indicator"></span>
+        </button>
+      </fv-tabbar>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
+    const bar = host.querySelector<HTMLElement>('fv-tabbar')!;
+    const tabs = bar.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+
+    // Sanity while connected.
+    await userEvent.click(tabs[1]!);
+    expect(tabs[1]?.getAttribute('aria-current')).toBe('page');
+
+    host.removeChild(bar);
+
+    const spy = fn();
+    document.addEventListener('change', spy);
+    tabs[0]!.click();
+    expect(spy).not.toHaveBeenCalled();
+    // Detached: aria-current should not flip.
+    expect(tabs[0]?.getAttribute('aria-current')).toBeNull();
+    document.removeEventListener('change', spy);
+  },
+};
+
+export const HandlesEmptyTabbar: Story = {
+  render: (): TemplateResult => html`
+    <fv-tabbar aria-label="Empty" data-testid="bar"></fv-tabbar>
+  `,
+  play: async ({ canvasElement }) => {
+    // No tabs — clicking the bar should not throw, role still set.
+    const bar = canvasElement.querySelector<HTMLElement>('[data-testid="bar"]')!;
+    await userEvent.click(bar);
+    expect(bar.getAttribute('role')).toBe('tablist');
   },
 };
 

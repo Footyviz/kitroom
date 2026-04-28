@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import './fv-segmented.js';
 
 const meta: Meta = {
@@ -73,6 +73,98 @@ export const SelectingOneDeselectsSiblings: Story = {
     expect(buttons[1]?.getAttribute('aria-checked')).toBe('true');
     expect(buttons[2]?.getAttribute('aria-checked')).toBe('false');
     expect(lastValue).toBe('b');
+  },
+};
+
+export const KeyboardArrowsMoveFocus: Story = {
+  render: (): TemplateResult => html`
+    <fv-segmented data-testid="seg" aria-label="Test">
+      <button role="radio" data-value="a" aria-checked="true">A</button>
+      <button role="radio" data-value="b" aria-checked="false">B</button>
+      <button role="radio" data-value="c" aria-checked="false">C</button>
+    </fv-segmented>
+  `,
+  play: async ({ canvasElement }) => {
+    const buttons = canvasElement.querySelectorAll<HTMLButtonElement>(
+      '[data-testid="seg"] button',
+    );
+    buttons[0]!.focus();
+    expect(document.activeElement).toBe(buttons[0]);
+
+    await userEvent.keyboard('{ArrowRight}');
+    expect(document.activeElement).toBe(buttons[1]);
+
+    await userEvent.keyboard('{ArrowRight}');
+    expect(document.activeElement).toBe(buttons[2]);
+
+    // Wraps around
+    await userEvent.keyboard('{ArrowRight}');
+    expect(document.activeElement).toBe(buttons[0]);
+
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(document.activeElement).toBe(buttons[2]);
+  },
+};
+
+export const CleansUpOnDisconnect: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="host">
+      <fv-segmented aria-label="Cleanup">
+        <button role="radio" data-value="a" aria-checked="true">A</button>
+        <button role="radio" data-value="b" aria-checked="false">B</button>
+      </fv-segmented>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
+    const seg = host.querySelector<HTMLElement>('fv-segmented')!;
+
+    const initialButtons = seg.querySelectorAll<HTMLButtonElement>('button');
+    await userEvent.click(initialButtons[1]!);
+    expect(initialButtons[1]?.getAttribute('aria-checked')).toBe('true');
+
+    host.removeChild(seg);
+
+    const spy = fn();
+    document.addEventListener('change', spy);
+    initialButtons[0]!.click();
+    expect(spy).not.toHaveBeenCalled();
+    // The detached button still flips its own aria-checked? No — the
+    // component sets it; with the listener gone, nothing changes.
+    expect(initialButtons[0]?.getAttribute('aria-checked')).toBe('false');
+    document.removeEventListener('change', spy);
+  },
+};
+
+export const HandlesEmptyGroup: Story = {
+  render: (): TemplateResult => html`
+    <fv-segmented aria-label="Empty" data-testid="seg"></fv-segmented>
+  `,
+  play: async ({ canvasElement }) => {
+    // No buttons — clicking the bare host should not throw.
+    const seg = canvasElement.querySelector<HTMLElement>('[data-testid="seg"]')!;
+    await userEvent.click(seg);
+    // role is auto-applied even when the group is empty.
+    expect(seg.getAttribute('role')).toBe('radiogroup');
+  },
+};
+
+export const SkipsDisabledOptionsInKeyboardNav: Story = {
+  render: (): TemplateResult => html`
+    <fv-segmented data-testid="seg" aria-label="Test">
+      <button role="radio" data-value="a" aria-checked="true">A</button>
+      <button role="radio" data-value="b" aria-checked="false" disabled>B</button>
+      <button role="radio" data-value="c" aria-checked="false">C</button>
+    </fv-segmented>
+  `,
+  play: async ({ canvasElement }) => {
+    const buttons = canvasElement.querySelectorAll<HTMLButtonElement>(
+      '[data-testid="seg"] button',
+    );
+    buttons[0]!.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    // B is disabled — focus should land on C, not B.
+    expect(document.activeElement).toBe(buttons[2]);
   },
 };
 

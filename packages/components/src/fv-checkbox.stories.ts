@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import './fv-checkbox.js';
 
 const meta: Meta = {
@@ -89,6 +89,66 @@ export const TogglesOnClick: Story = {
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('true');
 
+    await userEvent.click(cb);
+    expect(cb.getAttribute('aria-checked')).toBe('false');
+  },
+};
+
+export const DispatchesBubblingChangeEvent: Story = {
+  render: (): TemplateResult => html`
+    <fv-checkbox>${check}</fv-checkbox>
+  `,
+  play: async ({ canvasElement }) => {
+    const handler = fn();
+    document.body.addEventListener('change', handler);
+
+    const cb = canvasElement.querySelector<HTMLElement>('fv-checkbox')!;
+    await userEvent.click(cb);
+
+    expect(handler).toHaveBeenCalledOnce();
+    const event = handler.mock.calls[0]![0] as CustomEvent<{ checked: boolean }>;
+    expect(event.detail).toEqual({ checked: true });
+    expect(event.bubbles).toBe(true);
+
+    document.body.removeEventListener('change', handler);
+  },
+};
+
+export const CleansUpOnDisconnect: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="host">
+      <fv-checkbox>${check}</fv-checkbox>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.querySelector<HTMLElement>('[data-testid="host"]')!;
+    const cb = host.querySelector<HTMLElement>('fv-checkbox')!;
+
+    await userEvent.click(cb);
+    expect(cb.getAttribute('aria-checked')).toBe('true');
+
+    host.removeChild(cb);
+
+    const spy = fn();
+    document.addEventListener('change', spy);
+    cb.click();
+    expect(spy).not.toHaveBeenCalled();
+    expect(cb.getAttribute('aria-checked')).toBe('true');
+    document.removeEventListener('change', spy);
+  },
+};
+
+export const HandlesMissingCheckSvg: Story = {
+  render: (): TemplateResult => html`
+    <!-- The svg child is documented as required, but the component
+         must not crash if a server template forgets it. The check
+         is invisible; toggle behavior still works. -->
+    <fv-checkbox data-testid="cb"></fv-checkbox>
+  `,
+  play: async ({ canvasElement }) => {
+    const cb = canvasElement.querySelector<HTMLElement>('[data-testid="cb"]')!;
+    await userEvent.click(cb);
+    expect(cb.getAttribute('aria-checked')).toBe('true');
     await userEvent.click(cb);
     expect(cb.getAttribute('aria-checked')).toBe('false');
   },
