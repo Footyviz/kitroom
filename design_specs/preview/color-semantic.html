@@ -1,0 +1,73 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+<style>
+  .sem{border-radius:10px;padding:16px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between}
+  .sem .tok{font-family:var(--font-mono);font-size:10px;opacity:.75;letter-spacing:.04em}
+  .sem .nm{font-family:var(--font-sans);font-size:14px;font-weight:600;letter-spacing:-.005em}
+  .sem .hex{font-family:var(--font-mono);font-size:10px;opacity:.65;margin-top:2px}
+  .swatch-row{display:flex;align-items:center;gap:10px}
+  .swatch{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Semantic · match states</div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+    <div class="sem" style="background:#4BB375;color:#FFFFFF">
+      <div>
+        <div class="tok">--positive</div>
+        <div class="hex">#4BB375</div>
+      </div>
+      <div>
+        <div class="nm">Goal · advance</div>
+      </div>
+    </div>
+    <div class="sem" style="background:#E0402B;color:#FFFFFF">
+      <div>
+        <div class="tok">--negative</div>
+        <div class="hex">#E0402B</div>
+      </div>
+      <div>
+        <div class="nm">Red card · loss</div>
+      </div>
+    </div>
+    <div class="sem" style="background:#E8A13A;color:#201400">
+      <div>
+        <div class="tok">--warning</div>
+        <div class="hex">#E8A13A</div>
+      </div>
+      <div>
+        <div class="nm">Yellow · caution</div>
+      </div>
+    </div>
+    <div class="sem" style="background:#5AA9FF;color:#0B2340">
+      <div>
+        <div class="tok">--info</div>
+        <div class="hex">#5AA9FF</div>
+      </div>
+      <div>
+        <div class="nm">VAR · info</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:4px">
+    <div class="sem" style="background:#E9F5EE;color:#1E5233;border:1px solid #CFE8DA;min-height:auto;padding:12px 14px">
+      <div class="swatch-row"><span class="swatch" style="background:#4BB375"></span><div><div style="font-family:var(--font-sans);font-size:12px;font-weight:500">Goal confirmed</div><div class="mono" style="font-size:10px;color:#3D7A54">Soft surface</div></div></div>
+    </div>
+    <div class="sem" style="background:#FCEBE7;color:#7A1F10;border:1px solid #F5C8BF;min-height:auto;padding:12px 14px">
+      <div class="swatch-row"><span class="swatch" style="background:#E0402B"></span><div><div style="font-family:var(--font-sans);font-size:12px;font-weight:500">Red card</div><div class="mono" style="font-size:10px;color:#9A3527">Soft surface</div></div></div>
+    </div>
+    <div class="sem" style="background:#FFF4DC;color:#6E4400;border:1px solid #F5E3A8;min-height:auto;padding:12px 14px">
+      <div class="swatch-row"><span class="swatch" style="background:#E8A13A"></span><div><div style="font-family:var(--font-sans);font-size:12px;font-weight:500">Kick-off delay</div><div class="mono" style="font-size:10px;color:#8A5E0E">Soft surface</div></div></div>
+    </div>
+    <div class="sem" style="background:#EAF3FB;color:#1D4F7A;border:1px solid #CFE1F1;min-height:auto;padding:12px 14px">
+      <div class="swatch-row"><span class="swatch" style="background:#5AA9FF"></span><div><div style="font-family:var(--font-sans);font-size:12px;font-weight:500">VAR check</div><div class="mono" style="font-size:10px;color:#2E6A9C">Soft surface</div></div></div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:#6B6860;max-width:640px;margin-top:4px">Full-intensity tokens for badges and key states (row 1). Each has a matching soft surface — tinted background + deep text — for inline callouts and banners that shouldn't shout (row 2).</div>
+</div>
+</body></html>
