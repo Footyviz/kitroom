@@ -13,6 +13,10 @@ type Story = StoryObj;
 
 const labelStyle = 'display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;';
 
+const src = (code: string) => ({
+  docs: { source: { code, language: 'html' as const } },
+});
+
 export const Default: Story = {
   render: (): TemplateResult => html`
     <label style="${labelStyle}">
@@ -22,6 +26,12 @@ export const Default: Story = {
       All comps
     </label>
   `,
+  parameters: src(`<label>
+  <fv-radio data-group="comps" data-value="all">
+    <span data-role="dot"></span>
+  </fv-radio>
+  All comps
+</label>`),
 };
 
 export const Checked: Story = {
@@ -33,6 +43,12 @@ export const Checked: Story = {
       All comps
     </label>
   `,
+  parameters: src(`<label>
+  <fv-radio aria-checked="true" data-group="comps" data-value="all">
+    <span data-role="dot"></span>
+  </fv-radio>
+  All comps
+</label>`),
 };
 
 export const Group: Story = {
@@ -59,6 +75,26 @@ export const Group: Story = {
       </label>
     </div>
   `,
+  parameters: src(`<div role="radiogroup" aria-label="Competition filter">
+  <label>
+    <fv-radio aria-checked="true" data-group="comps" data-value="all">
+      <span data-role="dot"></span>
+    </fv-radio>
+    All comps
+  </label>
+  <label>
+    <fv-radio data-group="comps" data-value="followed">
+      <span data-role="dot"></span>
+    </fv-radio>
+    Followed only
+  </label>
+  <label>
+    <fv-radio data-group="comps" data-value="domestic">
+      <span data-role="dot"></span>
+    </fv-radio>
+    Domestic
+  </label>
+</div>`),
 };
 
 export const Disabled: Story = {
@@ -70,6 +106,12 @@ export const Disabled: Story = {
       Champions League (premium)
     </label>
   `,
+  parameters: src(`<label>
+  <fv-radio aria-disabled="true" data-group="comps" data-value="ucl">
+    <span data-role="dot"></span>
+  </fv-radio>
+  Champions League (premium)
+</label>`),
 };
 
 export const SelectingOneDeselectsSiblings: Story = {

@@ -11,6 +11,10 @@ export default meta;
 
 type Story = StoryObj;
 
+const src = (code: string) => ({
+  docs: { source: { code, language: 'html' as const } },
+});
+
 export const Default: Story = {
   render: (): TemplateResult => html`
     <fv-segmented aria-label="Match filter">
@@ -19,6 +23,11 @@ export const Default: Story = {
       <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
     </fv-segmented>
   `,
+  parameters: src(`<fv-segmented aria-label="Match filter">
+  <button role="radio" data-value="live" aria-checked="true">Live</button>
+  <button role="radio" data-value="today" aria-checked="false">Today</button>
+  <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
+</fv-segmented>`),
 };
 
 export const TwoOptions: Story = {
@@ -28,6 +37,10 @@ export const TwoOptions: Story = {
       <button role="radio" data-value="followed" aria-checked="true">Followed</button>
     </fv-segmented>
   `,
+  parameters: src(`<fv-segmented aria-label="Match scope">
+  <button role="radio" data-value="all" aria-checked="false">All</button>
+  <button role="radio" data-value="followed" aria-checked="true">Followed</button>
+</fv-segmented>`),
 };
 
 export const Grouped: Story = {
@@ -44,6 +57,16 @@ export const Grouped: Story = {
       </fv-segmented>
     </div>
   `,
+  parameters: src(`<fv-segmented aria-label="Match filter">
+  <button role="radio" data-value="live" aria-checked="true">Live</button>
+  <button role="radio" data-value="today" aria-checked="false">Today</button>
+  <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
+</fv-segmented>
+
+<fv-segmented aria-label="Match scope">
+  <button role="radio" data-value="all" aria-checked="false">All</button>
+  <button role="radio" data-value="followed" aria-checked="true">Followed</button>
+</fv-segmented>`),
 };
 
 export const SelectingOneDeselectsSiblings: Story = {
@@ -157,6 +180,12 @@ export const SkipsDisabledOptionsInKeyboardNav: Story = {
       <button role="radio" data-value="c" aria-checked="false">C</button>
     </fv-segmented>
   `,
+  parameters: src(`<!-- Disabled options stay in DOM but are skipped in arrow-key nav. -->
+<fv-segmented aria-label="Match filter">
+  <button role="radio" data-value="live" aria-checked="true">Live</button>
+  <button role="radio" data-value="today" aria-checked="false" disabled>Today</button>
+  <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
+</fv-segmented>`),
   play: async ({ canvasElement }) => {
     const buttons = canvasElement.querySelectorAll<HTMLButtonElement>(
       '[data-testid="seg"] button',

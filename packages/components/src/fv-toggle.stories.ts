@@ -13,6 +13,13 @@ type Story = StoryObj;
 
 const labelStyle = 'display: inline-flex; align-items: center; gap: 8px; font-size: 13px;';
 
+// Per-story `parameters: src('...')` shows the literal HTML in the
+// "Show code" panel — what a server template would actually emit —
+// instead of the auto-extracted lit-html template.
+const src = (code: string) => ({
+  docs: { source: { code, language: 'html' as const } },
+});
+
 export const Default: Story = {
   render: (): TemplateResult => html`
     <label style="${labelStyle}">
@@ -20,6 +27,10 @@ export const Default: Story = {
       Auto-play highlights
     </label>
   `,
+  parameters: src(`<label>
+  <fv-toggle><span data-role="knob"></span></fv-toggle>
+  Auto-play highlights
+</label>`),
 };
 
 export const Checked: Story = {
@@ -29,6 +40,10 @@ export const Checked: Story = {
       Notifications
     </label>
   `,
+  parameters: src(`<label>
+  <fv-toggle aria-checked="true"><span data-role="knob"></span></fv-toggle>
+  Notifications
+</label>`),
 };
 
 export const Ink: Story = {
@@ -38,6 +53,12 @@ export const Ink: Story = {
       Dark mode
     </label>
   `,
+  parameters: src(`<label>
+  <fv-toggle aria-checked="true" data-variant="ink">
+    <span data-role="knob"></span>
+  </fv-toggle>
+  Dark mode
+</label>`),
 };
 
 export const Large: Story = {
@@ -47,6 +68,12 @@ export const Large: Story = {
       Live alerts
     </label>
   `,
+  parameters: src(`<label>
+  <fv-toggle aria-checked="true" data-size="lg">
+    <span data-role="knob"></span>
+  </fv-toggle>
+  Live alerts
+</label>`),
 };
 
 export const Disabled: Story = {
@@ -56,6 +83,10 @@ export const Disabled: Story = {
       Stadium audio
     </label>
   `,
+  parameters: src(`<label>
+  <fv-toggle aria-disabled="true"><span data-role="knob"></span></fv-toggle>
+  Stadium audio
+</label>`),
 };
 
 export const OnDark: Story = {
@@ -77,6 +108,25 @@ export const OnDark: Story = {
       </div>
     </div>
   `,
+  parameters: src(`<!-- Parent sets data-theme="dark" on <html> or any wrapper. -->
+<div data-theme="dark">
+  <label>
+    <fv-toggle aria-checked="true"><span data-role="knob"></span></fv-toggle>
+    Notifications
+  </label>
+  <label>
+    <fv-toggle aria-checked="true" data-variant="ink">
+      <span data-role="knob"></span>
+    </fv-toggle>
+    Dark mode
+  </label>
+  <label>
+    <fv-toggle aria-checked="true" data-size="lg">
+      <span data-role="knob"></span>
+    </fv-toggle>
+    Live alerts
+  </label>
+</div>`),
 };
 
 export const TogglesOnClick: Story = {
@@ -160,6 +210,10 @@ export const RespectsPresetAttributes: Story = {
       <span data-role="knob"></span>
     </fv-toggle>
   `,
+  parameters: src(`<!-- Server-supplied role/tabindex/aria-checked are honored as-is. -->
+<fv-toggle aria-checked="true" tabindex="-1">
+  <span data-role="knob"></span>
+</fv-toggle>`),
   play: async ({ canvasElement }) => {
     // The component must not stomp server-supplied attribute values.
     const toggle = canvasElement.querySelector<HTMLElement>('[data-testid="t"]')!;

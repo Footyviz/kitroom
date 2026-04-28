@@ -19,6 +19,15 @@ const check = html`
   </svg>
 `;
 
+const src = (code: string) => ({
+  docs: { source: { code, language: 'html' as const } },
+});
+
+const checkSvgHtml = `<svg data-role="check" viewBox="0 0 16 16" aria-hidden="true" fill="none"
+       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 8 7 12 13 4"/>
+  </svg>`;
+
 export const Default: Story = {
   render: (): TemplateResult => html`
     <label style="${labelStyle}">
@@ -26,6 +35,12 @@ export const Default: Story = {
       Yellow cards
     </label>
   `,
+  parameters: src(`<label>
+  <fv-checkbox>
+    ${checkSvgHtml}
+  </fv-checkbox>
+  Yellow cards
+</label>`),
 };
 
 export const Checked: Story = {
@@ -35,6 +50,12 @@ export const Checked: Story = {
       Goals
     </label>
   `,
+  parameters: src(`<label>
+  <fv-checkbox aria-checked="true">
+    ${checkSvgHtml}
+  </fv-checkbox>
+  Goals
+</label>`),
 };
 
 export const Accent: Story = {
@@ -44,6 +65,12 @@ export const Accent: Story = {
       Big chances
     </label>
   `,
+  parameters: src(`<label>
+  <fv-checkbox aria-checked="true" data-variant="accent">
+    ${checkSvgHtml}
+  </fv-checkbox>
+  Big chances
+</label>`),
 };
 
 export const Disabled: Story = {
@@ -53,6 +80,12 @@ export const Disabled: Story = {
       Subs (premium only)
     </label>
   `,
+  parameters: src(`<label>
+  <fv-checkbox aria-disabled="true">
+    ${checkSvgHtml}
+  </fv-checkbox>
+  Subs (premium only)
+</label>`),
 };
 
 export const Group: Story = {
@@ -76,6 +109,22 @@ export const Group: Story = {
       </label>
     </div>
   `,
+  parameters: src(`<label>
+  <fv-checkbox aria-checked="true">${checkSvgHtml}</fv-checkbox>
+  Goals
+</label>
+<label>
+  <fv-checkbox aria-checked="true" data-variant="accent">${checkSvgHtml}</fv-checkbox>
+  Big chances
+</label>
+<label>
+  <fv-checkbox>${checkSvgHtml}</fv-checkbox>
+  Yellow cards
+</label>
+<label>
+  <fv-checkbox>${checkSvgHtml}</fv-checkbox>
+  Subs
+</label>`),
 };
 
 export const TogglesOnClick: Story = {

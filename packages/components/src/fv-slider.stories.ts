@@ -17,6 +17,14 @@ const innerParts = html`
   <span data-role="thumb"></span>
 `;
 
+const src = (code: string) => ({
+  docs: { source: { code, language: 'html' as const } },
+});
+
+const partsHtml = `<span data-role="track"></span>
+  <span data-role="fill"></span>
+  <span data-role="thumb"></span>`;
+
 export const Default: Story = {
   render: (): TemplateResult => html`
     <div style="display:inline-flex;align-items:center;gap:10px">
@@ -24,18 +32,27 @@ export const Default: Story = {
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg-muted)">62%</span>
     </div>
   `,
+  parameters: src(`<fv-slider data-value="62" aria-label="Volume">
+  ${partsHtml}
+</fv-slider>`),
 };
 
 export const Empty: Story = {
   render: (): TemplateResult => html`
     <fv-slider data-value="0" aria-label="Empty">${innerParts}</fv-slider>
   `,
+  parameters: src(`<fv-slider data-value="0" aria-label="Volume">
+  ${partsHtml}
+</fv-slider>`),
 };
 
 export const Full: Story = {
   render: (): TemplateResult => html`
     <fv-slider data-value="100" aria-label="Full">${innerParts}</fv-slider>
   `,
+  parameters: src(`<fv-slider data-value="100" aria-label="Volume">
+  ${partsHtml}
+</fv-slider>`),
 };
 
 export const CustomRange: Story = {
@@ -43,12 +60,19 @@ export const CustomRange: Story = {
     <fv-slider data-value="40" data-min="0" data-max="120" data-step="5"
                aria-label="Match minute">${innerParts}</fv-slider>
   `,
+  parameters: src(`<fv-slider data-value="40" data-min="0" data-max="120" data-step="5"
+           aria-label="Match minute">
+  ${partsHtml}
+</fv-slider>`),
 };
 
 export const Disabled: Story = {
   render: (): TemplateResult => html`
     <fv-slider data-value="40" aria-disabled="true" aria-label="Disabled">${innerParts}</fv-slider>
   `,
+  parameters: src(`<fv-slider data-value="40" aria-disabled="true" aria-label="Volume">
+  ${partsHtml}
+</fv-slider>`),
 };
 
 export const KeyboardArrowsAdjustValue: Story = {
