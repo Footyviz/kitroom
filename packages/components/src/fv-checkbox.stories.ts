@@ -1,15 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { html, type TemplateResult } from 'lit-html';
+import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-checkbox.js';
 
-const meta: Meta = {
+type CheckboxArgs = {
+  checked: boolean;
+  disabled: boolean;
+  variant: 'ink' | 'accent';
+};
+
+const meta: Meta<CheckboxArgs> = {
   title: 'Components/Checkbox',
   component: 'fv-checkbox',
+  argTypes: {
+    checked: { control: 'boolean', description: 'aria-checked' },
+    disabled: { control: 'boolean', description: 'aria-disabled' },
+    variant: {
+      control: { type: 'inline-radio' },
+      options: ['ink', 'accent'],
+      description: 'data-variant — ink default, accent (lime) for user-valued filters',
+    },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<CheckboxArgs>;
 
 const labelStyle = 'display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;';
 const check = html`
@@ -28,64 +43,60 @@ const checkSvgHtml = `<svg data-role="check" viewBox="0 0 16 16" aria-hidden="tr
     <polyline points="3 8 7 12 13 4"/>
   </svg>`;
 
-export const Default: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-checkbox>${check}</fv-checkbox>
-      Yellow cards
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-checkbox>
+const checkboxHtml = (args: CheckboxArgs, label: string): string => {
+  const attrs: string[] = [`aria-checked="${args.checked ? 'true' : 'false'}"`];
+  if (args.disabled) attrs.push('aria-disabled="true"');
+  if (args.variant !== 'ink') attrs.push(`data-variant="${args.variant}"`);
+  return `<label>
+  <fv-checkbox ${attrs.join(' ')}>
     ${checkSvgHtml}
   </fv-checkbox>
-  Yellow cards
-</label>`),
+  ${label}
+</label>`;
+};
+
+const dynamicSrc = (label: string) => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: CheckboxArgs }) => checkboxHtml(ctx.args, label),
+    },
+  },
+});
+
+const renderCheckbox = (args: CheckboxArgs, label: string): TemplateResult => html`
+  <label style="${labelStyle}${args.disabled ? '; color: var(--fg-subtle);' : ''}">
+    <fv-checkbox
+      aria-checked="${args.checked ? 'true' : 'false'}"
+      aria-disabled="${args.disabled ? 'true' : nothing}"
+      data-variant="${args.variant !== 'ink' ? args.variant : nothing}"
+    >${check}</fv-checkbox>
+    ${label}
+  </label>
+`;
+
+export const Default: Story = {
+  args: { checked: false, disabled: false, variant: 'ink' },
+  render: (args) => renderCheckbox(args, 'Yellow cards'),
+  parameters: dynamicSrc('Yellow cards'),
 };
 
 export const Checked: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-checkbox aria-checked="true">${check}</fv-checkbox>
-      Goals
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-checkbox aria-checked="true">
-    ${checkSvgHtml}
-  </fv-checkbox>
-  Goals
-</label>`),
+  args: { checked: true, disabled: false, variant: 'ink' },
+  render: (args) => renderCheckbox(args, 'Goals'),
+  parameters: dynamicSrc('Goals'),
 };
 
 export const Accent: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-checkbox aria-checked="true" data-variant="accent">${check}</fv-checkbox>
-      Big chances
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-checkbox aria-checked="true" data-variant="accent">
-    ${checkSvgHtml}
-  </fv-checkbox>
-  Big chances
-</label>`),
+  args: { checked: true, disabled: false, variant: 'accent' },
+  render: (args) => renderCheckbox(args, 'Big chances'),
+  parameters: dynamicSrc('Big chances'),
 };
 
 export const Disabled: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}; color: var(--fg-subtle);">
-      <fv-checkbox aria-disabled="true">${check}</fv-checkbox>
-      Subs (premium only)
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-checkbox aria-disabled="true">
-    ${checkSvgHtml}
-  </fv-checkbox>
-  Subs (premium only)
-</label>`),
+  args: { checked: false, disabled: true, variant: 'ink' },
+  render: (args) => renderCheckbox(args, 'Subs (premium only)'),
+  parameters: dynamicSrc('Subs (premium only)'),
 };
 
 export const Group: Story = {

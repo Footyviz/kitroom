@@ -1,15 +1,28 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { html, type TemplateResult } from 'lit-html';
+import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-tabbar.js';
 
-const meta: Meta = {
+type TabValue = 'live' | 'fixtures' | 'observe' | 'follow' | 'you';
+
+type TabbarArgs = {
+  current: TabValue;
+};
+
+const meta: Meta<TabbarArgs> = {
   title: 'Components/Tabbar',
   component: 'fv-tabbar',
+  argTypes: {
+    current: {
+      control: { type: 'select' },
+      options: ['live', 'fixtures', 'observe', 'follow', 'you'],
+      description: 'data-value of the tab marked aria-current="page"',
+    },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<TabbarArgs>;
 
 const src = (code: string) => ({
   docs: { source: { code, language: 'html' as const } },
@@ -64,117 +77,87 @@ const youIcon = html`
   </svg>
 `;
 
+const TABS: { value: TabValue; href: string; label: string; iconHtml: string; icon: TemplateResult }[] = [
+  { value: 'live',     href: '/live',     label: 'Live',     iconHtml: ICONS_HTML.live,     icon: liveIcon },
+  { value: 'fixtures', href: '/fixtures', label: 'Fixtures', iconHtml: ICONS_HTML.fixtures, icon: fixturesIcon },
+  { value: 'observe',  href: '/observe',  label: 'Observe',  iconHtml: ICONS_HTML.observe,  icon: observeIcon },
+  { value: 'follow',   href: '/follow',   label: 'Follow',   iconHtml: ICONS_HTML.follow,   icon: followIcon },
+  { value: 'you',      href: '/you',      label: 'You',      iconHtml: ICONS_HTML.you,      icon: youIcon },
+];
+
+const tabbarHtml = (
+  args: TabbarArgs,
+  ariaLabel: string,
+  use: 'a' | 'button',
+  tabs: typeof TABS,
+): string => {
+  const items = tabs
+    .map((t) => {
+      const current = t.value === args.current ? ' aria-current="page"' : '';
+      const open = use === 'a'
+        ? `<a href="${t.href}" role="tab" data-value="${t.value}"${current}>`
+        : `<button type="button" role="tab" data-value="${t.value}"${current}>`;
+      const close = use === 'a' ? '</a>' : '</button>';
+      return `  ${open}
+    ${t.iconHtml}
+    <span data-role="label">${t.label}</span>
+    <span data-role="indicator"></span>
+  ${close}`;
+    })
+    .join('\n');
+  return `<fv-tabbar aria-label="${ariaLabel}">
+${items}
+</fv-tabbar>`;
+};
+
+const renderTabbar = (
+  args: TabbarArgs,
+  ariaLabel: string,
+  use: 'a' | 'button',
+  tabs: typeof TABS,
+): TemplateResult => html`
+  <fv-tabbar aria-label="${ariaLabel}">
+    ${tabs.map((t) => {
+      const current = t.value === args.current ? 'page' : nothing;
+      return use === 'a'
+        ? html`<a href="${t.href}" role="tab" data-value="${t.value}" aria-current="${current}">
+            ${t.icon}<span data-role="label">${t.label}</span><span data-role="indicator"></span>
+          </a>`
+        : html`<button type="button" role="tab" data-value="${t.value}" aria-current="${current}">
+            ${t.icon}<span data-role="label">${t.label}</span><span data-role="indicator"></span>
+          </button>`;
+    })}
+  </fv-tabbar>
+`;
+
+const dynamicSrc = (ariaLabel: string, use: 'a' | 'button', tabs = TABS) => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: TabbarArgs }) => tabbarHtml(ctx.args, ariaLabel, use, tabs),
+    },
+  },
+});
+
 export const Default: Story = {
-  render: (): TemplateResult => html`
-    <fv-tabbar aria-label="Main navigation">
-      <a href="/live" role="tab" data-value="live" aria-current="page">
-        ${liveIcon}<span data-role="label">Live</span><span data-role="indicator"></span>
-      </a>
-      <a href="/fixtures" role="tab" data-value="fixtures">
-        ${fixturesIcon}<span data-role="label">Fixtures</span><span data-role="indicator"></span>
-      </a>
-      <a href="/observe" role="tab" data-value="observe">
-        ${observeIcon}<span data-role="label">Observe</span><span data-role="indicator"></span>
-      </a>
-      <a href="/follow" role="tab" data-value="follow">
-        ${followIcon}<span data-role="label">Follow</span><span data-role="indicator"></span>
-      </a>
-      <a href="/you" role="tab" data-value="you">
-        ${youIcon}<span data-role="label">You</span><span data-role="indicator"></span>
-      </a>
-    </fv-tabbar>
-  `,
-  parameters: src(`<fv-tabbar aria-label="Main navigation">
-  <a href="/live" role="tab" data-value="live" aria-current="page">
-    ${ICONS_HTML.live}
-    <span data-role="label">Live</span>
-    <span data-role="indicator"></span>
-  </a>
-  <a href="/fixtures" role="tab" data-value="fixtures">
-    ${ICONS_HTML.fixtures}
-    <span data-role="label">Fixtures</span>
-    <span data-role="indicator"></span>
-  </a>
-  <a href="/observe" role="tab" data-value="observe">
-    ${ICONS_HTML.observe}
-    <span data-role="label">Observe</span>
-    <span data-role="indicator"></span>
-  </a>
-  <a href="/follow" role="tab" data-value="follow">
-    ${ICONS_HTML.follow}
-    <span data-role="label">Follow</span>
-    <span data-role="indicator"></span>
-  </a>
-  <a href="/you" role="tab" data-value="you">
-    ${ICONS_HTML.you}
-    <span data-role="label">You</span>
-    <span data-role="indicator"></span>
-  </a>
-</fv-tabbar>`),
+  args: { current: 'live' },
+  render: (args) => renderTabbar(args, 'Main navigation', 'a', TABS),
+  parameters: dynamicSrc('Main navigation', 'a'),
 };
 
 export const FixturesActive: Story = {
-  render: (): TemplateResult => html`
-    <fv-tabbar aria-label="Main navigation">
-      <a href="/live" role="tab" data-value="live">
-        ${liveIcon}<span data-role="label">Live</span><span data-role="indicator"></span>
-      </a>
-      <a href="/fixtures" role="tab" data-value="fixtures" aria-current="page">
-        ${fixturesIcon}<span data-role="label">Fixtures</span><span data-role="indicator"></span>
-      </a>
-      <a href="/observe" role="tab" data-value="observe">
-        ${observeIcon}<span data-role="label">Observe</span><span data-role="indicator"></span>
-      </a>
-      <a href="/follow" role="tab" data-value="follow">
-        ${followIcon}<span data-role="label">Follow</span><span data-role="indicator"></span>
-      </a>
-      <a href="/you" role="tab" data-value="you">
-        ${youIcon}<span data-role="label">You</span><span data-role="indicator"></span>
-      </a>
-    </fv-tabbar>
-  `,
-  parameters: src(`<!-- Same shape as Default; aria-current="page" moved to /fixtures. -->
-<fv-tabbar aria-label="Main navigation">
-  <a href="/live" role="tab" data-value="live">${ICONS_HTML.live}<span data-role="label">Live</span><span data-role="indicator"></span></a>
-  <a href="/fixtures" role="tab" data-value="fixtures" aria-current="page">${ICONS_HTML.fixtures}<span data-role="label">Fixtures</span><span data-role="indicator"></span></a>
-  <a href="/observe" role="tab" data-value="observe">${ICONS_HTML.observe}<span data-role="label">Observe</span><span data-role="indicator"></span></a>
-  <a href="/follow" role="tab" data-value="follow">${ICONS_HTML.follow}<span data-role="label">Follow</span><span data-role="indicator"></span></a>
-  <a href="/you" role="tab" data-value="you">${ICONS_HTML.you}<span data-role="label">You</span><span data-role="indicator"></span></a>
-</fv-tabbar>`),
+  args: { current: 'fixtures' },
+  render: (args) => renderTabbar(args, 'Main navigation', 'a', TABS),
+  parameters: dynamicSrc('Main navigation', 'a'),
 };
 
 export const ButtonTabs: Story = {
-  render: (): TemplateResult => html`
-    <fv-tabbar aria-label="Section">
-      <button type="button" role="tab" data-value="live" aria-current="page">
-        ${liveIcon}<span data-role="label">Live</span><span data-role="indicator"></span>
-      </button>
-      <button type="button" role="tab" data-value="fixtures">
-        ${fixturesIcon}<span data-role="label">Fixtures</span><span data-role="indicator"></span>
-      </button>
-      <button type="button" role="tab" data-value="observe">
-        ${observeIcon}<span data-role="label">Observe</span><span data-role="indicator"></span>
-      </button>
-    </fv-tabbar>
-  `,
-  parameters: src(`<!-- Use <button> instead of <a> for SPA tabs that don't navigate. -->
-<fv-tabbar aria-label="Section">
-  <button type="button" role="tab" data-value="live" aria-current="page">
-    ${ICONS_HTML.live}
-    <span data-role="label">Live</span>
-    <span data-role="indicator"></span>
-  </button>
-  <button type="button" role="tab" data-value="fixtures">
-    ${ICONS_HTML.fixtures}
-    <span data-role="label">Fixtures</span>
-    <span data-role="indicator"></span>
-  </button>
-  <button type="button" role="tab" data-value="observe">
-    ${ICONS_HTML.observe}
-    <span data-role="label">Observe</span>
-    <span data-role="indicator"></span>
-  </button>
-</fv-tabbar>`),
+  args: { current: 'live' },
+  argTypes: {
+    current: { control: { type: 'select' }, options: ['live', 'fixtures', 'observe'] },
+  },
+  render: (args) => renderTabbar(args, 'Section', 'button', TABS.slice(0, 3)),
+  parameters: dynamicSrc('Section', 'button', TABS.slice(0, 3)),
 };
 
 export const ClickingMovesActive: Story = {

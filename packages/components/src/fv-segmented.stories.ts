@@ -3,44 +3,102 @@ import { html, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-segmented.js';
 
-const meta: Meta = {
+type SegmentedArgs = {
+  selected: string;
+};
+
+const meta: Meta<SegmentedArgs> = {
   title: 'Components/Segmented',
   component: 'fv-segmented',
+  argTypes: {
+    selected: {
+      control: { type: 'inline-radio' },
+      description: 'data-value of the option marked aria-checked="true"',
+    },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<SegmentedArgs>;
 
 const src = (code: string) => ({
   docs: { source: { code, language: 'html' as const } },
 });
 
+const segmentedHtml = (
+  args: SegmentedArgs,
+  ariaLabel: string,
+  options: { value: string; label: string }[],
+): string => {
+  const buttons = options
+    .map(
+      (o) =>
+        `  <button role="radio" data-value="${o.value}" aria-checked="${o.value === args.selected ? 'true' : 'false'}">${o.label}</button>`,
+    )
+    .join('\n');
+  return `<fv-segmented aria-label="${ariaLabel}">\n${buttons}\n</fv-segmented>`;
+};
+
+const renderSegmented = (
+  args: SegmentedArgs,
+  ariaLabel: string,
+  options: { value: string; label: string }[],
+): TemplateResult => html`
+  <fv-segmented aria-label="${ariaLabel}">
+    ${options.map(
+      (o) => html`
+        <button
+          role="radio"
+          data-value="${o.value}"
+          aria-checked="${o.value === args.selected ? 'true' : 'false'}"
+        >${o.label}</button>
+      `,
+    )}
+  </fv-segmented>
+`;
+
+const matchFilter = [
+  { value: 'live', label: 'Live' },
+  { value: 'today', label: 'Today' },
+  { value: 'upcoming', label: 'Upcoming' },
+];
+const matchScope = [
+  { value: 'all', label: 'All' },
+  { value: 'followed', label: 'Followed' },
+];
+
 export const Default: Story = {
-  render: (): TemplateResult => html`
-    <fv-segmented aria-label="Match filter">
-      <button role="radio" data-value="live" aria-checked="true">Live</button>
-      <button role="radio" data-value="today" aria-checked="false">Today</button>
-      <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
-    </fv-segmented>
-  `,
-  parameters: src(`<fv-segmented aria-label="Match filter">
-  <button role="radio" data-value="live" aria-checked="true">Live</button>
-  <button role="radio" data-value="today" aria-checked="false">Today</button>
-  <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
-</fv-segmented>`),
+  args: { selected: 'live' },
+  argTypes: {
+    selected: { control: { type: 'inline-radio' }, options: ['live', 'today', 'upcoming'] },
+  },
+  render: (args) => renderSegmented(args, 'Match filter', matchFilter),
+  parameters: {
+    docs: {
+      source: {
+        language: 'html',
+        transform: (_: string, ctx: { args: SegmentedArgs }) =>
+          segmentedHtml(ctx.args, 'Match filter', matchFilter),
+      },
+    },
+  },
 };
 
 export const TwoOptions: Story = {
-  render: (): TemplateResult => html`
-    <fv-segmented aria-label="Match scope">
-      <button role="radio" data-value="all" aria-checked="false">All</button>
-      <button role="radio" data-value="followed" aria-checked="true">Followed</button>
-    </fv-segmented>
-  `,
-  parameters: src(`<fv-segmented aria-label="Match scope">
-  <button role="radio" data-value="all" aria-checked="false">All</button>
-  <button role="radio" data-value="followed" aria-checked="true">Followed</button>
-</fv-segmented>`),
+  args: { selected: 'followed' },
+  argTypes: {
+    selected: { control: { type: 'inline-radio' }, options: ['all', 'followed'] },
+  },
+  render: (args) => renderSegmented(args, 'Match scope', matchScope),
+  parameters: {
+    docs: {
+      source: {
+        language: 'html',
+        transform: (_: string, ctx: { args: SegmentedArgs }) =>
+          segmentedHtml(ctx.args, 'Match scope', matchScope),
+      },
+    },
+  },
 };
 
 export const Grouped: Story = {

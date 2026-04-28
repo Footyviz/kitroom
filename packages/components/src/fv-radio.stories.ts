@@ -1,15 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { html, type TemplateResult } from 'lit-html';
+import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-radio.js';
 
-const meta: Meta = {
+type RadioArgs = {
+  checked: boolean;
+  disabled: boolean;
+};
+
+const meta: Meta<RadioArgs> = {
   title: 'Components/Radio',
   component: 'fv-radio',
+  argTypes: {
+    checked: { control: 'boolean', description: 'aria-checked' },
+    disabled: { control: 'boolean', description: 'aria-disabled' },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<RadioArgs>;
 
 const labelStyle = 'display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;';
 
@@ -17,38 +26,51 @@ const src = (code: string) => ({
   docs: { source: { code, language: 'html' as const } },
 });
 
-export const Default: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-radio data-group="story-default" data-value="all">
-        <span data-role="dot"></span>
-      </fv-radio>
-      All comps
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-radio data-group="comps" data-value="all">
+const radioHtml = (args: RadioArgs, label: string, value = 'all'): string => {
+  const attrs: string[] = [`data-group="comps"`, `data-value="${value}"`];
+  if (args.checked) attrs.unshift('aria-checked="true"');
+  if (args.disabled) attrs.push('aria-disabled="true"');
+  return `<label>
+  <fv-radio ${attrs.join(' ')}>
     <span data-role="dot"></span>
   </fv-radio>
-  All comps
-</label>`),
+  ${label}
+</label>`;
+};
+
+const dynamicSrc = (label: string, value?: string) => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: RadioArgs }) => radioHtml(ctx.args, label, value),
+    },
+  },
+});
+
+const renderRadio = (args: RadioArgs, label: string, group: string, value = 'all'): TemplateResult => html`
+  <label style="${labelStyle}${args.disabled ? '; color: var(--fg-subtle);' : ''}">
+    <fv-radio
+      aria-checked="${args.checked ? 'true' : nothing}"
+      aria-disabled="${args.disabled ? 'true' : nothing}"
+      data-group="${group}"
+      data-value="${value}"
+    >
+      <span data-role="dot"></span>
+    </fv-radio>
+    ${label}
+  </label>
+`;
+
+export const Default: Story = {
+  args: { checked: false, disabled: false },
+  render: (args) => renderRadio(args, 'All comps', 'story-default'),
+  parameters: dynamicSrc('All comps'),
 };
 
 export const Checked: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-radio aria-checked="true" data-group="story-checked" data-value="all">
-        <span data-role="dot"></span>
-      </fv-radio>
-      All comps
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-radio aria-checked="true" data-group="comps" data-value="all">
-    <span data-role="dot"></span>
-  </fv-radio>
-  All comps
-</label>`),
+  args: { checked: true, disabled: false },
+  render: (args) => renderRadio(args, 'All comps', 'story-checked'),
+  parameters: dynamicSrc('All comps'),
 };
 
 export const Group: Story = {
@@ -98,20 +120,9 @@ export const Group: Story = {
 };
 
 export const Disabled: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}; color: var(--fg-subtle);">
-      <fv-radio aria-disabled="true" data-group="story-disabled" data-value="x">
-        <span data-role="dot"></span>
-      </fv-radio>
-      Champions League (premium)
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-radio aria-disabled="true" data-group="comps" data-value="ucl">
-    <span data-role="dot"></span>
-  </fv-radio>
-  Champions League (premium)
-</label>`),
+  args: { checked: false, disabled: true },
+  render: (args) => renderRadio(args, 'Champions League (premium)', 'story-disabled', 'ucl'),
+  parameters: dynamicSrc('Champions League (premium)', 'ucl'),
 };
 
 export const SelectingOneDeselectsSiblings: Story = {

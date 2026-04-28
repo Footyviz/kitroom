@@ -1,92 +1,113 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { html, type TemplateResult } from 'lit-html';
+import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-toggle.js';
 
-const meta: Meta = {
+type ToggleArgs = {
+  checked: boolean;
+  disabled: boolean;
+  variant: 'accent' | 'ink';
+  size: 'default' | 'lg';
+};
+
+const meta: Meta<ToggleArgs> = {
   title: 'Components/Toggle',
   component: 'fv-toggle',
+  argTypes: {
+    checked: { control: 'boolean', description: 'aria-checked' },
+    disabled: { control: 'boolean', description: 'aria-disabled' },
+    variant: {
+      control: { type: 'inline-radio' },
+      options: ['accent', 'ink'],
+      description: 'data-variant — accent (lime) for user-valued, ink for system mode',
+    },
+    size: {
+      control: { type: 'inline-radio' },
+      options: ['default', 'lg'],
+      description: 'data-size',
+    },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<ToggleArgs>;
 
 const labelStyle = 'display: inline-flex; align-items: center; gap: 8px; font-size: 13px;';
 
-// Per-story `parameters: src('...')` shows the literal HTML in the
-// "Show code" panel — what a server template would actually emit —
-// instead of the auto-extracted lit-html template.
+// Static-snippet helper for stories whose markup doesn't vary by args
+// (composites, test scaffolds, degradation cases). The "Show code" panel
+// shows this exact HTML.
 const src = (code: string) => ({
   docs: { source: { code, language: 'html' as const } },
 });
 
+// Build the literal HTML a server template would emit for the current args.
+// Used both as the snippet (via parameters.docs.source.transform) and as
+// the basis for the live render so the two never drift.
+const toggleHtml = (args: ToggleArgs, label: string): string => {
+  const attrs: string[] = [`aria-checked="${args.checked ? 'true' : 'false'}"`];
+  if (args.disabled) attrs.push('aria-disabled="true"');
+  if (args.variant !== 'accent') attrs.push(`data-variant="${args.variant}"`);
+  if (args.size !== 'default') attrs.push(`data-size="${args.size}"`);
+  return `<label>
+  <fv-toggle ${attrs.join(' ')}><span data-role="knob"></span></fv-toggle>
+  ${label}
+</label>`;
+};
+
+// Per-story `parameters: dynamicSrc(label)` makes the "Show code" panel
+// re-derive its HTML whenever a control is tweaked.
+const dynamicSrc = (label: string) => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: ToggleArgs }) => toggleHtml(ctx.args, label),
+    },
+  },
+});
+
+// Live lit-html render that mirrors toggleHtml (kept side-by-side so a
+// reviewer can verify they agree).
+const renderToggle = (args: ToggleArgs, label: string): TemplateResult => html`
+  <label style="${labelStyle}">
+    <fv-toggle
+      aria-checked="${args.checked ? 'true' : 'false'}"
+      aria-disabled="${args.disabled ? 'true' : nothing}"
+      data-variant="${args.variant !== 'accent' ? args.variant : nothing}"
+      data-size="${args.size !== 'default' ? args.size : nothing}"
+    ><span data-role="knob"></span></fv-toggle>
+    ${label}
+  </label>
+`;
+
 export const Default: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-toggle><span data-role="knob"></span></fv-toggle>
-      Auto-play highlights
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-toggle><span data-role="knob"></span></fv-toggle>
-  Auto-play highlights
-</label>`),
+  args: { checked: false, disabled: false, variant: 'accent', size: 'default' },
+  render: (args) => renderToggle(args, 'Auto-play highlights'),
+  parameters: dynamicSrc('Auto-play highlights'),
 };
 
 export const Checked: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-toggle aria-checked="true"><span data-role="knob"></span></fv-toggle>
-      Notifications
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-toggle aria-checked="true"><span data-role="knob"></span></fv-toggle>
-  Notifications
-</label>`),
+  args: { checked: true, disabled: false, variant: 'accent', size: 'default' },
+  render: (args) => renderToggle(args, 'Notifications'),
+  parameters: dynamicSrc('Notifications'),
 };
 
 export const Ink: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-toggle aria-checked="true" data-variant="ink"><span data-role="knob"></span></fv-toggle>
-      Dark mode
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-toggle aria-checked="true" data-variant="ink">
-    <span data-role="knob"></span>
-  </fv-toggle>
-  Dark mode
-</label>`),
+  args: { checked: true, disabled: false, variant: 'ink', size: 'default' },
+  render: (args) => renderToggle(args, 'Dark mode'),
+  parameters: dynamicSrc('Dark mode'),
 };
 
 export const Large: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}">
-      <fv-toggle aria-checked="true" data-size="lg"><span data-role="knob"></span></fv-toggle>
-      Live alerts
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-toggle aria-checked="true" data-size="lg">
-    <span data-role="knob"></span>
-  </fv-toggle>
-  Live alerts
-</label>`),
+  args: { checked: true, disabled: false, variant: 'accent', size: 'lg' },
+  render: (args) => renderToggle(args, 'Live alerts'),
+  parameters: dynamicSrc('Live alerts'),
 };
 
 export const Disabled: Story = {
-  render: (): TemplateResult => html`
-    <label style="${labelStyle}; color: var(--fg-subtle);">
-      <fv-toggle aria-disabled="true"><span data-role="knob"></span></fv-toggle>
-      Stadium audio
-    </label>
-  `,
-  parameters: src(`<label>
-  <fv-toggle aria-disabled="true"><span data-role="knob"></span></fv-toggle>
-  Stadium audio
-</label>`),
+  args: { checked: false, disabled: true, variant: 'accent', size: 'default' },
+  render: (args) => renderToggle(args, 'Stadium audio'),
+  parameters: dynamicSrc('Stadium audio'),
 };
 
 export const OnDark: Story = {

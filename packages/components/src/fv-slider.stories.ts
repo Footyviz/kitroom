@@ -1,15 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
-import { html, type TemplateResult } from 'lit-html';
+import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect, fn, userEvent } from 'storybook/test';
 import './fv-slider.js';
 
-const meta: Meta = {
+type SliderArgs = {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  disabled: boolean;
+};
+
+const meta: Meta<SliderArgs> = {
   title: 'Components/Slider',
   component: 'fv-slider',
+  argTypes: {
+    value: { control: { type: 'number' }, description: 'data-value' },
+    min: { control: { type: 'number' }, description: 'data-min' },
+    max: { control: { type: 'number' }, description: 'data-max' },
+    step: { control: { type: 'number' }, description: 'data-step' },
+    disabled: { control: 'boolean', description: 'aria-disabled' },
+  },
 };
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<SliderArgs>;
 
 const innerParts = html`
   <span data-role="track"></span>
@@ -25,54 +40,71 @@ const partsHtml = `<span data-role="track"></span>
   <span data-role="fill"></span>
   <span data-role="thumb"></span>`;
 
+const sliderHtml = (args: SliderArgs, ariaLabel: string): string => {
+  const attrs: string[] = [`data-value="${args.value}"`];
+  if (args.min !== 0) attrs.push(`data-min="${args.min}"`);
+  if (args.max !== 100) attrs.push(`data-max="${args.max}"`);
+  if (args.step !== 1) attrs.push(`data-step="${args.step}"`);
+  if (args.disabled) attrs.push('aria-disabled="true"');
+  attrs.push(`aria-label="${ariaLabel}"`);
+  return `<fv-slider ${attrs.join(' ')}>
+  ${partsHtml}
+</fv-slider>`;
+};
+
+const dynamicSrc = (ariaLabel: string) => ({
+  docs: {
+    source: {
+      language: 'html' as const,
+      transform: (_: string, ctx: { args: SliderArgs }) => sliderHtml(ctx.args, ariaLabel),
+    },
+  },
+});
+
+const renderSlider = (args: SliderArgs, ariaLabel: string): TemplateResult => html`
+  <fv-slider
+    data-value="${args.value}"
+    data-min="${args.min !== 0 ? String(args.min) : nothing}"
+    data-max="${args.max !== 100 ? String(args.max) : nothing}"
+    data-step="${args.step !== 1 ? String(args.step) : nothing}"
+    aria-disabled="${args.disabled ? 'true' : nothing}"
+    aria-label="${ariaLabel}"
+  >${innerParts}</fv-slider>
+`;
+
 export const Default: Story = {
-  render: (): TemplateResult => html`
+  args: { value: 62, min: 0, max: 100, step: 1, disabled: false },
+  render: (args) => html`
     <div style="display:inline-flex;align-items:center;gap:10px">
-      <fv-slider data-value="62" aria-label="Volume">${innerParts}</fv-slider>
-      <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg-muted)">62%</span>
+      ${renderSlider(args, 'Volume')}
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg-muted)">${args.value}%</span>
     </div>
   `,
-  parameters: src(`<fv-slider data-value="62" aria-label="Volume">
-  ${partsHtml}
-</fv-slider>`),
+  parameters: dynamicSrc('Volume'),
 };
 
 export const Empty: Story = {
-  render: (): TemplateResult => html`
-    <fv-slider data-value="0" aria-label="Empty">${innerParts}</fv-slider>
-  `,
-  parameters: src(`<fv-slider data-value="0" aria-label="Volume">
-  ${partsHtml}
-</fv-slider>`),
+  args: { value: 0, min: 0, max: 100, step: 1, disabled: false },
+  render: (args) => renderSlider(args, 'Empty'),
+  parameters: dynamicSrc('Empty'),
 };
 
 export const Full: Story = {
-  render: (): TemplateResult => html`
-    <fv-slider data-value="100" aria-label="Full">${innerParts}</fv-slider>
-  `,
-  parameters: src(`<fv-slider data-value="100" aria-label="Volume">
-  ${partsHtml}
-</fv-slider>`),
+  args: { value: 100, min: 0, max: 100, step: 1, disabled: false },
+  render: (args) => renderSlider(args, 'Full'),
+  parameters: dynamicSrc('Full'),
 };
 
 export const CustomRange: Story = {
-  render: (): TemplateResult => html`
-    <fv-slider data-value="40" data-min="0" data-max="120" data-step="5"
-               aria-label="Match minute">${innerParts}</fv-slider>
-  `,
-  parameters: src(`<fv-slider data-value="40" data-min="0" data-max="120" data-step="5"
-           aria-label="Match minute">
-  ${partsHtml}
-</fv-slider>`),
+  args: { value: 40, min: 0, max: 120, step: 5, disabled: false },
+  render: (args) => renderSlider(args, 'Match minute'),
+  parameters: dynamicSrc('Match minute'),
 };
 
 export const Disabled: Story = {
-  render: (): TemplateResult => html`
-    <fv-slider data-value="40" aria-disabled="true" aria-label="Disabled">${innerParts}</fv-slider>
-  `,
-  parameters: src(`<fv-slider data-value="40" aria-disabled="true" aria-label="Volume">
-  ${partsHtml}
-</fv-slider>`),
+  args: { value: 40, min: 0, max: 100, step: 1, disabled: true },
+  render: (args) => renderSlider(args, 'Disabled'),
+  parameters: dynamicSrc('Disabled'),
 };
 
 export const KeyboardArrowsAdjustValue: Story = {
