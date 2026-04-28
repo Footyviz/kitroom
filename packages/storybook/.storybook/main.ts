@@ -29,6 +29,11 @@ const config: StorybookConfig = {
     name: '@storybook/web-components-vite',
     options: {},
   },
+  staticDirs: [
+    // Serve the raw design-spec HTML pages so the "Design Specs" stories can
+    // embed them in iframes. Path is relative to this file.
+    { from: '../../../design_specs', to: '/design_specs' },
+  ],
   viteFinal: async (config) => {
     if (process.env.STORYBOOK_BASE_PATH) {
       config.base = process.env.STORYBOOK_BASE_PATH;
