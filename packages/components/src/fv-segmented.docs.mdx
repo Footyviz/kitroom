@@ -1,0 +1,70 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as SegmentedStories from './fv-segmented.stories';
+
+<Meta of={SegmentedStories} />
+
+# fv-segmented
+
+A pill-style single-select control made of buttons sharing one
+container. Use for quick filters with 2–4 mutually-exclusive options
+(e.g. Live / Today / Upcoming).
+
+## Required HTML
+
+```html
+<fv-segmented aria-label="Match filter">
+  <button role="radio" data-value="live" aria-checked="true">Live</button>
+  <button role="radio" data-value="today" aria-checked="false">Today</button>
+  <button role="radio" data-value="upcoming" aria-checked="false">Upcoming</button>
+</fv-segmented>
+```
+
+The component does not generate buttons. The server must render every
+`<button role="radio">` with a `data-value` and an initial `aria-checked`.
+
+## Attributes
+
+| Attribute       | On         | Required | Effect                              |
+|-----------------|------------|----------|-------------------------------------|
+| `aria-label`    | host       | yes      | accessible name for the radiogroup  |
+| `role`          | host       | auto     | set to `radiogroup` on connection   |
+| `role="radio"`  | each button| yes      | identifies a selectable option      |
+| `data-value`    | each button| yes      | included in the dispatched event    |
+| `aria-checked`  | each button| yes      | reflects state                      |
+| `disabled`      | each button| no       | dims and skips in keyboard nav      |
+
+## Keyboard
+
+| Key                           | Effect                          |
+|-------------------------------|---------------------------------|
+| `ArrowRight` / `ArrowDown`    | Move focus to next enabled option |
+| `ArrowLeft` / `ArrowUp`       | Move focus to previous enabled option |
+| `Space` / `Enter`             | Select the focused option       |
+
+## Tokens used
+
+| Token            | Where                            |
+|------------------|----------------------------------|
+| `--neutral-100`  | container background             |
+| `--neutral-200`  | container border                 |
+| `--neutral-0`    | selected button background       |
+| `--neutral-500`  | unselected button text           |
+| `--neutral-800`  | selected button text             |
+| `--radius-full`  | container + buttons              |
+| `--accent`       | `:focus-visible` outline         |
+
+## Events dispatched
+
+| Event    | When                            | Detail              |
+|----------|---------------------------------|---------------------|
+| `change` | After a new option is selected  | `{ value: string }` |
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={SegmentedStories.Default} />
+<Story of={SegmentedStories.TwoOptions} />
+<Story of={SegmentedStories.Grouped} />

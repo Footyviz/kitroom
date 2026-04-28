@@ -1,0 +1,140 @@
+import type { Meta, StoryObj } from '@storybook/web-components';
+import { html, type TemplateResult } from 'lit-html';
+import { expect, userEvent } from 'storybook/test';
+import './fv-chip.js';
+
+const meta: Meta = {
+  title: 'Components/Chip',
+  component: 'fv-chip',
+};
+export default meta;
+
+type Story = StoryObj;
+
+const xIcon = html`
+  <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor"
+       stroke-width="1.4" aria-hidden="true">
+    <path d="M1 1l6 6M7 1L1 7"></path>
+  </svg>
+`;
+
+const row = 'display: flex; gap: 8px; flex-wrap: wrap; align-items: center;';
+
+export const Default: Story = {
+  render: (): TemplateResult => html`
+    <fv-chip>Premier League</fv-chip>
+  `,
+};
+
+export const StatusVariants: Story = {
+  render: (): TemplateResult => html`
+    <div style="${row}">
+      <fv-chip data-variant="live">LIVE</fv-chip>
+      <fv-chip data-variant="mono">73'</fv-chip>
+      <fv-chip data-variant="mono">HT</fv-chip>
+      <fv-chip data-variant="strong"><span data-role="dot"></span>FT</fv-chip>
+      <fv-chip data-variant="info">VAR review</fv-chip>
+      <fv-chip data-variant="warn"><span data-role="dot" style="background:#B88700"></span>Delay</fv-chip>
+      <fv-chip data-variant="pos"><span data-role="dot" style="background:#3B7217"></span>Goal</fv-chip>
+      <fv-chip data-variant="neg">Red card</fv-chip>
+    </div>
+  `,
+};
+
+export const Closable: Story = {
+  render: (): TemplateResult => html`
+    <div style="${row}">
+      <fv-chip data-closable data-variant="accent" data-value="premier">
+        Premier League
+        <button data-action="close" aria-label="Remove Premier League">${xIcon}</button>
+      </fv-chip>
+      <fv-chip data-closable data-value="arsenal">
+        Arsenal
+        <button data-action="close" aria-label="Remove Arsenal">${xIcon}</button>
+      </fv-chip>
+      <fv-chip data-closable data-value="saka">
+        Saka
+        <button data-action="close" aria-label="Remove Saka">${xIcon}</button>
+      </fv-chip>
+      <fv-chip data-variant="outline">+ Add filter</fv-chip>
+    </div>
+  `,
+};
+
+export const Teams: Story = {
+  render: (): TemplateResult => html`
+    <div style="${row}">
+      <fv-chip data-variant="team">
+        <span data-role="crest" style="background:#DB0007">ARS</span>Arsenal
+      </fv-chip>
+      <fv-chip data-variant="team">
+        <span data-role="crest" style="background:#034694">CHE</span>Chelsea
+      </fv-chip>
+      <fv-chip data-variant="team">
+        <span data-role="crest" style="background:#6CABDD;color:#1C2C5B">MCI</span>Man City
+      </fv-chip>
+      <fv-chip data-variant="team">
+        <span data-role="crest" style="background:#DA291C">LIV</span>Liverpool
+      </fv-chip>
+    </div>
+  `,
+};
+
+export const Counts: Story = {
+  render: (): TemplateResult => html`
+    <div style="${row}">
+      <fv-chip data-variant="count"><span>Followers</span><b data-role="count">12.4k</b></fv-chip>
+      <fv-chip data-variant="count"><span>xG</span><b data-role="count">1.84</b></fv-chip>
+      <fv-chip data-variant="count"><span>Possession</span><b data-role="count">63%</b></fv-chip>
+    </div>
+  `,
+};
+
+export const CloseDispatchesEvent: Story = {
+  render: (): TemplateResult => html`
+    <fv-chip data-closable data-value="arsenal" data-testid="chip">
+      Arsenal
+      <button data-action="close" aria-label="Remove Arsenal">${xIcon}</button>
+    </fv-chip>
+  `,
+  play: async ({ canvasElement }) => {
+    const chip = canvasElement.querySelector<HTMLElement>('[data-testid="chip"]')!;
+    const closeBtn = chip.querySelector<HTMLButtonElement>('[data-action="close"]')!;
+
+    let lastValue: string | undefined;
+    chip.addEventListener('close', (e) => {
+      lastValue = (e as CustomEvent<{ value: string }>).detail.value;
+    });
+
+    await userEvent.click(closeBtn);
+    expect(lastValue).toBe('arsenal');
+  },
+};
+
+export const SurvivesHtmxSwap: Story = {
+  render: (): TemplateResult => html`
+    <div data-testid="container">
+      <fv-chip data-closable data-value="initial">
+        Initial
+        <button data-action="close" aria-label="Remove">${xIcon}</button>
+      </fv-chip>
+    </div>
+  `,
+  play: async ({ canvasElement }) => {
+    const container = canvasElement.querySelector<HTMLElement>('[data-testid="container"]')!;
+    container.innerHTML = `
+      <fv-chip data-closable data-value="swapped">
+        Swapped
+        <button data-action="close" aria-label="Remove"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l6 6M7 1L1 7"/></svg></button>
+      </fv-chip>
+    `;
+    const chip = container.querySelector<HTMLElement>('fv-chip')!;
+    const closeBtn = chip.querySelector<HTMLButtonElement>('[data-action="close"]')!;
+    let lastValue: string | undefined;
+    chip.addEventListener('close', (e) => {
+      lastValue = (e as CustomEvent<{ value: string }>).detail.value;
+    });
+    await userEvent.click(closeBtn);
+    expect(lastValue).toBe('swapped');
+  },
+};
