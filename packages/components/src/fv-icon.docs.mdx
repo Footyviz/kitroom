@@ -1,0 +1,87 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as IconStories from './fv-icon.stories';
+
+<Meta of={IconStories} />
+
+# fv-icon
+
+A sprite-backed icon. `<fv-icon name="pitch">` renders a tiny
+`<svg><use href="#icon-pitch"/></svg>` reference into its light DOM,
+which points at a `<symbol id="icon-pitch">` defined in the page-level
+icon sprite.
+
+The component does not ship the SVG paths — those live in a single
+sprite that the page is responsible for placing once near `<body>`.
+The sprite is shipped two ways:
+
+- `@footyviz/components/icons.js` exports `iconSpriteHtml` (a string)
+  for inline injection during app boot.
+- `@footyviz/tokens/icons.svg` is the same sprite as a static file,
+  for `<use href="/path/to/icons.svg#icon-pitch"/>`-style fetch.
+
+Storybook injects the sprite once via a global decorator in
+`preview.ts`, so all stories on this page can reference it.
+
+## Required HTML
+
+The page must include the sprite once. Then anywhere on the page:
+
+```html
+<fv-icon name="pitch" data-size="md"></fv-icon>
+<fv-icon name="live" data-size="lg" data-tone="accent" aria-label="Live match"></fv-icon>
+```
+
+To inject the sprite at app boot:
+
+```ts
+import { iconSpriteHtml } from '@footyviz/components/icons.js';
+document.body.insertAdjacentHTML('beforeend', iconSpriteHtml);
+```
+
+## Architecture note
+
+`<fv-icon>` is the one component in this library that uses
+`innerHTML` in `connectedCallback`. It only emits a small
+`<svg><use href="#icon-${name}"/></svg>` reference — the actual paths
+live in the page sprite. The transform is deterministic
+(`name` → `#icon-${name}`) and contains no JS-resident content; it is
+a styling hook in the same sense as a CSS `background-image`. See
+`ARCHITECTURE.md` for the general rule this exception lives under.
+
+## Attributes
+
+| Attribute     | On    | Required | Effect                                                            |
+|---------------|-------|----------|-------------------------------------------------------------------|
+| `name`        | host  | yes      | Picks `<symbol id="icon-NAME">` from the sprite                   |
+| `data-size`   | host  | no       | `sm` (16px) · `md` (20px, default) · `lg` (28px)                  |
+| `data-tone`   | host  | no       | `default` (currentColor) · `accent` · `muted`                     |
+| `aria-label`  | host  | no       | When present, the icon is treated as meaningful (not aria-hidden) |
+| `aria-hidden` | host  | auto     | Set to `"true"` if neither `aria-label` nor `aria-hidden` is set  |
+
+## Tokens used
+
+| Token          | Where                                        |
+|----------------|----------------------------------------------|
+| `--accent`     | `data-tone="accent"` foreground              |
+| `--fg-muted`   | `data-tone="muted"` foreground               |
+
+The sprite itself uses `currentColor` for stroke / fill on every
+symbol, so the host's `color` themes the glyph. The one exception is
+the inner dot of `icon-live`, which keeps a hardcoded `#C6F24E` fill
+to match the design spec's accent indicator.
+
+## Events dispatched
+
+None.
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={IconStories.Default} />
+<Story of={IconStories.Sizes} />
+<Story of={IconStories.Tones} />
+<Story of={IconStories.Catalog} />
+<Story of={IconStories.Playground} />
