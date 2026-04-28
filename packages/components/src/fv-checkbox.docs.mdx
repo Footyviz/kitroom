@@ -1,0 +1,62 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as CheckboxStories from './fv-checkbox.stories';
+
+<Meta of={CheckboxStories} />
+
+# fv-checkbox
+
+A binary checkbox. Light-DOM, server-renderable. Default fill is ink
+black; `data-variant="accent"` switches to the signal-lime accent for
+"user-valued" filters (favorites, big-chance highlights).
+
+## Required HTML
+
+```html
+<fv-checkbox aria-checked="false" data-variant="accent">
+  <svg data-role="check" viewBox="0 0 16 16" aria-hidden="true" fill="none"
+       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 8 7 12 13 4" />
+  </svg>
+</fv-checkbox>
+```
+
+The checkmark `<svg data-role="check">` must be present in the server
+output. CSS hides it when `aria-checked="false"`.
+
+## Attributes
+
+| Attribute       | Required | Values                  | Effect                              |
+|-----------------|----------|-------------------------|-------------------------------------|
+| `aria-checked`  | yes      | `true` `false`          | reflects state; toggled on user input |
+| `data-variant`  | no       | `accent`                | switches checked fill to lime         |
+| `aria-disabled` | no       | `true`                  | dims and ignores click / keyboard     |
+
+The component sets `role="checkbox"` and `tabindex` on first connection.
+
+## Tokens used
+
+| Token            | Where                            |
+|------------------|----------------------------------|
+| `--neutral-300`  | unchecked border                 |
+| `--neutral-1000` | default checked fill             |
+| `--toggle-on`    | accent variant checked fill      |
+| `--radius-md`    | corner radius                    |
+| `--accent`       | `:focus-visible` outline         |
+
+## Events dispatched
+
+| Event    | When                       | Detail                |
+|----------|----------------------------|-----------------------|
+| `change` | After user click / Space   | `{ checked: boolean }` |
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={CheckboxStories.Default} />
+<Story of={CheckboxStories.Checked} />
+<Story of={CheckboxStories.Accent} />
+<Story of={CheckboxStories.Group} />
+<Story of={CheckboxStories.Disabled} />

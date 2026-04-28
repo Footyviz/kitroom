@@ -1,4 +1,10 @@
 export { FvButton } from './fv-button.js';
+export { FvCheckbox } from './fv-checkbox.js';
+export { FvChip } from './fv-chip.js';
+export { FvRadio } from './fv-radio.js';
+export { FvSegmented } from './fv-segmented.js';
+export { FvSlider } from './fv-slider.js';
+export { FvTabbar } from './fv-tabbar.js';
 export { FvToggle } from './fv-toggle.js';
 export { store } from './store.js';
 export type { Store } from './store.js';

@@ -1,0 +1,74 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ChipStories from './fv-chip.stories';
+
+<Meta of={ChipStories} />
+
+# fv-chip
+
+A pill-shaped label / badge / token. Visual-only by default. Add a
+`<button data-action="close">` child for closable filter chips — the
+component dispatches a bubbling `close` event when the button is
+clicked; the consumer decides whether to remove the chip from the DOM.
+
+## Required HTML
+
+```html
+<fv-chip data-variant="info">VAR review</fv-chip>
+
+<fv-chip data-closable data-variant="accent" data-value="premier">
+  Premier League
+  <button data-action="close" aria-label="Remove Premier League">
+    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M1 1l6 6M7 1L1 7" />
+    </svg>
+  </button>
+</fv-chip>
+```
+
+## Attributes
+
+| Attribute       | Required | Values                                                                          | Effect                          |
+|-----------------|----------|---------------------------------------------------------------------------------|---------------------------------|
+| `data-variant`  | no       | `mono` `strong` `accent` `info` `warn` `neg` `pos` `outline` `live` `team` `count` | hue / typography treatment       |
+| `data-closable` | no       | (presence)                                                                      | reduces right padding for the X |
+| `data-value`    | no       | string                                                                          | included in the `close` event   |
+
+The `live` variant runs a CSS pulse animation on the inner dot,
+disabled under `prefers-reduced-motion`.
+
+## Roles for child elements
+
+| Selector              | Used by                       |
+|-----------------------|-------------------------------|
+| `[data-role="dot"]`   | colored status dot            |
+| `[data-role="crest"]` | team crest disc (team variant) |
+| `[data-role="count"]` | bold count cell (count variant) |
+| `[data-action="close"]` | close button (closable chip)  |
+
+## Tokens used
+
+| Token            | Where                                  |
+|------------------|----------------------------------------|
+| `--neutral-0`    | default chip background                |
+| `--neutral-200`  | default chip border                    |
+| `--neutral-1000` | strong variant + count cell background |
+| `--toggle-on`    | accent + live variant background       |
+| `--radius-full`  | pill shape                             |
+
+## Events dispatched
+
+| Event   | When                              | Detail              |
+|---------|-----------------------------------|---------------------|
+| `close` | After `[data-action="close"]` click | `{ value: string }` |
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={ChipStories.Default} />
+<Story of={ChipStories.StatusVariants} />
+<Story of={ChipStories.Closable} />
+<Story of={ChipStories.Teams} />
+<Story of={ChipStories.Counts} />

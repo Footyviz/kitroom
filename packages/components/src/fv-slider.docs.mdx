@@ -1,0 +1,77 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as SliderStories from './fv-slider.stories';
+
+<Meta of={SliderStories} />
+
+# fv-slider
+
+A single-thumb horizontal slider. Drag the thumb, click anywhere on
+the track to jump, or use keyboard arrows / Home / End / PageUp /
+PageDown.
+
+## Required HTML
+
+```html
+<fv-slider data-value="62" aria-label="Volume">
+  <span data-role="track"></span>
+  <span data-role="fill"></span>
+  <span data-role="thumb"></span>
+</fv-slider>
+```
+
+The track / fill / thumb spans must be present. The component
+positions `fill.style.width` and `thumb.style.left` (as percentages)
+in JS; CSS provides geometry and color.
+
+## Attributes
+
+| Attribute       | Required | Default | Effect                              |
+|-----------------|----------|---------|-------------------------------------|
+| `data-value`    | yes      | —       | current value (numeric)             |
+| `data-min`      | no       | `0`     | range minimum                       |
+| `data-max`      | no       | `100`   | range maximum                       |
+| `data-step`     | no       | `1`     | snap increment                      |
+| `aria-disabled` | no       | —       | dims and ignores all input          |
+| `aria-label`    | yes      | —       | accessible name                     |
+
+The component sets `role="slider"`, `tabindex`, and mirrors
+`aria-valuenow` / `aria-valuemin` / `aria-valuemax` from data-* on
+connection and after every change.
+
+## Keyboard
+
+| Key                       | Effect                       |
+|---------------------------|------------------------------|
+| `ArrowRight` / `ArrowUp`  | +1 step                      |
+| `ArrowLeft` / `ArrowDown` | −1 step                      |
+| `PageUp` / `PageDown`     | ±max(step, range/10)         |
+| `Home` / `End`            | jump to min / max            |
+
+## Tokens used
+
+| Token            | Where                            |
+|------------------|----------------------------------|
+| `--neutral-0`    | thumb fill                       |
+| `--neutral-200`  | track background                 |
+| `--neutral-1000` | fill bar + thumb border          |
+| `--radius-full`  | track / fill / thumb radius      |
+| `--accent-soft`  | focus halo around thumb          |
+
+## Events dispatched
+
+| Event    | When                                | Detail              |
+|----------|-------------------------------------|---------------------|
+| `input`  | Continuously while dragging         | `{ value: number }` |
+| `change` | Once on commit (pointerup / keyup)  | `{ value: number }` |
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={SliderStories.Default} />
+<Story of={SliderStories.Empty} />
+<Story of={SliderStories.Full} />
+<Story of={SliderStories.CustomRange} />
+<Story of={SliderStories.Disabled} />

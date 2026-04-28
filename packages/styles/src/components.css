@@ -8,4 +8,10 @@
    Add new components by appending an @import below.
    ============================================================ */
 
+@import './fv-checkbox.css';
+@import './fv-chip.css';
+@import './fv-radio.css';
+@import './fv-segmented.css';
+@import './fv-slider.css';
+@import './fv-tabbar.css';
 @import './fv-toggle.css';
