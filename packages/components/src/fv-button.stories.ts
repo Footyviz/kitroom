@@ -22,7 +22,7 @@ const meta: Meta<ButtonArgs> = {
   argTypes: {
     label: { control: 'text' },
     variant: {
-      control: { type: 'select' },
+      control: 'select',
       options: ['default', 'primary', 'cream', 'secondary', 'outline', 'ghost', 'destructive'],
       description: 'data-variant — default is the secondary white-card style',
     },
@@ -33,13 +33,6 @@ const meta: Meta<ButtonArgs> = {
     },
     loading: { control: 'boolean', description: 'data-loading' },
     disabled: { control: 'boolean', description: 'aria-disabled' },
-  },
-  args: {
-    label: 'Open match',
-    variant: 'primary',
-    size: 'default',
-    loading: false,
-    disabled: false,
   },
 };
 export default meta;
@@ -84,6 +77,13 @@ const row = (...children: TemplateResult[]): TemplateResult => html`
 `;
 
 export const Playground: Story = {
+  args: {
+    label: 'Open match',
+    variant: 'primary',
+    size: 'default',
+    loading: false,
+    disabled: false,
+  },
   render: renderButton,
   parameters: dynamicSrc(),
 };
