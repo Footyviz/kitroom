@@ -1,0 +1,25 @@
+/* ============================================================
+   <fv-gap> — ad-hoc horizontal spacer
+   ============================================================
+   One attribute: data-size from the 9-step spacing scale.
+   Inline-block + flex-shrink:0 so it survives row-flex parents.
+   height:0 keeps it from adding any vertical space.
+   ============================================================ */
+
+fv-gap {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--_size, 0);
+  height: 0;
+  vertical-align: middle;
+}
+
+fv-gap[data-size="1"]  { --_size: var(--space-1);  }
+fv-gap[data-size="2"]  { --_size: var(--space-2);  }
+fv-gap[data-size="3"]  { --_size: var(--space-3);  }
+fv-gap[data-size="4"]  { --_size: var(--space-4);  }
+fv-gap[data-size="6"]  { --_size: var(--space-6);  }
+fv-gap[data-size="8"]  { --_size: var(--space-8);  }
+fv-gap[data-size="12"] { --_size: var(--space-12); }
+fv-gap[data-size="16"] { --_size: var(--space-16); }
+fv-gap[data-size="24"] { --_size: var(--space-24); }
