@@ -23,6 +23,12 @@ const meta: Meta<TableArgs> = {
     zebra: { control: 'boolean', description: 'data-zebra — alternating row tint' },
     stickyHead: { control: 'boolean', description: 'data-sticky-head — header sticks to scroll container top' },
   },
+  parameters: {
+    // Make the bubbling `sort` CustomEvent visible in the Actions panel.
+    // Storybook's actions addon installs a listener at the canvas root for
+    // each event name in `handles` and logs every dispatch.
+    actions: { handles: ['sort'] },
+  },
 };
 export default meta;
 
@@ -134,6 +140,31 @@ export const Compact: Story = {
 export const Comfortable: Story = {
   args: { density: 'comfortable', zebra: false, stickyHead: false },
   render: (args) => renderTable(args),
+};
+
+export const StickyHead: Story = {
+  args: { density: 'default', zebra: false, stickyHead: true },
+  render: (args) => html`
+    <div
+      style="height: 320px; overflow: auto; border: 1px solid var(--border); border-radius: var(--radius-md);"
+      aria-label="Scrollable league table viewport"
+    >
+      ${renderTable(
+        { ...args, stickyHead: true },
+        // Duplicate the dataset so the body overflows the 320px viewport
+        // and the user can scroll to confirm the header stays pinned.
+        [...TEAMS, ...TEAMS.map((t) => ({ ...t, pos: t.pos + TEAMS.length }))],
+      )}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When `data-sticky-head` is set, the column header row pins to the top of the nearest scrolling ancestor. Wrap the table in a fixed-height scroll container (the consumer owns the scroll boundary; the component just handles the sticky behaviour). The dataset here is doubled so you can scroll to see it stick.',
+      },
+    },
+  },
 };
 
 export const Zones: Story = {
