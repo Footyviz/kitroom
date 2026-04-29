@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-DnJy8xQt.js";var t,n=e((()=>{t=class extends HTMLElement{connectedCallback(){}disconnectedCallback(){}},customElements.get(`fv-icon-text`)||customElements.define(`fv-icon-text`,t)}));export{n as t};

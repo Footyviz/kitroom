@@ -1,0 +1,28 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css"><style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style></head>
+<body>
+<div class="card" style="padding:28px 32px;gap:18px">
+  <div class="meta">Data series · use inside visualizations only · named 1–6</div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px">
+    <div><div style="height:84px;border-radius:6px;background:#E8BE56"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-1 · home</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#E8BE56</div></div>
+    <div><div style="height:84px;border-radius:6px;background:#1E2A44"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-2 · away</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#1E2A44</div></div>
+    <div><div style="height:84px;border-radius:6px;background:#5AA9FF"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-3 · context</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#5AA9FF</div></div>
+    <div><div style="height:84px;border-radius:6px;background:#D97757"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-4 · warm</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#D97757</div></div>
+    <div><div style="height:84px;border-radius:6px;background:#8F8B7E"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-5 · neutral</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#8F8B7E</div></div>
+    <div><div style="height:84px;border-radius:6px;background:#4BB375"></div><div class="mono" style="font-size:10px;color:var(--fg-subtle);margin-top:6px">series-6 · positive</div><div class="mono" style="font-size:10px;color:var(--fg-muted)">#4BB375</div></div>
+  </div>
+  <!-- example application -->
+  <div style="margin-top:8px;padding:18px;background:#080807;border-radius:8px">
+    <div class="mono" style="font-size:10px;color:#8F8B7E;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">xG race · Arsenal vs Chelsea</div>
+    <svg viewBox="0 0 420 90" style="width:100%">
+      <line x1="0" y1="75" x2="420" y2="75" stroke="#26251F"/>
+      <path d="M 0 75 L 30 72 L 70 66 L 120 55 L 170 48 L 220 40 L 270 28 L 320 22 L 380 15 L 420 12" stroke="#E8BE56" stroke-width="2" fill="none"/>
+      <path d="M 0 75 L 40 74 L 90 72 L 150 68 L 210 62 L 270 58 L 330 50 L 400 44" stroke="#5AA9FF" stroke-width="2" fill="none" opacity="0.9"/>
+    </svg>
+    <div style="display:flex;gap:18px;margin-top:10px">
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:2px;background:#E8BE56"></span><span style="font-family:var(--font-mono);font-size:10px;color:#FAFAF7">ARS 1.84</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:2px;background:#5AA9FF"></span><span style="font-family:var(--font-mono);font-size:10px;color:#FAFAF7">CHE 0.92</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

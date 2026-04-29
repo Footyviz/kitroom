@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-DnJy8xQt.js";var t,n=e((()=>{t=class extends HTMLElement{connectedCallback(){}disconnectedCallback(){}},customElements.get(`fv-button-badge`)||customElements.define(`fv-button-badge`,t)}));export{n as t};
