@@ -4,7 +4,7 @@ Repo: [Footyviz/kitroom](https://github.com/Footyviz/kitroom). npm workspaces mo
 
 ## Hard constraints
 
-- **Vanilla web components only.** Custom elements + shadow DOM. **No JSX, no React, no Lit, no Preact, no template engine.** Stories and any rendering glue build DOM with `document.createElement` and return `HTMLElement`.
+- **Vanilla web components only.** Custom elements + light DOM (no shadow root, no declarative shadow root — see [ARCHITECTURE.md](ARCHITECTURE.md) for the full rule and rationale). **No JSX, no React, no Lit, no Preact, no template engine.** Stories and any rendering glue build DOM with `document.createElement` and return `HTMLElement`.
 - **TypeScript strict, ESM-only.** No CommonJS. `verbatimModuleSyntax: true` — use `import type { ... }` for type-only imports.
 - **No emoji in code, comments, or commit messages** unless the user explicitly asks.
 - **Tokens are the design contract.** New components consume `var(--*)` from `@footyviz/tokens`; never hardcode colors or sizes from the handoff. The few literal hex values that remain in component CSS (cream, destructive, info, warn, neg, pos chip variants) are spec values for which no token group exists yet — flag with a `/* spec */` comment and lift to tokens when the design system grows the relevant scale.
