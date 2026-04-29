@@ -1,0 +1,86 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TextStories from './fv-text.stories';
+
+<Meta of={TextStories} />
+
+# fv-text
+
+A light-DOM styling primitive over the typography utility classes in
+`@footyviz/tokens` (`.fv-display` … `.fv-editorial`). Picks a type style
+via `data-variant`, optionally overrides the colour with `data-tone`,
+and optionally caps width with single-line ellipsis truncation via
+`data-max-width`.
+
+The component is intentionally semantic-free: `data-variant="h1"`
+*styles* like an H1 but does not set `role="heading"` or any other
+ARIA. Wrap with the appropriate semantic element (`<h1>`, `<p>`,
+`<label>` …) when meaning matters to assistive tech.
+
+## Required HTML
+
+```html
+<fv-text>Saka advanced 11m before releasing the pass.</fv-text>
+
+<fv-text data-variant="caption">live · 73′ · 2H</fv-text>
+
+<fv-text data-variant="stat-lg">62.4%</fv-text>
+
+<fv-text data-variant="body" data-tone="muted">Updated 12 seconds ago.</fv-text>
+
+<fv-text data-variant="body" data-max-width="200px">
+  Long line that gets truncated with an ellipsis.
+</fv-text>
+```
+
+## Attributes
+
+| Attribute        | On    | Required | Effect                                                                                                                                                                                                                                                |
+|------------------|-------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `data-variant`   | host  | no       | One of `body` (default) · `body-sm` · `caption` · `label` · `h1` · `h2` · `h3` · `display` · `display-serif` · `stat-xl` · `stat-lg` · `stat-md` · `stat-sm` · `mono` · `editorial`. Mirrors the matching `.fv-*` utility class in `tokens.css`. |
+| `data-tone`      | host  | no       | `default` (variant's own colour) · `muted` · `subtle` · `inverse` · `accent`. Overrides the variant's foreground colour.                                                                                                                              |
+| `data-max-width` | host  | no       | Any CSS `<length>` (e.g. `200px`, `20ch`, `12rem`). When present, the host becomes `display: inline-block` and truncates overflow with an ellipsis. The value is reflected to inline `style.max-width` by the component.                              |
+
+## Tokens used
+
+| Token                                                    | Where                                            |
+|----------------------------------------------------------|--------------------------------------------------|
+| `--font-sans`, `--font-mono`                             | font-family per variant                          |
+| `--fw-regular`, `--fw-medium`, `--fw-semibold`           | font-weight per variant                          |
+| `--lh-tight`, `--lh-snug`, `--lh-normal`, `--lh-relaxed` | line-height per variant                          |
+| `--tracking-tight`, `--tracking-snug`, `--tracking-caps` | letter-spacing per variant                       |
+| `--fg`                                                   | default foreground (and `data-tone="default"`)   |
+| `--fg-muted`                                             | `body-sm` / `caption` / `stat-sm` / `mono` colour, plus `data-tone="muted"` |
+| `--fg-subtle`                                            | `data-tone="subtle"`                             |
+| `--fg-inverse`                                           | `data-tone="inverse"` (pair with an inverted surface) |
+| `--accent`                                               | `data-tone="accent"`                             |
+
+The component does not declare any new tokens — every value comes from
+`tokens.css`. When the type ramp changes there, mirror the change in
+`packages/styles/src/fv-text.css`.
+
+## Events dispatched
+
+None.
+
+## Store interaction
+
+None.
+
+## When *not* to use this
+
+- For a real document heading, write the semantic element and (if you
+  want the type style) put `<fv-text data-variant="h1">` *inside* it,
+  or apply the `.fv-h1` utility class directly to the `<h1>`. Don't
+  rely on `<fv-text data-variant="h1">` to carry heading semantics.
+- For paragraphs of running prose, prefer `<p class="fv-body">` so the
+  paragraph element supplies the natural block semantics. `<fv-text>`
+  is best for inline phrases, single-line stat readouts, and labels
+  where the surrounding layout already supplies structure.
+
+## Stories
+
+<Story of={TextStories.Playground} />
+<Story of={TextStories.TypeRamp} />
+<Story of={TextStories.Tones} />
+<Story of={TextStories.Truncation} />
+<Story of={TextStories.Stats} />

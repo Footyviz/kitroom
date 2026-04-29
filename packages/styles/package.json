@@ -18,6 +18,7 @@
     "./fv-segmented.css": "./src/fv-segmented.css",
     "./fv-slider.css": "./src/fv-slider.css",
     "./fv-tabbar.css": "./src/fv-tabbar.css",
+    "./fv-text.css": "./src/fv-text.css",
     "./fv-toggle.css": "./src/fv-toggle.css"
   },
   "files": [
