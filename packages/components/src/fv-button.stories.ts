@@ -34,6 +34,7 @@ const meta: Meta<ButtonArgs> = {
     loading: { control: 'boolean', description: 'data-loading' },
     disabled: { control: 'boolean', description: 'aria-disabled' },
   },
+  parameters: { controls: { disable: true } },
 };
 export default meta;
 
@@ -85,7 +86,7 @@ export const Playground: Story = {
     disabled: false,
   },
   render: renderButton,
-  parameters: dynamicSrc(),
+  parameters: { ...dynamicSrc(), controls: { disable: false } },
 };
 
 export const Hierarchy: Story = {
