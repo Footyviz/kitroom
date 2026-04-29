@@ -101,3 +101,13 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 ## Worktree note
 
 Active dev usually happens in a git worktree under `.claude/worktrees/`. The primary checkout (and `main`) lives at `/Users/akshay/UndergroundSecretLabaratory/FootyViz/component-library/`. To pull `main` into a worktree branch, use `git fetch origin && git merge origin/main` — you can't `git checkout main` from a worktree because main is held by the primary checkout.
+
+### Worktree gotcha: always run `npm install` once in a fresh worktree
+
+A new worktree starts with no `node_modules/` of its own. Node module resolution then walks up the directory tree and finds the primary checkout's `node_modules/`, where `@footyviz/components` is symlinked to the **primary's** `packages/components` — i.e. whatever's on `main`, not your worktree's edits.
+
+What this looks like in practice: you change `packages/components/src/fv-button.ts` in the worktree, run `npm run storybook` (which runs `predev` → builds the worktree's `dist/`), open the story, and the page renders the **old** behavior. Worse: every component file does a `if (!customElements.get('fv-foo')) customElements.define(...)` registration guard, so once the primary's old class wins the registration race, your new class silently never registers — no error, just stale behavior. Symptoms: controls don't drive the rendered component, event handlers absent, `connectedCallback` apparently not running, attribute changes ignored.
+
+Fix: run `npm install` once inside the worktree. That creates a worktree-local `node_modules/` whose `@footyviz/*` symlinks point at the worktree's own `packages/`. After that, the worktree is self-contained and `predev` builds and storybook reads the same `dist/`.
+
+Bake this into the spawn ritual for any new worktree.
