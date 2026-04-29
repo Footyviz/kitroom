@@ -92,14 +92,14 @@ export const Playground: Story = {
 export const Hierarchy: Story = {
   render: (): TemplateResult => row(
     html`<fv-button data-variant="primary">Open match</fv-button>`,
-    html`<fv-button data-variant="cream"><fv-icon name="live"/>Watch live</fv-button>`,
+    html`<fv-button data-variant="cream"><fv-icon name="live"></fv-icon><span>Watch live</span></fv-button>`,
     html`<fv-button data-variant="secondary">Compare sides</fv-button>`,
     html`<fv-button data-variant="outline">Save match</fv-button>`,
     html`<fv-button data-variant="ghost">Dismiss</fv-button>`,
     html`<fv-button data-variant="destructive">Remove</fv-button>`,
   ),
   parameters: src(`<fv-button data-variant="primary">Open match</fv-button>
-<fv-button data-variant="cream"><fv-icon name="live"></fv-icon>Watch live</fv-button>
+<fv-button data-variant="cream"><fv-icon name="live"></fv-icon><span>Watch live</span></fv-button>
 <fv-button data-variant="secondary">Compare sides</fv-button>
 <fv-button data-variant="outline">Save match</fv-button>
 <fv-button data-variant="ghost">Dismiss</fv-button>
@@ -112,8 +112,8 @@ export const Sizes: Story = {
     html`<fv-button data-variant="primary" data-size="sm">Small</fv-button>`,
     html`<fv-button data-variant="primary">Default</fv-button>`,
     html`<fv-button data-variant="primary" data-size="lg">Large</fv-button>`,
-    html`<fv-button data-variant="secondary" aria-label="Share"><fv-icon name="share"/></fv-button>`,
-    html`<fv-button data-variant="secondary" data-size="lg" aria-label="Notify"><fv-icon name="bell"/></fv-button>`,
+    html`<fv-button data-variant="secondary" aria-label="Share"><fv-icon name="share"></fv-icon></fv-button>`,
+    html`<fv-button data-variant="secondary" data-size="lg" aria-label="Notify"><fv-icon name="bell"></fv-icon></fv-button>`,
   ),
   parameters: src(`<fv-button data-variant="primary" data-size="xs">XS</fv-button>
 <fv-button data-variant="primary" data-size="sm">Small</fv-button>
@@ -151,15 +151,15 @@ export const States: Story = {
 
 export const WithIcon: Story = {
   render: (): TemplateResult => row(
-    html`<fv-button data-variant="primary"><fv-icon name="live"/>Watch live</fv-button>`,
-    html`<fv-button data-variant="secondary"><fv-icon name="bell"/>Notify me</fv-button>`,
-    html`<fv-button data-variant="ghost"><fv-icon name="share"/>Share</fv-button>`,
-    html`<fv-button data-variant="destructive"><fv-icon name="card"/>Remove</fv-button>`,
+    html`<fv-button data-variant="primary"><fv-icon name="live"></fv-icon><span>Watch live</span></fv-button>`,
+    html`<fv-button data-variant="secondary"><fv-icon name="bell"></fv-icon><span>Notify me</span></fv-button>`,
+    html`<fv-button data-variant="ghost"><fv-icon name="share"></fv-icon><span>Share</span></fv-button>`,
+    html`<fv-button data-variant="destructive"><fv-icon name="card"></fv-icon><span>Remove</span></fv-button>`,
   ),
-  parameters: src(`<fv-button data-variant="primary"><fv-icon name="live"></fv-icon>Watch live</fv-button>
-<fv-button data-variant="secondary"><fv-icon name="bell"></fv-icon>Notify me</fv-button>
-<fv-button data-variant="ghost"><fv-icon name="share"></fv-icon>Share</fv-button>
-<fv-button data-variant="destructive"><fv-icon name="card"></fv-icon>Remove</fv-button>`),
+  parameters: src(`<fv-button data-variant="primary"><fv-icon name="live"></fv-icon><span>Watch live</span></fv-button>
+<fv-button data-variant="secondary"><fv-icon name="bell"></fv-icon><span>Notify me</span></fv-button>
+<fv-button data-variant="ghost"><fv-icon name="share"></fv-icon><span>Share</span></fv-button>
+<fv-button data-variant="destructive"><fv-icon name="card"></fv-icon><span>Remove</span></fv-button>`),
 };
 
 export const OnDark: Story = {

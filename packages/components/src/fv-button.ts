@@ -3,7 +3,7 @@
  *            [data-size="xs|sm|lg"]
  *            [data-loading]
  *            [aria-disabled="true"]>
- *   ...children — typically <fv-icon name="..."/> and/or text...
+ *   ...children — typically <fv-icon name="..."></fv-icon> and/or <span> text...
  * </fv-button>
  *
  * Light-DOM button. The host IS the interactive element (role="button",
