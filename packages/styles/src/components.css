@@ -24,7 +24,7 @@
 @import './fv-text.css';
 @import './fv-toggle.css';
 
-/* Organisms — composed from primitives above. Shipped from
-   @footyviz/organisms; styles colocated here for the same
+/* Formations — composed from primitives above. Shipped from
+   @footyviz/formations; styles colocated here for the same
    single-import surface. */
 @import './fv-table.css';

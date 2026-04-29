@@ -4,18 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm run build -w @footyviz/components && npm run build -w @footyviz/organisms",
+    "predev": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
     "dev": "storybook dev -p 6006",
-    "prebuild": "npm run build -w @footyviz/components && npm run build -w @footyviz/organisms",
+    "prebuild": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
     "build": "storybook build",
-    "pretest": "npm run build -w @footyviz/components && npm run build -w @footyviz/organisms",
+    "pretest": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf storybook-static"
   },
   "dependencies": {
     "@footyviz/components": "*",
-    "@footyviz/organisms": "*",
+    "@footyviz/formations": "*",
     "@footyviz/styles": "*",
     "@footyviz/tokens": "*"
   },

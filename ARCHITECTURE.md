@@ -19,7 +19,7 @@ Server renders complete HTML. Components enhance existing DOM.
 ## Accessibility
 
 Accessibility is a first-class constraint, equal to type-safety and
-design-token fidelity. Components and organisms ship accessible by
+design-token fidelity. Components and formations ship accessible by
 default — there is no "add a11y later" mode. The rules below apply to
 every `<fv-*>` element, primitive or composed.
 
@@ -29,7 +29,7 @@ every `<fv-*>` element, primitive or composed.
 2. Disabled / loading state is conveyed via `aria-disabled` and
    `tabindex` sync, never by silently removing the element from the tab
    order.
-3. Composed organisms expose ARIA structural roles (`table` / `rowgroup`
+3. Composed formations expose ARIA structural roles (`table` / `rowgroup`
    / `row` / `cell`, `listbox` / `option`, etc.) on the appropriate
    child elements. CSS-driven layouts (e.g. CSS Grid table, masonry
    list) MUST keep ARIA semantics — visual restructuring never strips

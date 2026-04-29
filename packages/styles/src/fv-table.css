@@ -1,5 +1,5 @@
 /* ============================================================
-   <fv-table> — CSS-grid tabular data organism
+   <fv-table> — CSS-grid tabular data formation
    ============================================================
    Light-DOM. The host carries role="table" and broadcasts the
    column template via the --fv-table-cols custom property,

@@ -4,7 +4,7 @@ import '@footyviz/tokens/fonts.css';
 import '@footyviz/styles/base.css';
 import '@footyviz/styles/components.css';
 import '@footyviz/components';
-import '@footyviz/organisms';
+import '@footyviz/formations';
 import { iconSpriteHtml } from '@footyviz/components/icons.js';
 
 // The <fv-icon> component renders <svg><use href="#icon-NAME"/></svg>
@@ -24,7 +24,7 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Overview', 'Foundations', 'Components', 'Organisms', 'Design Specs'],
+        order: ['Overview', 'Foundations', 'Components', 'Formations', 'Design Specs'],
       },
     },
     controls: {

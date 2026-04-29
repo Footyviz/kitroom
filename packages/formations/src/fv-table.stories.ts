@@ -12,7 +12,7 @@ type TableArgs = {
 };
 
 const meta: Meta<TableArgs> = {
-  title: 'Organisms/Table',
+  title: 'Formations/Table',
   component: 'fv-table',
   argTypes: {
     density: {

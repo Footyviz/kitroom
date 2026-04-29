@@ -23,7 +23,7 @@
  *   </div>
  * </fv-table>
  *
- * Light-DOM CSS-grid table organism. The host provides ARIA role="table"
+ * Light-DOM CSS-grid table formation. The host provides ARIA role="table"
  * and broadcasts the column template to all descendant rows via the
  * --fv-table-cols custom property. Each [role="row"] is itself a CSS
  * grid container that consumes that property, so the whole table aligns
