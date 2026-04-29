@@ -1,0 +1,33 @@
+/* ============================================================
+   <fv-icon> — sprite-backed icon
+   ============================================================
+   Renders a <svg><use href="#icon-NAME"/></svg> referencing a
+   <symbol> from the page-level icon sprite (shipped by
+   @footyviz/components/icons.js or @footyviz/tokens/icons.svg).
+
+   Sizes mirror the design spec: utility row is 20px (md),
+   brand grid is 28px (lg), 16px (sm) is the smaller chip /
+   inline-text size.
+   ============================================================ */
+
+fv-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+  vertical-align: -0.15em; /* baseline alignment with text */
+}
+
+fv-icon[data-size="sm"] { width: 16px; height: 16px; }
+fv-icon[data-size="md"] { width: 20px; height: 20px; }
+fv-icon[data-size="lg"] { width: 28px; height: 28px; }
+
+fv-icon[data-tone="accent"] { color: var(--accent); }
+fv-icon[data-tone="muted"]  { color: var(--fg-muted); }
+
+fv-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

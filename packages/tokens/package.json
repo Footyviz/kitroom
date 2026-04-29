@@ -9,10 +9,12 @@
   "exports": {
     "./tokens.css": "./src/tokens.css",
     "./fonts.css": "./src/fonts.css",
+    "./icons.svg": "./src/icons.svg",
     "./assets/*": "./src/assets/*"
   },
   "files": [
     "src/tokens.css",
+    "src/icons.svg",
     "src/assets"
   ]
 }
