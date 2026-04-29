@@ -1,0 +1,142 @@
+/* ============================================================
+   <fv-input> — light-DOM text input wrapper
+   ============================================================
+   DOM contract:
+     <fv-input [data-variant="search"] [data-size="sm"]
+               [aria-disabled="true"]>
+       <fv-icon name="search"/>            optional leading icon
+       <input type="text" placeholder="…"/>   required
+       <kbd>⌘K</kbd>                       optional trailing hint
+     </fv-input>
+
+   The host is the visible "field" surface. The inner <input> is a
+   real form control rendered flush against the host. Focus styling
+   uses :focus-within so the chrome reacts when the input gains
+   focus — no JS required for that.
+   ============================================================ */
+
+fv-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px; /* spec — no radius token at 12 yet */
+  min-width: 220px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03); /* spec */
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg);
+  cursor: text;
+  transition: border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+fv-input:focus-within {
+  border-color: var(--fg);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06); /* spec */
+}
+
+fv-input[data-variant="search"] {
+  /* spec — heavier elevation to read as the global search bar */
+  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.06),
+              0 4px 12px rgba(14, 14, 12, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+fv-input[data-variant="search"]:focus-within {
+  /* keep the elevated stack and add the focus ring on top */
+  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.06),
+              0 4px 12px rgba(14, 14, 12, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8),
+              0 0 0 3px rgba(0, 0, 0, 0.06); /* spec */
+}
+
+fv-input[data-size="sm"] {
+  padding: 7px 10px;
+  font-size: 12px;
+  min-width: 180px;
+}
+
+fv-input[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Inner <input> — render flush, inherit color/font from host. */
+fv-input > input {
+  border: 0;
+  background: transparent;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  flex: 1;
+  min-width: 0;
+}
+
+fv-input > input::placeholder {
+  color: var(--fg-subtle);
+}
+
+/* Leading icon — sized small, tinted subtle. */
+fv-input > fv-icon {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--fg-subtle);
+}
+
+/* Trailing keyboard hint — neutral pill by default. */
+fv-input > kbd {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-muted);
+  background: var(--neutral-100);
+  border: 1px solid var(--border-subtle);
+  padding: 1px 6px;
+  border-radius: 5px;
+  line-height: 1.4;
+}
+
+/* Inverted hint — for "press Enter to submit" affordances. */
+fv-input > kbd[data-variant="inverse"] {
+  background: var(--neutral-1000);
+  color: var(--fg-inverse);
+  border-color: transparent;
+}
+
+/* Dark theme: tokens already invert; the kbd needs a touch of help so
+   it reads as a frame against the dark field bg. Mirror tokens.css's
+   selector list so both `<html data-theme="dark">` and a scoped
+   `class="theme-dark"` wrapper light up the same overrides. */
+[data-theme="dark"] fv-input > kbd,
+.theme-dark fv-input > kbd {
+  background: var(--neutral-700);
+  border-color: var(--neutral-600);
+  color: var(--fg);
+}
+
+[data-theme="dark"] fv-input > kbd[data-variant="inverse"],
+.theme-dark fv-input > kbd[data-variant="inverse"] {
+  background: var(--neutral-50);
+  color: var(--neutral-1000);
+  border-color: transparent;
+}
+
+[data-theme="dark"] fv-input:focus-within,
+.theme-dark fv-input:focus-within {
+  /* white-on-dark would be too hot; use the standard border + a softer ring */
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08); /* spec */
+}
+
+[data-theme="dark"] fv-input[data-variant="search"]:focus-within,
+.theme-dark fv-input[data-variant="search"]:focus-within {
+  box-shadow: 0 1px 2px rgba(14, 14, 12, 0.06),
+              0 4px 12px rgba(14, 14, 12, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05),
+              0 0 0 3px rgba(255, 255, 255, 0.08); /* spec */
+}

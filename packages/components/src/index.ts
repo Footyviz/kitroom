@@ -4,6 +4,7 @@ export { FvCheckbox } from './fv-checkbox.js';
 export { FvChip } from './fv-chip.js';
 export { FvIcon } from './fv-icon.js';
 export { FvIconText } from './fv-icon-text.js';
+export { FvInput } from './fv-input.js';
 export { FvRadio } from './fv-radio.js';
 export { FvRadioGroup } from './fv-radio-group.js';
 export { FvSegmented } from './fv-segmented.js';

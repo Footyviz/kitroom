@@ -14,7 +14,7 @@ Repo: [Footyviz/kitroom](https://github.com/Footyviz/kitroom). npm workspaces mo
 
 | Package | Purpose | Build |
 |---|---|---|
-| `@footyviz/components` | Published web components (`<fv-button>`, `<fv-checkbox>`, `<fv-chip>`, `<fv-icon>`, `<fv-icon-text>`, `<fv-radio>`, `<fv-radio-group>`, `<fv-segmented>`, `<fv-slider>`, `<fv-split-button>`, `<fv-button-badge>`, `<fv-tabbar>`, `<fv-toggle>`) | `tsc` → `dist/` |
+| `@footyviz/components` | Published web components (`<fv-button>`, `<fv-checkbox>`, `<fv-chip>`, `<fv-icon>`, `<fv-icon-text>`, `<fv-input>`, `<fv-radio>`, `<fv-radio-group>`, `<fv-segmented>`, `<fv-slider>`, `<fv-split-button>`, `<fv-button-badge>`, `<fv-tabbar>`, `<fv-toggle>`) | `tsc` → `dist/` |
 | `@footyviz/tokens` | CSS tokens, type styles, brand SVGs, Geist fonts | None (CSS + static assets) |
 | `@footyviz/storybook` | Internal showcase. `private: true`. | `storybook build` |
 

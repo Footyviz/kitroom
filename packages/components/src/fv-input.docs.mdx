@@ -1,0 +1,105 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as InputStories from './fv-input.stories';
+
+<Meta of={InputStories} />
+
+# fv-input
+
+A light-DOM wrapper that styles a real `<input>` child as a FootyViz
+form field. The host adds the visible "field" chrome (border, padding,
+focus ring) and one tiny convenience: clicking anywhere on the padded
+surface focuses the inner input. Form integration, autofill, IME, and
+keyboard handling come for free because the inner element is a real
+`<input>`.
+
+## Required HTML
+
+```html
+<fv-input>
+  <input type="text" placeholder="Player name" />
+</fv-input>
+
+<fv-input data-variant="search" style="width: 260px;">
+  <fv-icon name="search"></fv-icon>
+  <input type="text" placeholder="Search matches, teams, players" />
+  <kbd>⌘K</kbd>
+</fv-input>
+
+<fv-input>
+  <input type="text" value="Saka" />
+  <kbd data-variant="inverse">Enter</kbd>
+</fv-input>
+```
+
+The inner `<input>` is required. The leading `<fv-icon>` and trailing
+`<kbd>` are optional — include either, both, or neither.
+
+## Attributes
+
+| Attribute        | Required | Values             | Effect                                                                  |
+|------------------|----------|--------------------|-------------------------------------------------------------------------|
+| `data-variant`   | no       | `search`           | adds the elevated shadow stack used for the global search field         |
+| `data-size`      | no       | `sm`               | tighter padding + smaller font; default = medium (no attr)              |
+| `aria-disabled`  | no       | `"true"`           | dims the chrome and sets `cursor: not-allowed`                          |
+
+`aria-disabled` on the host is for the styling cascade only. The
+inner `<input>` should also receive the native `disabled` attribute so
+it can't actually be typed in or focused. Both stay in sync because the
+consumer renders both.
+
+## Roles for child elements
+
+| Selector                       | Used by                                                  |
+|--------------------------------|----------------------------------------------------------|
+| `fv-input > input`             | the real form control — flush, inherits color and font   |
+| `fv-input > fv-icon`           | leading icon (sized 15px, tinted `var(--fg-subtle)`)     |
+| `fv-input > kbd`               | trailing keyboard hint (mono, neutral pill)              |
+| `fv-input > kbd[data-variant="inverse"]` | inverted "press Enter to submit" hint           |
+
+## Tokens used
+
+| Token             | Where                                              |
+|-------------------|----------------------------------------------------|
+| `--bg-elev`       | field background                                   |
+| `--border`        | field border (default state)                       |
+| `--fg`            | text color + focused border                        |
+| `--fg-subtle`     | placeholder + leading icon tint                    |
+| `--fg-muted`      | default kbd text                                   |
+| `--fg-inverse`    | inverted kbd text                                  |
+| `--neutral-100`   | default kbd background (light theme)               |
+| `--neutral-1000`  | inverted kbd background (light theme)              |
+| `--font-sans`     | input + placeholder font                           |
+| `--font-mono`     | kbd font                                           |
+| `--ease`, `--dur-fast` | border-color and box-shadow transitions       |
+
+The `:focus-within` ring (`rgba(0, 0, 0, 0.06)`) and the search
+variant's box-shadow stack are literal values rather than tokens —
+flagged with `/* spec */` in `fv-input.css`. Same precedent as
+`fv-button`'s cream / destructive hex.
+
+## Events dispatched
+
+None. The component relies on the native `input` and `change` events
+fired by the inner `<input>`, which bubble through the host. Listen on
+the host (or any ancestor) the same way you'd listen on a plain
+`<input>`:
+
+```js
+document.querySelector('fv-input').addEventListener('input', (e) => {
+  console.log(e.target.value);
+});
+```
+
+## Store interaction
+
+None.
+
+## Stories
+
+<Story of={InputStories.Default} />
+<Story of={InputStories.Search} />
+<Story of={InputStories.Focused} />
+<Story of={InputStories.Sizes} />
+<Story of={InputStories.Disabled} />
+<Story of={InputStories.OnDark} />
+<Story of={InputStories.Playground} />
