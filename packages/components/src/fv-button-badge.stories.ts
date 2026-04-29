@@ -20,24 +20,24 @@ export const InsideButton: Story = {
   render: (): TemplateResult => html`
     <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
       <fv-button data-variant="secondary">
-        <fv-icon name="star"/>
-        Follow
+        <fv-icon name="star"></fv-icon>
+        <span>Follow</span>
         <fv-button-badge>12.4k</fv-button-badge>
       </fv-button>
       <fv-button data-variant="primary">
-        <fv-icon name="bell"/>
-        Notifications
+        <fv-icon name="bell"></fv-icon>
+        <span>Notifications</span>
         <fv-button-badge>3</fv-button-badge>
       </fv-button>
       <fv-button data-variant="cream">
-        Watch live
+        <span>Watch live</span>
         <fv-button-badge>LIVE</fv-button-badge>
       </fv-button>
     </div>
   `,
   parameters: src(`<fv-button data-variant="secondary">
   <fv-icon name="star"></fv-icon>
-  Follow
+  <span>Follow</span>
   <fv-button-badge>12.4k</fv-button-badge>
 </fv-button>`),
 };

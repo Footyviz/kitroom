@@ -32,7 +32,7 @@ selectors and :has().
 
 ```html
 <!-- yes -->
-<fv-button data-variant="primary"><fv-icon name="play"/>Watch live</fv-button>
+<fv-button data-variant="primary"><fv-icon name="play"></fv-icon><span>Watch live</span></fv-button>
 
 <!-- no -->
 <fv-button data-variant="primary" data-icon="play" data-label="Watch live"/>

@@ -1,7 +1,7 @@
 /**
  * <fv-split-button [data-variant="primary|cream|secondary|outline|ghost|destructive"]>
  *   <fv-button>Notify me</fv-button>
- *   <fv-button><fv-icon name="chevron-down"/></fv-button>
+ *   <fv-button><fv-icon name="chevron-down"></fv-icon></fv-button>
  * </fv-split-button>
  *
  * Visual wrapper that fuses two adjacent <fv-button> children into a

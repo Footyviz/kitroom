@@ -20,7 +20,7 @@ export const Default: Story = {
   render: (): TemplateResult => html`
     <fv-split-button data-variant="primary">
       <fv-button>Notify me</fv-button>
-      <fv-button aria-label="More options"><fv-icon name="settings"/></fv-button>
+      <fv-button aria-label="More options"><fv-icon name="settings"></fv-icon></fv-button>
     </fv-split-button>
   `,
   parameters: src(`<fv-split-button data-variant="primary">
@@ -34,15 +34,15 @@ export const Variants: Story = {
     <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
       <fv-split-button data-variant="primary">
         <fv-button>Primary</fv-button>
-        <fv-button aria-label="More"><fv-icon name="settings"/></fv-button>
+        <fv-button aria-label="More"><fv-icon name="settings"></fv-icon></fv-button>
       </fv-split-button>
       <fv-split-button data-variant="cream">
         <fv-button>Cream</fv-button>
-        <fv-button aria-label="More"><fv-icon name="settings"/></fv-button>
+        <fv-button aria-label="More"><fv-icon name="settings"></fv-icon></fv-button>
       </fv-split-button>
       <fv-split-button data-variant="secondary">
         <fv-button>Secondary</fv-button>
-        <fv-button aria-label="More"><fv-icon name="settings"/></fv-button>
+        <fv-button aria-label="More"><fv-icon name="settings"></fv-icon></fv-button>
       </fv-split-button>
     </div>
   `,
