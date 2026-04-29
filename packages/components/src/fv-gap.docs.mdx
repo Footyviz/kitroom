@@ -1,0 +1,61 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as GapStories from './fv-gap.stories';
+
+<Meta of={GapStories} />
+
+# fv-gap
+
+Ad-hoc horizontal whitespace between two siblings, sized from the
+9-step spacing scale (see `Design Specs / Spacing / Scale`). Inline-block
+with `flex-shrink: 0`, so it survives row-flex parents. `height: 0` —
+never adds vertical space. Zero JS.
+
+Reach for it when flex `gap` doesn't fit, e.g. when two clusters of
+buttons in the same row need a wider gap between groups than within
+each group.
+
+## Required HTML
+
+```html
+<fv-button data-variant="secondary">Filter</fv-button>
+<fv-gap data-size="2"></fv-gap>
+<fv-button data-variant="secondary">Compare</fv-button>
+
+<fv-gap data-size="6"></fv-gap>
+
+<fv-button data-variant="primary">Open match</fv-button>
+```
+
+## Attributes
+
+| Attribute   | Values                                | Resolves to        |
+|-------------|---------------------------------------|--------------------|
+| `data-size` | `1`                                   | `var(--space-1)` — 4px  |
+| `data-size` | `2`                                   | `var(--space-2)` — 8px  |
+| `data-size` | `3`                                   | `var(--space-3)` — 12px |
+| `data-size` | `4`                                   | `var(--space-4)` — 16px |
+| `data-size` | `6`                                   | `var(--space-6)` — 24px |
+| `data-size` | `8`                                   | `var(--space-8)` — 32px |
+| `data-size` | `12`                                  | `var(--space-12)` — 48px |
+| `data-size` | `16`                                  | `var(--space-16)` — 64px |
+| `data-size` | `24`                                  | `var(--space-24)` — 96px |
+
+Omitting `data-size` collapses to width 0. Off-scale tokens (5, 10, 20)
+are deliberately not exposed — the spec page only documents the 9 steps
+above.
+
+## Events dispatched
+
+None.
+
+## Tokens used
+
+| Token             | Where             |
+|-------------------|-------------------|
+| `--space-{1..24}` | width per `data-size` |
+
+## Stories
+
+<Story of={GapStories.Playground} />
+<Story of={GapStories.Scale} />
+<Story of={GapStories.InToolbar} />

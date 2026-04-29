@@ -2,6 +2,7 @@ export { FvButton } from './fv-button.js';
 export { FvButtonBadge } from './fv-button-badge.js';
 export { FvCheckbox } from './fv-checkbox.js';
 export { FvChip } from './fv-chip.js';
+export { FvGap } from './fv-gap.js';
 export { FvIcon } from './fv-icon.js';
 export { FvIconText } from './fv-icon-text.js';
 export { FvRadio } from './fv-radio.js';
