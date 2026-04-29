@@ -10,6 +10,7 @@ export { FvSegmented } from './fv-segmented.js';
 export { FvSlider } from './fv-slider.js';
 export { FvSplitButton } from './fv-split-button.js';
 export { FvTabbar } from './fv-tabbar.js';
+export { FvText } from './fv-text.js';
 export { FvToggle } from './fv-toggle.js';
 export { store } from './store.js';
 export type { Store } from './store.js';

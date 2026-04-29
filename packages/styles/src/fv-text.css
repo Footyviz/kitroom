@@ -1,0 +1,176 @@
+/* ============================================================
+   <fv-text> — typography primitive
+   ============================================================
+   Maps data-variant to the type-style blocks defined in
+   @footyviz/tokens/tokens.css (.fv-display .. .fv-editorial).
+   Variants are kept in sync with the utility classes by copying
+   the property block verbatim — when the typography ramp changes
+   in tokens.css, mirror it here.
+
+   data-tone is an additive colour override layered on top of the
+   variant's own colour. data-max-width turns on single-line
+   ellipsis truncation; the value itself is reflected to the host
+   `style.max-width` by the JS in fv-text.ts.
+   ============================================================ */
+
+fv-text {
+  display: inline;
+}
+
+/* ----- Variants (default = body) ----- */
+
+fv-text,
+fv-text[data-variant="body"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: 15px;
+  line-height: var(--lh-relaxed);
+  color: var(--fg);
+}
+
+fv-text[data-variant="body-sm"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: 13px;
+  line-height: var(--lh-normal);
+  color: var(--fg-muted);
+}
+
+fv-text[data-variant="caption"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: 11px;
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+fv-text[data-variant="label"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--fg);
+}
+
+fv-text[data-variant="h1"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: 40px;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+fv-text[data-variant="h2"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: 28px;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--fg);
+}
+
+fv-text[data-variant="h3"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: 20px;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--fg);
+}
+
+fv-text[data-variant="display"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+fv-text[data-variant="display-serif"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: clamp(40px, 6vw, 80px);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+fv-text[data-variant="stat-xl"] {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+  font-size: 72px;
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+fv-text[data-variant="stat-lg"] {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: var(--tracking-snug);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+fv-text[data-variant="stat-md"] {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+  font-size: 22px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+fv-text[data-variant="stat-sm"] {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: 13px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+fv-text[data-variant="mono"] {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: 12px;
+  letter-spacing: 0;
+  color: var(--fg-muted);
+}
+
+fv-text[data-variant="editorial"] {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: 22px;
+  line-height: var(--lh-snug);
+  color: var(--fg);
+}
+
+/* ----- Tone overrides (layered on top of variant colour) ----- */
+
+fv-text[data-tone="default"] { color: var(--fg); }
+fv-text[data-tone="muted"]   { color: var(--fg-muted); }
+fv-text[data-tone="subtle"]  { color: var(--fg-subtle); }
+fv-text[data-tone="inverse"] { color: var(--fg-inverse); }
+fv-text[data-tone="accent"]  { color: var(--accent); }
+
+/* ----- Optional truncation (presence triggers ellipsis) -----
+   The value of data-max-width is reflected to inline style.max-width
+   by fv-text.ts; the rules below are presence-gated so they only
+   apply when truncation is requested. */
+
+fv-text[data-max-width] {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
