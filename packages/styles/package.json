@@ -20,7 +20,8 @@
     "./fv-slider.css": "./src/fv-slider.css",
     "./fv-tabbar.css": "./src/fv-tabbar.css",
     "./fv-text.css": "./src/fv-text.css",
-    "./fv-toggle.css": "./src/fv-toggle.css"
+    "./fv-toggle.css": "./src/fv-toggle.css",
+    "./fv-table.css": "./src/fv-table.css"
   },
   "files": [
     "src"

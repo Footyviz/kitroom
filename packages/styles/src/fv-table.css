@@ -1,0 +1,347 @@
+/* ============================================================
+   <fv-table> — CSS-grid tabular data organism
+   ============================================================
+   Light-DOM. The host carries role="table" and broadcasts the
+   column template via the --fv-table-cols custom property,
+   which is set on <fv-table> itself by the component (from
+   data-columns) and inherited by every descendant row that
+   declares display: grid.
+
+   Selector contract:
+     - fv-table                         : host
+     - fv-table [role="rowgroup"]       : <header> or <div> grouping rows
+     - fv-table [role="row"]            : a row (any element — div, a, button)
+     - fv-table [role="columnheader"]   : header cell
+     - fv-table [role="cell"]           : body cell
+     - data-numeric on a cell or header : right-aligned, tabular-nums, mono
+     - data-primary  on a cell or header: stronger color (Team / Pts columns)
+     - data-strong   on a cell           : bold
+     - data-sign="pos|neg|zero"          : sign color on numeric cells
+     - data-zone="champions|continental|conference|relegation"
+                                          : left-edge accent rail on a row
+     - data-highlight on a row           : faint accent gradient + bold name
+     - data-selected on a row            : selection tint + inset rail
+     - data-disabled on a row            : 50% opacity, no pointer events
+     - data-expanded on a row            : highlight while detail panel is open
+     - data-result="win|loss|tbd" on a row (match-card variant)
+     - data-status="complete|upcoming"   : solid vs dashed row border
+     - data-pip="pos|warn|neg"           : color of a form pip span
+     - [role="columnheader"][data-sort]  : sortable header — toggles
+                                            none → asc → desc
+   ============================================================ */
+
+fv-table {
+  --fv-table-row-h: 52px;
+  --fv-table-px: 14px;
+  --fv-table-gap: 10px;
+
+  display: block;
+  position: relative;
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.3;
+  contain: layout style;
+  container-type: inline-size;
+}
+
+/* ---------- density --------------------------------------- */
+
+fv-table[data-density="compact"] {
+  --fv-table-row-h: 38px;
+  --fv-table-px: 10px;
+}
+
+fv-table[data-density="comfortable"] {
+  --fv-table-row-h: 60px;
+  --fv-table-px: 18px;
+}
+
+/* ---------- row groups ----------------------------------- */
+
+fv-table [role="rowgroup"] {
+  display: contents;
+}
+
+/* ---------- row (CSS grid track) ------------------------- */
+
+fv-table [role="row"] {
+  display: grid;
+  grid-template-columns: var(--fv-table-cols, repeat(auto-fit, minmax(80px, 1fr)));
+  align-items: center;
+  gap: var(--fv-table-gap);
+  height: var(--fv-table-row-h);
+  padding: 0 var(--fv-table-px);
+  border-bottom: 1px solid var(--border-subtle);
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  transition: background 160ms var(--ease, ease-out);
+}
+
+fv-table [role="row"]:last-child {
+  border-bottom: 0;
+}
+
+/* Body rows (links/buttons): hover + focus visuals */
+
+fv-table [role="row"]:is(a, button) {
+  cursor: pointer;
+  background: transparent;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+
+fv-table [role="row"]:is(a, button):hover {
+  background: var(--bg-alt);
+}
+
+fv-table [role="row"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--bg-alt);
+}
+
+/* ---------- header row ----------------------------------- */
+
+fv-table .fv-table-head,
+fv-table [role="row"]:has([role="columnheader"]) {
+  height: 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+fv-table[data-sticky-head] .fv-table-head,
+fv-table[data-sticky-head] [role="row"]:has([role="columnheader"]) {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+fv-table [role="columnheader"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+fv-table [role="columnheader"][data-primary] {
+  color: var(--fg);
+}
+
+fv-table [role="columnheader"][data-numeric] {
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* sortable header: indicator + interactive affordance */
+
+fv-table [role="columnheader"][data-sort] {
+  cursor: pointer;
+  user-select: none;
+  border: 0;
+  background: none;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+fv-table [role="columnheader"][data-sort]::after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 4px solid currentColor;
+  opacity: 0.25;
+  transition: opacity 160ms var(--ease, ease-out), transform 160ms var(--ease, ease-out);
+}
+
+fv-table [role="columnheader"][data-sort]:hover::after {
+  opacity: 0.6;
+}
+
+fv-table [role="columnheader"][data-sort="asc"]::after {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+fv-table [role="columnheader"][data-sort="desc"]::after {
+  opacity: 1;
+}
+
+/* ---------- cells ---------------------------------------- */
+
+fv-table [role="cell"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+fv-table [role="cell"][data-primary] {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+fv-table [role="cell"][data-numeric] {
+  justify-content: flex-end;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+fv-table [role="cell"][data-strong] {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+fv-table [role="cell"][data-sign="pos"] { color: var(--positive); }
+fv-table [role="cell"][data-sign="neg"] { color: var(--negative); }
+fv-table [role="cell"][data-sign="zero"] { color: var(--fg-muted); }
+
+/* ---------- zone accent rail ----------------------------- */
+
+fv-table [role="row"][data-zone] {
+  box-shadow: inset 3px 0 0 0 var(--fv-table-zone-color, var(--accent));
+}
+
+fv-table [role="row"][data-zone="champions"]   { --fv-table-zone-color: var(--accent); }
+fv-table [role="row"][data-zone="continental"] { --fv-table-zone-color: var(--info); }
+fv-table [role="row"][data-zone="conference"]  { --fv-table-zone-color: var(--positive); }
+fv-table [role="row"][data-zone="relegation"]  { --fv-table-zone-color: var(--negative); }
+
+/* ---------- highlight, selected, expanded, disabled ------ */
+
+fv-table [role="row"][data-highlight] {
+  background: linear-gradient(90deg, var(--accent-soft) 0%, transparent 60%);
+  font-weight: 500;
+}
+
+fv-table [role="row"][data-selected] {
+  background: var(--accent-soft);
+  box-shadow: inset 3px 0 0 0 var(--accent);
+}
+
+fv-table [role="row"][data-expanded] {
+  background: var(--bg-alt);
+}
+
+fv-table [role="row"][data-disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---------- match-card row variants ---------------------- */
+
+fv-table [role="row"][data-result="win"] {
+  box-shadow: inset 3px 0 0 0 var(--accent);
+  font-weight: 500;
+}
+
+fv-table [role="row"][data-result="loss"] {
+  color: var(--fg-muted);
+}
+
+fv-table [role="row"][data-status="upcoming"] {
+  border-bottom-style: dashed;
+}
+
+/* ---------- form-pip series stand-in --------------------- */
+/* Used until <fv-series> ships: <span data-role="series">
+   wraps a row of <span data-pip="pos|warn|neg"> dots. */
+
+fv-table [data-role="series"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+fv-table [data-pip] {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--neutral-300);
+}
+
+fv-table [data-pip="pos"]  { background: var(--positive); }
+fv-table [data-pip="warn"] { background: var(--warning); }
+fv-table [data-pip="neg"]  { background: var(--negative); }
+
+/* ---------- crest stand-in -------------------------------- */
+/* Used until <fv-crest> ships: <span data-role="crest"> wraps
+   a 3-letter team code. Renders as a 24px monogram badge. */
+
+fv-table [data-role="crest"] {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ---------- trend stand-in ------------------------------- */
+/* Used until <fv-trend> ships: <span data-role="trend"
+   data-direction="up|down|flat"> contains arrow + delta. */
+
+fv-table [data-role="trend"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+fv-table [data-role="trend"][data-direction="up"]   { color: var(--positive); }
+fv-table [data-role="trend"][data-direction="down"] { color: var(--negative); }
+
+/* ---------- zebra and outline modifiers ------------------ */
+
+fv-table[data-zebra] [role="rowgroup"]:not(:has([role="columnheader"])) [role="row"]:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-alt) 50%, transparent);
+}
+
+fv-table[data-outline] [role="row"] {
+  border-bottom-color: var(--border);
+}
+
+/* ---------- container queries ---------------------------- */
+/* Below 480px the spec hides GF/GA columns. Consumers opt in
+   by giving those columns 0px width in their data-columns
+   value; we provide a class hook for the helper case. */
+
+@container (max-width: 480px) {
+  fv-table [role="row"][data-cols-narrow] {
+    grid-template-columns: var(--fv-table-cols-narrow, var(--fv-table-cols));
+  }
+}

@@ -9,6 +9,9 @@ const config: StorybookConfig = {
     // Component stories and docs live next to the component source.
     '../../components/src/**/*.stories.ts',
     '../../components/src/**/*.docs.mdx',
+    // Organism stories and docs live next to the organism source.
+    '../../organisms/src/**/*.stories.ts',
+    '../../organisms/src/**/*.docs.mdx',
   ],
   addons: [
     {
