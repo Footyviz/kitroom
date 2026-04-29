@@ -1,0 +1,224 @@
+/* ============================================================
+   <fv-button> — light-DOM button
+   ============================================================
+   Variants via data-variant on the host. Default (no attribute)
+   is the "secondary" white-card style — same as the spec's
+   plain .btn class.
+
+   Sizes: data-size="xs|sm|lg" (no attribute = medium).
+
+   The host IS the button (role="button"); composition for
+   content (icons, label, badge) happens via children.
+
+   Spec snapshot: design_specs/preview/component-buttons.html
+   ============================================================ */
+
+fv-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 9px 15px;                /* spec medium */
+  border-radius: 12px;              /* spec medium — between --radius-md/lg */
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    transform var(--dur-instant) var(--ease);
+}
+
+fv-button:hover { background: var(--neutral-100); }
+fv-button:active { transform: translateY(1px); }
+fv-button:focus-visible {
+  outline: 3px solid rgba(26, 26, 24, 0.35);
+  outline-offset: 2px;
+}
+
+fv-button[aria-disabled="true"],
+fv-button[data-loading] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading: opacity stays at 0.45 (handled above). The spinner is the
+   only thing that should remain visually crisp, so it sits at full
+   opacity inside the dimmed button via its own currentColor stroke. */
+fv-button[data-loading]::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-full);
+  animation: fv-button-spin 0.9s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes fv-button-spin {
+  to { transform: rotate(1turn); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  fv-button[data-loading]::before { animation: none; }
+}
+
+/* Icon-only: a single <fv-icon> with nothing else. CSS detects this and
+   collapses the button into a square. */
+fv-button:has(fv-icon:only-child) {
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  border-radius: 9px;
+}
+
+/* ---------- Variants ---------- */
+
+/* Primary — ink black */
+fv-button[data-variant="primary"] {
+  background: var(--neutral-1000);
+  color: var(--fg-inverse);
+  border-color: var(--neutral-1000);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 1px 0 rgba(0, 0, 0, 0.18);
+}
+fv-button[data-variant="primary"]:hover {
+  background: var(--neutral-700);
+  border-color: var(--neutral-700);
+}
+fv-button[data-variant="primary"]:focus-visible {
+  outline-color: rgba(26, 26, 24, 0.55);
+}
+
+/* Cream — warm CTA. Hex literals match the spec; no token group exists yet. */
+fv-button[data-variant="cream"] {
+  background: #F1E4C3;            /* spec */
+  color: #3A2A10;                 /* spec */
+  border-color: #E3D3A7;          /* spec */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 1px 0 rgba(58, 42, 16, 0.08);
+}
+fv-button[data-variant="cream"]:hover {
+  background: #EBD9A8;            /* spec */
+  border-color: #D9C688;          /* spec */
+}
+fv-button[data-variant="cream"]:focus-visible {
+  outline-color: rgba(227, 211, 167, 0.85);
+}
+
+/* Secondary — explicit alias of the default */
+fv-button[data-variant="secondary"] {
+  background: var(--bg-elev);
+  color: var(--fg);
+  border-color: var(--border);
+}
+fv-button[data-variant="secondary"]:hover { background: var(--neutral-100); }
+
+/* Outline */
+fv-button[data-variant="outline"] {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+fv-button[data-variant="outline"]:hover { background: var(--neutral-50); }
+
+/* Ghost */
+fv-button[data-variant="ghost"] {
+  background: transparent;
+  color: var(--fg);
+  border-color: transparent;
+  box-shadow: none;
+}
+fv-button[data-variant="ghost"]:hover {
+  background: var(--neutral-100);
+  border-color: var(--border-subtle);
+}
+
+/* Destructive — quiet outlined red. Hex literals match spec; no semantic-danger tokens yet. */
+fv-button[data-variant="destructive"] {
+  background: var(--bg-elev);
+  color: #8A1D0E;                 /* spec */
+  border-color: #E8BBB2;          /* spec */
+}
+fv-button[data-variant="destructive"]:hover {
+  background: #FDF3F1;            /* spec */
+  border-color: #D99B8F;          /* spec */
+}
+
+/* ---------- Sizes ---------- */
+
+fv-button[data-size="xs"] {
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 7px;
+  gap: 5px;
+}
+fv-button[data-size="xs"]:has(fv-icon:only-child) {
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+}
+
+fv-button[data-size="sm"] {
+  padding: 6px 11px;
+  font-size: 12px;
+  border-radius: 9px;
+  gap: 6px;
+}
+fv-button[data-size="sm"]:has(fv-icon:only-child) {
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+}
+
+fv-button[data-size="lg"] {
+  padding: 13px 20px;
+  font-size: 15px;
+  border-radius: 14px;
+  gap: 10px;
+}
+fv-button[data-size="lg"]:has(fv-icon:only-child) {
+  padding: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+/* ---------- Dark surface ---------- */
+/* When placed inside a dark-themed surface, the default (secondary) button
+   inverts so it sits well against the dark background. Variants that have
+   their own explicit colors (primary, cream, destructive) keep them. */
+[data-theme="dark"] fv-button:not([data-variant]),
+[data-theme="dark"] fv-button[data-variant="secondary"] {
+  background: var(--fg-inverse);
+  color: var(--neutral-1000);
+  border-color: var(--fg-inverse);
+}
+[data-theme="dark"] fv-button:not([data-variant]):hover,
+[data-theme="dark"] fv-button[data-variant="secondary"]:hover {
+  background: var(--neutral-100);
+  border-color: var(--neutral-100);
+}
+
+[data-theme="dark"] fv-button[data-variant="outline"],
+[data-theme="dark"] fv-button[data-variant="ghost"] {
+  color: var(--fg);
+}

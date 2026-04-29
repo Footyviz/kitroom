@@ -1,0 +1,37 @@
+/* ============================================================
+   <fv-button-badge> — small inline count pill
+   ============================================================
+   Sized in em units so it scales with the parent's font-size.
+   Designed to sit as a trailing child inside <fv-button>, but
+   the styling is standalone and it works anywhere.
+   ============================================================ */
+
+fv-button-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15em 0.5em;
+  background: var(--neutral-150);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Inside a primary or cream button, soften the badge so it doesn't
+   compete with the button's own fill. */
+fv-button[data-variant="primary"] > fv-button-badge {
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(250, 250, 247, 0.85);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+fv-button[data-variant="cream"] > fv-button-badge {
+  background: rgba(58, 42, 16, 0.1);
+  color: rgba(58, 42, 16, 0.7);
+  border-color: rgba(58, 42, 16, 0.15);
+}

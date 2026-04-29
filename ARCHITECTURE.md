@@ -16,6 +16,32 @@ Server renders complete HTML. Components enhance existing DOM.
 6. Inline `:not(:defined) { visibility: hidden }` to prevent FOUC.
 7. htmx fragments are HTML only. No <script> tags, no JS execution.
 
+## Composition
+
+Components compose via child tags, not via symbolic prop values that name a
+child. The host element's attributes are limited to:
+
+- Behavior — aria-disabled, data-loading, etc. State the user (or server)
+  flips at runtime.
+- Variant — data-variant from a fixed visual set defined by the design
+  system.
+- Size — data-size from a fixed scale.
+
+Anything else is a child. CSS reacts to composition via descendant
+selectors and :has().
+
+```html
+<!-- yes -->
+<fv-button data-variant="primary"><fv-icon name="play"/>Watch live</fv-button>
+
+<!-- no -->
+<fv-button data-variant="primary" data-icon="play" data-label="Watch live"/>
+```
+
+Why: composition keeps each component small and replaceable. A consumer can
+substitute a different icon component, drop the icon entirely, or wrap text
+in their own element without the host having to know about it.
+
 ## Forbidden patterns
 
 - this.attachShadow(...)

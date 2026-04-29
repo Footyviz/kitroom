@@ -1,0 +1,77 @@
+/* ============================================================
+   <fv-split-button> — fused two-button split-action control
+   ============================================================
+   Wraps adjacent <fv-button> children in a single rounded rect
+   with a hairline divider between them. Inner buttons keep
+   their own click/keyboard behavior; the wrapper only changes
+   the visual treatment.
+
+   data-variant on the wrapper cascades to the inner buttons.
+   ============================================================ */
+
+fv-split-button {
+  display: inline-flex;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--neutral-1000);
+  background: var(--neutral-1000);
+  vertical-align: middle;
+}
+
+fv-split-button > fv-button {
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Light divider on dark/primary fills, dark divider on light fills. */
+fv-split-button > fv-button + fv-button {
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- Variant cascade ---------- */
+/* The wrapper's data-variant defines the wrapper's frame; the cascade
+   tells inner buttons to render in that variant too. */
+
+fv-split-button[data-variant="primary"] > fv-button:not([data-variant]) {
+  background: var(--neutral-1000);
+  color: var(--fg-inverse);
+}
+fv-split-button[data-variant="primary"] > fv-button:not([data-variant]):hover {
+  background: var(--neutral-700);
+  color: var(--fg-inverse);
+}
+
+fv-split-button[data-variant="cream"] {
+  background: #F1E4C3;            /* spec */
+  border-color: #E3D3A7;          /* spec */
+}
+fv-split-button[data-variant="cream"] > fv-button:not([data-variant]) {
+  background: #F1E4C3;            /* spec */
+  color: #3A2A10;                 /* spec */
+}
+fv-split-button[data-variant="cream"] > fv-button:not([data-variant]):hover {
+  background: #EBD9A8;            /* spec */
+}
+fv-split-button[data-variant="cream"] > fv-button + fv-button {
+  border-left-color: rgba(58, 42, 16, 0.18);
+}
+
+fv-split-button[data-variant="secondary"],
+fv-split-button:not([data-variant]) {
+  background: var(--bg-elev);
+  border-color: var(--border);
+}
+fv-split-button[data-variant="secondary"] > fv-button:not([data-variant]),
+fv-split-button:not([data-variant]) > fv-button:not([data-variant]) {
+  background: var(--bg-elev);
+  color: var(--fg);
+}
+fv-split-button[data-variant="secondary"] > fv-button:not([data-variant]):hover,
+fv-split-button:not([data-variant]) > fv-button:not([data-variant]):hover {
+  background: var(--neutral-100);
+}
+fv-split-button[data-variant="secondary"] > fv-button + fv-button,
+fv-split-button:not([data-variant]) > fv-button + fv-button {
+  border-left-color: var(--border);
+}

@@ -7,13 +7,14 @@ Repo: [Footyviz/kitroom](https://github.com/Footyviz/kitroom). npm workspaces mo
 - **Vanilla web components only.** Custom elements + shadow DOM. **No JSX, no React, no Lit, no Preact, no template engine.** Stories and any rendering glue build DOM with `document.createElement` and return `HTMLElement`.
 - **TypeScript strict, ESM-only.** No CommonJS. `verbatimModuleSyntax: true` — use `import type { ... }` for type-only imports.
 - **No emoji in code, comments, or commit messages** unless the user explicitly asks.
-- **Tokens are the design contract.** New components consume `var(--*)` from `@footyviz/tokens`; never hardcode colors or sizes from the handoff. The one exception currently is `fv-button`, which predates the tokens package and still has hardcoded values — refactoring it is a known TODO.
+- **Tokens are the design contract.** New components consume `var(--*)` from `@footyviz/tokens`; never hardcode colors or sizes from the handoff. The few literal hex values that remain in component CSS (cream, destructive, info, warn, neg, pos chip variants) are spec values for which no token group exists yet — flag with a `/* spec */` comment and lift to tokens when the design system grows the relevant scale.
+- **Composition over prop-naming.** Component attributes are limited to behavior (aria-disabled, data-loading), variant, and size. Anything else — icons, labels, badges — is supplied as child elements. CSS reacts to composition via descendant selectors and `:has()`. See [ARCHITECTURE.md](ARCHITECTURE.md) for the rule and rationale.
 
 ## Workspaces
 
 | Package | Purpose | Build |
 |---|---|---|
-| `@footyviz/components` | Published web components (currently just `<fv-button>`) | `tsc` → `dist/` |
+| `@footyviz/components` | Published web components (`<fv-button>`, `<fv-checkbox>`, `<fv-chip>`, `<fv-icon>`, `<fv-icon-text>`, `<fv-radio>`, `<fv-radio-group>`, `<fv-segmented>`, `<fv-slider>`, `<fv-split-button>`, `<fv-button-badge>`, `<fv-tabbar>`, `<fv-toggle>`) | `tsc` → `dist/` |
 | `@footyviz/tokens` | CSS tokens, type styles, brand SVGs, Geist fonts | None (CSS + static assets) |
 | `@footyviz/storybook` | Internal showcase. `private: true`. | `storybook build` |
 
@@ -93,7 +94,6 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 ## Known follow-ups (not yet done)
 
-- **`fv-button` should consume tokens.** Currently hardcoded in shadow DOM. Custom properties cross the shadow boundary, so it's a real refactor but not a blocker.
 - **Port the handoff's reference mocks to vanilla web components.** `design_handoff_footyviz/ui_kits/` has `.jsx` reference mocks for `MatchHeader`, `StatBar`, `EventTimeline`, `TabBar`, `PitchViz`. Read them as visual reference only — do not import or compile JSX into this repo.
 - **HMR across components ↔ storybook.** Today components must be rebuilt to `dist/` before Storybook sees them. Options: run `tsc --watch` in parallel, or repoint `exports` at `src/*.ts` for dev. Out of scope until friction is felt.
 - **Brand PNGs.** Three large PNGs in the handoff (`FootyVizIcon.png`, `FootyVizLogo.png`, `FootyVizTall.png`, ~4 MB total) are intentionally not in the package. Re-evaluate if a consumer needs raster logos.
@@ -101,3 +101,13 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 ## Worktree note
 
 Active dev usually happens in a git worktree under `.claude/worktrees/`. The primary checkout (and `main`) lives at `/Users/akshay/UndergroundSecretLabaratory/FootyViz/component-library/`. To pull `main` into a worktree branch, use `git fetch origin && git merge origin/main` — you can't `git checkout main` from a worktree because main is held by the primary checkout.
+
+### Worktree gotcha: always run `npm install` once in a fresh worktree
+
+A new worktree starts with no `node_modules/` of its own. Node module resolution then walks up the directory tree and finds the primary checkout's `node_modules/`, where `@footyviz/components` is symlinked to the **primary's** `packages/components` — i.e. whatever's on `main`, not your worktree's edits.
+
+What this looks like in practice: you change `packages/components/src/fv-button.ts` in the worktree, run `npm run storybook` (which runs `predev` → builds the worktree's `dist/`), open the story, and the page renders the **old** behavior. Worse: every component file does a `if (!customElements.get('fv-foo')) customElements.define(...)` registration guard, so once the primary's old class wins the registration race, your new class silently never registers — no error, just stale behavior. Symptoms: controls don't drive the rendered component, event handlers absent, `connectedCallback` apparently not running, attribute changes ignored.
+
+Fix: run `npm install` once inside the worktree. That creates a worktree-local `node_modules/` whose `@footyviz/*` symlinks point at the worktree's own `packages/`. After that, the worktree is self-contained and `predev` builds and storybook reads the same `dist/`.
+
+Bake this into the spawn ritual for any new worktree.

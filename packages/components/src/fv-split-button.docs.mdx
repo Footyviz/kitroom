@@ -1,0 +1,40 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as SplitButtonStories from './fv-split-button.stories';
+
+<Meta of={SplitButtonStories} />
+
+# fv-split-button
+
+A visual wrapper that fuses two adjacent `<fv-button>` children into a
+single split-action control with a shared border and a hairline divider.
+Zero JS — the inner buttons keep their own click and keyboard behavior;
+this element only changes the visual treatment.
+
+`data-variant` on the wrapper cascades to the inner buttons, so the
+consumer sets the variant once.
+
+## Required HTML
+
+```html
+<fv-split-button data-variant="primary">
+  <fv-button>Notify me</fv-button>
+  <fv-button aria-label="More options">
+    <fv-icon name="settings"></fv-icon>
+  </fv-button>
+</fv-split-button>
+```
+
+## Attributes
+
+| Attribute      | Required | Values                                                       | Effect                              |
+|----------------|----------|--------------------------------------------------------------|-------------------------------------|
+| `data-variant` | no       | `primary` `cream` `secondary` `outline` `ghost` `destructive` | wrapper frame + cascade to children |
+
+## Events dispatched
+
+None. Inner `<fv-button>` children emit native `click` events as usual.
+
+## Stories
+
+<Story of={SplitButtonStories.Default} />
+<Story of={SplitButtonStories.Variants} />

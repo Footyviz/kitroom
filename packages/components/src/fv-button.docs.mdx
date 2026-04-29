@@ -1,0 +1,86 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './fv-button.stories';
+
+<Meta of={ButtonStories} />
+
+# fv-button
+
+Light-DOM button. The host **is** the interactive element — `role="button"`,
+`tabindex="0"` — there is no inner `<button>` and no shadow root. Composition
+is the API: any leading `<fv-icon>`, label text, and trailing
+`<fv-button-badge>` are placed as children. CSS uses `:has()` to react
+(e.g. icon-only sizing collapses the button into a square automatically).
+
+Default variant is **secondary** (white card on light); default size is
+**medium** (no `data-size` attribute).
+
+## Required HTML
+
+```html
+<fv-button data-variant="primary">Open match</fv-button>
+
+<fv-button data-variant="cream">
+  <fv-icon name="live"></fv-icon>
+  Watch live
+</fv-button>
+
+<fv-button data-variant="secondary" aria-label="Share">
+  <fv-icon name="share"></fv-icon>
+</fv-button>
+
+<fv-button data-variant="primary" data-loading>Loading</fv-button>
+<fv-button data-variant="primary" aria-disabled="true">Disabled</fv-button>
+```
+
+## Attributes
+
+| Attribute       | Required | Values                                                                  | Effect                                                                |
+|-----------------|----------|-------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| `data-variant`  | no       | `primary` `cream` `secondary` `outline` `ghost` `destructive`           | visual treatment; default = `secondary`                                |
+| `data-size`     | no       | `xs` `sm` `lg`                                                          | size ladder; default = medium (no attribute)                          |
+| `data-loading`  | no       | (presence)                                                              | renders a spinner, blocks click + keyboard, sets `tabindex="-1"`      |
+| `aria-disabled` | no       | `"true"`                                                                 | dims, blocks click + keyboard, sets `tabindex="-1"`                    |
+
+## Composition
+
+Content is supplied as children. CSS keys off composition:
+
+- A single `<fv-icon>` child (and nothing else) → button collapses into a
+  square icon button. Provide `aria-label` for accessibility.
+- A leading `<fv-icon>` followed by text → renders the icon-with-label
+  pattern with an 8px gap.
+- A trailing `<fv-button-badge>` child → renders the count-badge pattern.
+
+## Events dispatched
+
+| Event   | When                              | Detail |
+|---------|-----------------------------------|--------|
+| `click` | Mouse click, or Space/Enter while focused | (native) |
+
+`aria-disabled="true"` and `data-loading` both block the click. The
+component does not dispatch any custom events of its own.
+
+## Tokens used
+
+| Token              | Where                                        |
+|--------------------|----------------------------------------------|
+| `--neutral-1000`   | primary background                           |
+| `--neutral-700`    | primary hover                                |
+| `--bg-elev`, `--fg`, `--border` | secondary surface, text, border    |
+| `--border-strong`  | outline variant border                       |
+| `--neutral-100`    | secondary / ghost hover                      |
+| `--font-sans`, `--fw-medium` | type                                |
+| `--dur-fast`, `--ease`, `--dur-instant` | transitions             |
+| `--space-2`        | icon-text gap                                |
+
+Cream and destructive variants use literal hex values from the design
+spec; no token group exists for them yet.
+
+## Stories
+
+<Story of={ButtonStories.Playground} />
+<Story of={ButtonStories.Hierarchy} />
+<Story of={ButtonStories.Sizes} />
+<Story of={ButtonStories.States} />
+<Story of={ButtonStories.WithIcon} />
+<Story of={ButtonStories.OnDark} />
