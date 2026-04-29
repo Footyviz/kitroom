@@ -5,6 +5,7 @@ const config: StorybookConfig = {
   stories: [
     // Foundations (tokens, type, spacing) live in the storybook package.
     '../stories/**/*.stories.ts',
+    '../stories/**/*.docs.mdx',
     // Component stories and docs live next to the component source.
     '../../components/src/**/*.stories.ts',
     '../../components/src/**/*.docs.mdx',

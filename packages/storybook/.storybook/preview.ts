@@ -21,6 +21,11 @@ const injectSprite = (): void => {
 
 const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ['Overview', 'Foundations', 'Components', 'Design Specs'],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
