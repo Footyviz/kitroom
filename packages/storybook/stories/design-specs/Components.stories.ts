@@ -16,4 +16,5 @@ export const Events: Story     = { render: () => previewIframe('component-events
 export const Tabbar: Story     = { render: () => previewIframe('component-tabbar.html', 950) };
 export const StatRow: Story    = { render: () => previewIframe('component-stat-row.html', 800) };
 export const MatchCard: Story  = { render: () => previewIframe('component-match-card.html', 1300) };
+export const Table: Story      = { render: () => previewIframe('component-table.html', 4200) };
 export const VizFrame: Story   = { render: () => previewIframe('component-viz-frame.html', 600) };
