@@ -1,0 +1,48 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ButtonBadgeStories from './fv-button-badge.stories';
+
+<Meta of={ButtonBadgeStories} />
+
+# fv-button-badge
+
+A small inline pill, sized in `em` units so it scales with the parent's
+font-size. Designed to sit as a trailing child inside `<fv-button>` for
+the count pattern (e.g. "Follow 12.4k"), but the styling is standalone
+and works anywhere a count badge fits. Zero JS.
+
+When placed inside an `<fv-button data-variant="primary">` or
+`data-variant="cream"`, the badge softens its fill so it doesn't compete
+with the button's own surface.
+
+## Required HTML
+
+```html
+<fv-button data-variant="secondary">
+  <fv-icon name="star"></fv-icon>
+  Follow
+  <fv-button-badge>12.4k</fv-button-badge>
+</fv-button>
+```
+
+## Attributes
+
+None.
+
+## Events dispatched
+
+None.
+
+## Tokens used
+
+| Token             | Where                            |
+|-------------------|----------------------------------|
+| `--neutral-150`   | default badge background         |
+| `--fg-muted`      | default badge text               |
+| `--font-mono`     | numeric / count typography       |
+| `--radius-full`   | pill shape                       |
+| `--border-subtle` | hairline border                  |
+
+## Stories
+
+<Story of={ButtonBadgeStories.InsideButton} />
+<Story of={ButtonBadgeStories.Standalone} />
