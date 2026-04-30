@@ -33,3 +33,4 @@
    @footyviz/locker-room; styles colocated here for the same
    single-import surface. */
 @import './fv-table.css';
+@import './fv-match-card.css';
