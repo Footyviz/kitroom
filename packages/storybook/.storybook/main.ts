@@ -1,5 +1,9 @@
 import type { StorybookConfig } from '@storybook/web-components-vite';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import remarkGfm from 'remark-gfm';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   stories: [
@@ -42,6 +46,18 @@ const config: StorybookConfig = {
     if (process.env.STORYBOOK_BASE_PATH) {
       config.base = process.env.STORYBOOK_BASE_PATH;
     }
+    // Resolve workspace packages directly to their TypeScript sources so
+    // Storybook never depends on a built dist/ directory. Without this,
+    // Vite resolves @footyviz/kitroom via the package's exports map
+    // (./dist/index.js) and fails with "Failed to resolve import" on a
+    // fresh clone or any time dist/ is stale.
+    config.resolve = config.resolve ?? {};
+    config.resolve.alias = {
+      ...(config.resolve.alias as Record<string, string> | undefined),
+      '@footyviz/kitroom/icons.js': resolve(__dirname, '../../kitroom/src/icons.ts'),
+      '@footyviz/kitroom': resolve(__dirname, '../../kitroom/src/index.ts'),
+      '@footyviz/locker-room': resolve(__dirname, '../../locker-room/src/index.ts'),
+    };
     return config;
   },
 };

@@ -4,11 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "dev": "storybook dev -p 6006",
-    "prebuild": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "build": "storybook build",
-    "pretest": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf storybook-static"
