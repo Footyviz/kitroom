@@ -1,5 +1,5 @@
 {
-  "name": "footyviz-component-library",
+  "name": "home-ground",
   "private": true,
   "workspaces": [
     "packages/*"

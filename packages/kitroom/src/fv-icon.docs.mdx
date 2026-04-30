@@ -14,7 +14,7 @@ The component does not ship the SVG paths — those live in a single
 sprite that the page is responsible for placing once near `<body>`.
 The sprite is shipped two ways:
 
-- `@footyviz/components/icons.js` exports `iconSpriteHtml` (a string)
+- `@footyviz/kitroom/icons.js` exports `iconSpriteHtml` (a string)
   for inline injection during app boot.
 - `@footyviz/tokens/icons.svg` is the same sprite as a static file,
   for `<use href="/path/to/icons.svg#icon-pitch"/>`-style fetch.
@@ -34,7 +34,7 @@ The page must include the sprite once. Then anywhere on the page:
 To inject the sprite at app boot:
 
 ```ts
-import { iconSpriteHtml } from '@footyviz/components/icons.js';
+import { iconSpriteHtml } from '@footyviz/kitroom/icons.js';
 document.body.insertAdjacentHTML('beforeend', iconSpriteHtml);
 ```
 

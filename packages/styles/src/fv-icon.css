@@ -3,7 +3,7 @@
    ============================================================
    Renders a <svg><use href="#icon-NAME"/></svg> referencing a
    <symbol> from the page-level icon sprite (shipped by
-   @footyviz/components/icons.js or @footyviz/tokens/icons.svg).
+   @footyviz/kitroom/icons.js or @footyviz/tokens/icons.svg).
 
    Sizes mirror the design spec: utility row is 20px (md),
    brand grid is 28px (lg), 16px (sm) is the smaller chip /

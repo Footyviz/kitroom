@@ -1,0 +1,153 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TableStories from './fv-table.stories';
+
+<Meta of={TableStories} />
+
+# fv-table
+
+A CSS-grid tabular-data formation. Renders rows of mixed identity, numeric,
+and series cells with full ARIA `role="table"` semantics. Built for
+ranked, scored, sequenced data — league standings, fixture lists, stat
+grids — but generic over column shape.
+
+`<fv-table>` does **not** use the native `<table>` element. Each row is
+its own CSS grid container; the host broadcasts the column template via
+`--fv-table-cols`, which every descendant row inherits. This gives you
+sticky headers, container queries, and arbitrary cell content (web
+components, anchors, buttons) without giving up keyboard or screen-reader
+semantics.
+
+## Required HTML
+
+```html
+<fv-table
+  data-density="default"
+  data-columns="36px minmax(0,1fr) 56px 48px 48px 100px 48px"
+  aria-label="League table"
+>
+  <header role="rowgroup">
+    <div role="row" class="fv-table-head">
+      <span role="columnheader">#</span>
+      <span role="columnheader" data-primary>Team</span>
+      <span role="columnheader" data-numeric>GD</span>
+      <span role="columnheader" data-numeric>GF</span>
+      <span role="columnheader" data-numeric>GA</span>
+      <span role="columnheader">Form</span>
+      <span role="columnheader" data-numeric data-primary
+            data-sort="none" data-sort-key="pts" tabindex="0">Pts</span>
+    </div>
+  </header>
+  <div role="rowgroup">
+    <a role="row" href="/team/har" data-zone="champions" data-highlight>
+      <span role="cell">
+        <span data-role="trend" data-direction="up">▲+2</span>
+        1
+      </span>
+      <span role="cell" data-primary>
+        <span data-role="crest" aria-hidden="true">HAR</span>
+        <fv-text>Harringate Utd</fv-text>
+      </span>
+      <span role="cell" data-numeric data-sign="pos">+18</span>
+      <span role="cell" data-numeric>32</span>
+      <span role="cell" data-numeric>14</span>
+      <span role="cell">
+        <span data-role="series" aria-label="Last 5: pos, pos, warn, pos, pos">
+          <span data-pip="pos"></span><span data-pip="pos"></span>
+          <span data-pip="warn"></span><span data-pip="pos"></span>
+          <span data-pip="pos"></span>
+        </span>
+      </span>
+      <span role="cell" data-numeric data-strong>42</span>
+    </a>
+    <!-- more rows -->
+  </div>
+</fv-table>
+```
+
+## Attributes
+
+### Host
+
+| Attribute            | Required | Values                              | Effect                                                                 |
+|----------------------|----------|-------------------------------------|------------------------------------------------------------------------|
+| `data-columns`       | yes      | any CSS grid-template-columns value | broadcast to `--fv-table-cols`; every row inherits                     |
+| `aria-label`         | yes      | string                              | accessible name (or use `aria-labelledby`)                             |
+| `data-density`       | no       | `compact` \| `default` \| `comfortable` | row height + padding scale                                         |
+| `data-zebra`         | no       | flag                                | alternating row tint in body                                           |
+| `data-outline`       | no       | flag                                | upgrade body row separators from subtle to standard border             |
+| `data-sticky-head`   | no       | flag                                | header sticks to top of nearest scroll container                       |
+
+### Row (`[role="row"]`)
+
+| Attribute        | Values                                            | Effect                                              |
+|------------------|---------------------------------------------------|-----------------------------------------------------|
+| `data-zone`      | `champions` \| `continental` \| `conference` \| `relegation` | left-edge accent rail, semantic color    |
+| `data-highlight` | flag                                              | faint accent gradient + bold name                   |
+| `data-selected`  | flag                                              | selection tint + inset rail                         |
+| `data-disabled`  | flag                                              | 50% opacity, `pointer-events: none`                 |
+| `data-expanded`  | flag                                              | highlight while detail panel is open                |
+| `data-result`    | `win` \| `loss` \| `tbd` (match-card variant)     | result framing — left rail, muted text, dashed      |
+| `data-status`    | `complete` \| `upcoming`                          | solid vs dashed bottom border                       |
+
+### Cell (`[role="cell"]`) and column header (`[role="columnheader"]`)
+
+| Attribute        | Values                                            | Effect                                              |
+|------------------|---------------------------------------------------|-----------------------------------------------------|
+| `data-primary`   | flag                                              | stronger color (Team / Pts columns)                 |
+| `data-numeric`   | flag                                              | right-aligned, tabular-nums, Geist Mono             |
+| `data-strong`    | flag (cell only)                                  | bold + slightly larger                              |
+| `data-sign`      | `pos` \| `neg` \| `zero` (cell only)              | sign coloring on numeric cells                      |
+| `data-sort`      | `none` \| `asc` \| `desc` (header only)           | sortable affordance + emits `sort` event on click   |
+| `data-sort-key`  | string (header only)                              | identifier emitted in `sort` event detail           |
+
+## Events
+
+| Event   | When                                       | Detail                                              |
+|---------|--------------------------------------------|-----------------------------------------------------|
+| `sort`  | A `[role="columnheader"][data-sort]` is clicked or activated via Space/Enter | `{ key: string, direction: 'asc' \| 'desc' }` |
+
+The component does not sort row data. It reports user intent; consumers
+re-render rows in the new order (htmx swap, re-render from store, etc.).
+
+## Accessibility
+
+- Host gets `role="table"` if not already set.
+- Column headers carrying `data-sort` keep `aria-sort` in sync (`none` /
+  `ascending` / `descending`).
+- Sortable headers are activated by **click** and by **Space/Enter** when
+  focused. Mark them `tabindex="0"` so keyboard users can reach them.
+- Use a real `<a href>` or `<button>` for any row that is interactive —
+  the host doesn't synthesize keyboard activation for rows. The CSS
+  treats `:focus-visible` on rows so focus rings are always visible.
+- Color is never the only signal: zone is paired with table position,
+  sign is paired with `+`/`-` text, form pips carry an `aria-label`
+  describing the sequence.
+
+## Composition
+
+Where the spec calls for the team crest, form-pip series, or trend
+arrow, this component currently uses inline `data-role="crest|series|trend"`
+spans styled by the table's stylesheet. These are stand-ins for
+`<fv-crest>`, `<fv-series>`, and `<fv-trend>` primitives that are being
+built in a separate session. When those land, swap the spans for the
+real elements — the visual contract is identical.
+
+## Tokens used
+
+| Token                                | Where                                |
+|--------------------------------------|--------------------------------------|
+| `--bg`, `--bg-alt`, `--bg-elev`      | row backgrounds, hover, header       |
+| `--fg`, `--fg-muted`, `--fg-subtle`  | primary, secondary, header text      |
+| `--border`, `--border-subtle`        | outer table, row separators          |
+| `--accent`, `--accent-soft`          | champions zone, highlight, selected  |
+| `--positive`, `--negative`, `--warning`, `--info` | semantic cell signs and zones |
+| `--font-sans`, `--font-mono`         | UI text vs numerics                  |
+| `--radius-md`, `--radius-full`       | host corner, pip dots                |
+
+## Stories
+
+<Story of={TableStories.Standings} />
+<Story of={TableStories.Compact} />
+<Story of={TableStories.Comfortable} />
+<Story of={TableStories.Zones} />
+<Story of={TableStories.StickyHead} />

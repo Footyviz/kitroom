@@ -16,6 +16,32 @@ Server renders complete HTML. Components enhance existing DOM.
 6. Inline `:not(:defined) { visibility: hidden }` to prevent FOUC.
 7. htmx fragments are HTML only. No <script> tags, no JS execution.
 
+## Accessibility
+
+Accessibility is a first-class constraint, equal to type-safety and
+design-token fidelity. Components and formations ship accessible by
+default — there is no "add a11y later" mode. The rules below apply to
+every `<fv-*>` element, primitive or composed.
+
+1. Every interactive element manages role, keyboard handling, and focus
+   order in `connectedCallback`. No consumer should need to add ARIA to
+   make a `<fv-*>` element work for assistive tech.
+2. Disabled / loading state is conveyed via `aria-disabled` and
+   `tabindex` sync, never by silently removing the element from the tab
+   order.
+3. Composed formations expose ARIA structural roles (`table` / `rowgroup`
+   / `row` / `cell`, `listbox` / `option`, etc.) on the appropriate
+   child elements. CSS-driven layouts (e.g. CSS Grid table, masonry
+   list) MUST keep ARIA semantics — visual restructuring never strips
+   structure from screen readers.
+4. Color is never the only signal. Sign, status, and zone accents
+   always pair with text or an icon. Form-pip series carry an
+   `aria-label` describing the sequence.
+5. Focus rings are always visible. Never set `outline: 0` without a
+   replacement `:focus-visible` style.
+6. Storybook addon-a11y violations are treated as failing tests — fix
+   the component, do not silence the rule.
+
 ## Composition
 
 Components compose via child tags, not via symbolic prop values that name a

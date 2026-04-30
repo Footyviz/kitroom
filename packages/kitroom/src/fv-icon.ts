@@ -5,7 +5,7 @@
  *          [aria-label="..."]>
  *
  * Renders a reference to a <symbol id="icon-NAME"> defined elsewhere on
- * the page. The symbol sprite is shipped by @footyviz/components/icons.js
+ * the page. The symbol sprite is shipped by @footyviz/kitroom/icons.js
  * (the iconSpriteHtml string) or @footyviz/tokens/icons.svg (the file).
  * The page is responsible for placing the sprite once near <body>; this
  * component does NOT inject the sprite.

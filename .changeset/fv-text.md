@@ -1,5 +1,5 @@
 ---
-"@footyviz/components": minor
+"@footyviz/kitroom": minor
 "@footyviz/styles": minor
 ---
 
@@ -7,6 +7,6 @@ Add `<fv-text>` — a light-DOM typography primitive that maps `data-variant` to
 
 The component is intentionally semantic-free: `data-variant="h1"` styles like an H1 but does not set `role="heading"`. Wrap with a semantic element when meaning matters.
 
-- New `@footyviz/components/src/fv-text.ts` (registers `<fv-text>`).
+- New `@footyviz/kitroom/src/fv-text.ts` (registers `<fv-text>`).
 - New `@footyviz/styles/fv-text.css` mirroring the `.fv-*` utility-class blocks in `tokens.css`.
 - New Storybook entries under **Components / Text** (Playground, TypeRamp, Tones, Truncation, Stats) plus behaviour tests for the `data-max-width` reflection and survival across innerHTML swaps.

@@ -8,7 +8,7 @@ shadow boundaries.
 ## Storybook
 
 The current set of components and their docs live at
-**<https://footyviz.github.io/kitroom/>**. Every story is also a
+**<https://footyviz.github.io/home-ground/>**. Every story is also a
 test — `play` functions run as real Vitest cases in headless Chromium.
 
 ## Workspaces
@@ -17,7 +17,8 @@ test — `play` functions run as real Vitest cases in headless Chromium.
 |---|---|
 | [`@footyviz/tokens`](packages/tokens) | Design tokens (CSS variables, type styles, fonts, brand SVGs) |
 | [`@footyviz/styles`](packages/styles) | Global stylesheet for the components |
-| [`@footyviz/components`](packages/components) | The `<fv-*>` web components |
+| [`@footyviz/kitroom`](packages/kitroom) | The `<fv-*>` web components |
+| [`@footyviz/locker-room`](packages/locker-room) | Composed formations built on top of the components |
 | [`@footyviz/storybook`](packages/storybook) | Internal showcase + Vitest test harness |
 
 ## Local development
