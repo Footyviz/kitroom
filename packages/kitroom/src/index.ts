@@ -13,6 +13,7 @@ export { FvSeries } from './fv-series.js';
 export { FvSlider } from './fv-slider.js';
 export { FvSplitButton } from './fv-split-button.js';
 export { FvTabbar } from './fv-tabbar.js';
+export { FvTeam } from './fv-team.js';
 export { FvText } from './fv-text.js';
 export { FvToggle } from './fv-toggle.js';
 export { FvTrend } from './fv-trend.js';

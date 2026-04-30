@@ -1,0 +1,39 @@
+/* ============================================================
+   <fv-team> — crest + team-name composite
+   ============================================================
+   A flex shell that pairs an <fv-crest> with an element marked
+   data-role="team-name" (commonly an <fv-text>). The component
+   itself does not auto-size the crest — consumers pick the crest
+   size. The shell only manages direction (home/away mirroring),
+   gap, and ellipsis truncation on the name.
+   ============================================================ */
+
+fv-team {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* Away teams are visually mirrored: crest sits on the right, name
+   on the left. Authors keep the same child order in markup; the
+   flip is purely visual via flex-direction. */
+fv-team[data-side="away"] {
+  flex-direction: row-reverse;
+}
+
+/* Compact density tightens the gap. Crest size stays whatever the
+   author chose — density does NOT proxy size to the crest. */
+fv-team[data-density="compact"] {
+  gap: var(--space-2);
+}
+
+/* The team-name truncates with ellipsis when its container is
+   bounded. min-width: 0 on the host lets the flex item shrink
+   below its content's intrinsic size. */
+fv-team [data-role="team-name"] {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
