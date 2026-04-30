@@ -10,9 +10,9 @@
    ============================================================ */
 
 fv-crest {
-  --_size: 24px;
+  --_size: 28px;
   --_radius: var(--radius-sm);
-  --_font-size: 9.5px;
+  --_font-size: 10.5px;
 
   display: inline-grid;
   place-items: center;
@@ -37,9 +37,14 @@ fv-crest[data-size="sm"] {
   --_font-size: 8.5px;
 }
 
+fv-crest[data-size="md"] {
+  --_size: 28px;
+  --_font-size: 10.5px;
+}
+
 fv-crest[data-size="lg"] {
-  --_size: 32px;
-  --_font-size: 11px;
+  --_size: 36px;
+  --_font-size: 12.5px;
 }
 
 /* Image mode — drop the chrome so the logo renders naturally at

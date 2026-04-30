@@ -18,8 +18,9 @@
  * The fallback render is the same path the no-src case takes, so there
  * is exactly one shape of DOM the CSS targets.
  *
- * Sizes: data-size="sm" (20px) | default (24px) | "lg" (32px). Borders,
- * radius, font, and background come from tokens — no per-instance values.
+ * Sizes: data-size="sm" (20px) | "md" (28px, default) | "lg" (36px).
+ * Borders, radius, font, and background come from tokens — no
+ * per-instance values.
  */
 export class FvCrest extends HTMLElement {
   static observedAttributes = ['data-code', 'data-src', 'data-alt'];
