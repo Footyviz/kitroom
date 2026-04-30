@@ -58,9 +58,9 @@ const liveCard = (): TemplateResult => html`
         <fv-text data-role="team-name" data-variant="body">Arsenal</fv-text>
       </fv-team>
       <div data-role="result">
-        <fv-text data-variant="stat-lg">2</fv-text>
-        <fv-text data-role="sep" data-variant="stat-lg" data-tone="subtle">–</fv-text>
-        <fv-text data-variant="stat-lg">1</fv-text>
+        <fv-text data-variant="stat-md">2</fv-text>
+        <fv-text data-role="sep" data-variant="stat-md" data-tone="subtle">–</fv-text>
+        <fv-text data-variant="stat-md">1</fv-text>
       </div>
       <fv-team data-side="away">
         <fv-crest data-code="CHE" data-size="lg"></fv-crest>
@@ -156,9 +156,9 @@ const finalCard = (): TemplateResult => html`
         <fv-text data-role="team-name" data-variant="body">Newcastle</fv-text>
       </fv-team>
       <div data-role="result">
-        <fv-text data-variant="stat-lg">0</fv-text>
-        <fv-text data-role="sep" data-variant="stat-lg" data-tone="subtle">–</fv-text>
-        <fv-text data-variant="stat-lg">3</fv-text>
+        <fv-text data-variant="stat-md">0</fv-text>
+        <fv-text data-role="sep" data-variant="stat-md" data-tone="subtle">–</fv-text>
+        <fv-text data-variant="stat-md">3</fv-text>
       </div>
       <fv-team data-side="away">
         <fv-crest data-code="TOT" data-size="lg"></fv-crest>
