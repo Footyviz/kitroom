@@ -12,7 +12,7 @@ type RadioGroupArgs = {
 };
 
 const meta: Meta<RadioGroupArgs> = {
-  title: 'Components/RadioGroup',
+  title: 'Kitroom/RadioGroup',
   component: 'fv-radio-group',
   argTypes: {
     selectedValue: {

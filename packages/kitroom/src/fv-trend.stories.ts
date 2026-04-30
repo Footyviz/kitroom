@@ -12,7 +12,7 @@ type TrendArgs = {
 };
 
 const meta: Meta<TrendArgs> = {
-  title: 'Components/Trend',
+  title: 'Kitroom/Trend',
   component: 'fv-trend',
   argTypes: {
     direction: {

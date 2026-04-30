@@ -21,7 +21,7 @@ type ChipArgs = {
 };
 
 const meta: Meta<ChipArgs> = {
-  title: 'Components/Chip',
+  title: 'Kitroom/Chip',
   component: 'fv-chip',
   argTypes: {
     variant: {

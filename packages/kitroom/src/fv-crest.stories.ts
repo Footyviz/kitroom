@@ -13,7 +13,7 @@ type CrestArgs = {
 };
 
 const meta: Meta<CrestArgs> = {
-  title: 'Components/Crest',
+  title: 'Kitroom/Crest',
   component: 'fv-crest',
   argTypes: {
     code: { control: 'text', description: 'data-code — 2-4 letter team monogram' },

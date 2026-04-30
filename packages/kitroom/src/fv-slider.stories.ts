@@ -12,7 +12,7 @@ type SliderArgs = {
 };
 
 const meta: Meta<SliderArgs> = {
-  title: 'Components/Slider',
+  title: 'Kitroom/Slider',
   component: 'fv-slider',
   argTypes: {
     value: { control: { type: 'number' }, description: 'data-value' },

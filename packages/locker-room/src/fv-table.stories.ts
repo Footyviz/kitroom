@@ -12,7 +12,7 @@ type TableArgs = {
 };
 
 const meta: Meta<TableArgs> = {
-  title: 'Formations/Table',
+  title: 'Locker Room/Table',
   component: 'fv-table',
   argTypes: {
     density: {

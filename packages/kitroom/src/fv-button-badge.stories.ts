@@ -5,7 +5,7 @@ import './fv-button.js';
 import './fv-icon.js';
 
 const meta: Meta = {
-  title: 'Components/ButtonBadge',
+  title: 'Kitroom/ButtonBadge',
   component: 'fv-button-badge',
 };
 export default meta;
