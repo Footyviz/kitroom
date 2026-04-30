@@ -27,14 +27,14 @@ jobs:
 
       - name: Build Storybook
         env:
-          STORYBOOK_BASE_PATH: /kitroom/
+          STORYBOOK_BASE_PATH: /home-ground/
         run: npm run build:storybook
 
-      - name: Deploy to kitroom branch
+      - name: Deploy to home-ground branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: kitroom
+          publish_branch: home-ground
           publish_dir: ./packages/storybook/storybook-static
           force_orphan: true
           user_name: 'github-actions[bot]'

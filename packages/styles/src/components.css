@@ -25,6 +25,6 @@
 @import './fv-toggle.css';
 
 /* Formations — composed from primitives above. Shipped from
-   @footyviz/formations; styles colocated here for the same
+   @footyviz/locker-room; styles colocated here for the same
    single-import surface. */
 @import './fv-table.css';

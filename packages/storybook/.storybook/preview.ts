@@ -3,9 +3,9 @@ import '@footyviz/tokens/tokens.css';
 import '@footyviz/tokens/fonts.css';
 import '@footyviz/styles/base.css';
 import '@footyviz/styles/components.css';
-import '@footyviz/components';
-import '@footyviz/formations';
-import { iconSpriteHtml } from '@footyviz/components/icons.js';
+import '@footyviz/kitroom';
+import '@footyviz/locker-room';
+import { iconSpriteHtml } from '@footyviz/kitroom/icons.js';
 
 // The <fv-icon> component renders <svg><use href="#icon-NAME"/></svg>
 // references — the symbol sprite must already be on the page. Inject

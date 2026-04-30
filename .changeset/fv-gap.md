@@ -1,5 +1,5 @@
 ---
-"@footyviz/components": minor
+"@footyviz/kitroom": minor
 "@footyviz/styles": minor
 ---
 

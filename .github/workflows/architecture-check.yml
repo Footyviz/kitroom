@@ -17,7 +17,7 @@ jobs:
       - name: Forbid attachShadow / shadowrootmode in components
         run: |
           set -e
-          matches=$(grep -rn "attachShadow\|shadowrootmode" packages/components/src/ \
+          matches=$(grep -rn "attachShadow\|shadowrootmode" packages/kitroom/src/ \
             | grep -v "fv-button.ts" \
             || true)
           if [ -n "$matches" ]; then

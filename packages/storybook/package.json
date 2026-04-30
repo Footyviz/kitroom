@@ -4,18 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
+    "predev": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "dev": "storybook dev -p 6006",
-    "prebuild": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
+    "prebuild": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "build": "storybook build",
-    "pretest": "npm run build -w @footyviz/components && npm run build -w @footyviz/formations",
+    "pretest": "npm run build -w @footyviz/kitroom && npm run build -w @footyviz/locker-room",
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf storybook-static"
   },
   "dependencies": {
-    "@footyviz/components": "*",
-    "@footyviz/formations": "*",
+    "@footyviz/kitroom": "*",
+    "@footyviz/locker-room": "*",
     "@footyviz/styles": "*",
     "@footyviz/tokens": "*"
   },
