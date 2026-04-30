@@ -7,11 +7,11 @@ const config: StorybookConfig = {
     '../stories/**/*.stories.ts',
     '../stories/**/*.docs.mdx',
     // Component stories and docs live next to the component source.
-    '../../components/src/**/*.stories.ts',
-    '../../components/src/**/*.docs.mdx',
+    '../../kitroom/src/**/*.stories.ts',
+    '../../kitroom/src/**/*.docs.mdx',
     // Formation stories and docs live next to the formation source.
-    '../../formations/src/**/*.stories.ts',
-    '../../formations/src/**/*.docs.mdx',
+    '../../locker-room/src/**/*.stories.ts',
+    '../../locker-room/src/**/*.docs.mdx',
   ],
   addons: [
     {
