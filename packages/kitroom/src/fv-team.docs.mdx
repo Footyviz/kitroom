@@ -1,0 +1,92 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TeamStories from './fv-team.stories';
+
+<Meta of={TeamStories} />
+
+# fv-team
+
+A composite primitive that pairs a team crest with a team-name label.
+Used wherever a team identity needs to be rendered as a single inline
+unit — match cards, list rows, table cells, header bars.
+
+The component is a thin layout shell: it does **not** generate the
+crest or the name. Per the composition rule in `ARCHITECTURE.md`,
+authors drop in real `<fv-crest>` and `<fv-text data-role="team-name">`
+children. The shell only handles direction (home/away mirroring), the
+gap between crest and name, and ellipsis truncation when the name
+overflows.
+
+The host carries `role="group"` with an `aria-label` synthesised from
+the team-name's text content, so the pair announces as one team
+identity to assistive tech. A `MutationObserver` keeps the label in
+sync if the name text changes (htmx swap, store re-render, etc.).
+
+## Required HTML
+
+```html
+<fv-team data-side="home">
+  <fv-crest data-code="ARS" data-size="lg"></fv-crest>
+  <fv-text data-role="team-name" data-variant="body">Arsenal</fv-text>
+</fv-team>
+
+<fv-team data-side="away">
+  <fv-crest data-code="CHE" data-size="lg"></fv-crest>
+  <fv-text data-role="team-name" data-variant="body">Chelsea</fv-text>
+</fv-team>
+```
+
+## Attributes
+
+| Attribute       | On   | Required | Effect                                                                                                                                       |
+|-----------------|------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `data-side`     | host | yes      | `home` lays the children out left-to-right (crest then name). `away` mirrors the order via `flex-direction: row-reverse` — author markup unchanged. |
+| `data-density`  | host | no       | `compact` tightens the gap between crest and name from `--space-3` (12px) to `--space-2` (8px). Does **not** auto-resize the crest.            |
+
+The component does **not** auto-size the inner crest. Consumers pick
+`data-size` on the `<fv-crest>` directly — typically `sm`/`md` in lists
+and `lg` in match-card headers.
+
+## Composition
+
+The component reads two children:
+
+| Selector                      | Purpose                                                                 |
+|-------------------------------|-------------------------------------------------------------------------|
+| `<fv-crest>`                  | Team badge. Any `data-size` works; the team shell does not constrain it.|
+| `[data-role="team-name"]`     | Team-name text. Typically `<fv-text data-variant="body">`, but any element bearing the data-role works (e.g. `<span>`). |
+
+If the team-name child is missing the host simply omits the
+`aria-label`; nothing crashes.
+
+## Tokens used
+
+| Token        | Where                          |
+|--------------|--------------------------------|
+| `--space-3`  | default gap between crest and name |
+| `--space-2`  | gap when `data-density="compact"`  |
+
+All visual chrome (font, colour, crest geometry) comes from the inner
+components and their own tokens — `<fv-team>` adds none of its own.
+
+## Accessibility
+
+- Host gets `role="group"` so the pair announces as a single unit.
+- `aria-label` is synthesised from the team-name's text content. If
+  the text changes after first render, a single `MutationObserver`
+  picks up the change and updates the label.
+- The observer is disconnected in `disconnectedCallback` so detached
+  elements don't leak listeners.
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={TeamStories.Home} />
+<Story of={TeamStories.Away} />
+<Story of={TeamStories.HomeAndAwayPair} />
+<Story of={TeamStories.Compact} />
+<Story of={TeamStories.LongName} />
+<Story of={TeamStories.MonogramFallback} />
+<Story of={TeamStories.Playground} />
