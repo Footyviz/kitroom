@@ -14,7 +14,7 @@ type IconArgs = {
 };
 
 const meta: Meta<IconArgs> = {
-  title: 'Components/Icon',
+  title: 'Kitroom/Icon',
   component: 'fv-icon',
   argTypes: {
     name: {

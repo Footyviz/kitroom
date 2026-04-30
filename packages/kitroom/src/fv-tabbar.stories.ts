@@ -11,7 +11,7 @@ type TabbarArgs = {
 };
 
 const meta: Meta<TabbarArgs> = {
-  title: 'Components/Tabbar',
+  title: 'Kitroom/Tabbar',
   component: 'fv-tabbar',
   argTypes: {
     current: {

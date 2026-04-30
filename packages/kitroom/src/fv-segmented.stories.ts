@@ -8,7 +8,7 @@ type SegmentedArgs = {
 };
 
 const meta: Meta<SegmentedArgs> = {
-  title: 'Components/Segmented',
+  title: 'Kitroom/Segmented',
   component: 'fv-segmented',
   argTypes: {
     selected: {

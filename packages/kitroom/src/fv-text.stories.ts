@@ -50,7 +50,7 @@ const variantOptions: Variant[] = [
 ];
 
 const meta: Meta<TextArgs> = {
-  title: 'Components/Text',
+  title: 'Kitroom/Text',
   component: 'fv-text',
   argTypes: {
     text: { control: 'text', description: 'Slot content' },

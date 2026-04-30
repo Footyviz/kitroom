@@ -12,7 +12,7 @@ type SeriesArgs = {
 };
 
 const meta: Meta<SeriesArgs> = {
-  title: 'Components/Series',
+  title: 'Kitroom/Series',
   component: 'fv-series',
   argTypes: {
     pips: {

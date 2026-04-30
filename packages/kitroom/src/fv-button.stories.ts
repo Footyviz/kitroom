@@ -17,7 +17,7 @@ type ButtonArgs = {
 };
 
 const meta: Meta<ButtonArgs> = {
-  title: 'Components/Button',
+  title: 'Kitroom/Button',
   component: 'fv-button',
   argTypes: {
     label: { control: 'text' },

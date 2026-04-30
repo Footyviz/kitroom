@@ -10,7 +10,7 @@ type RadioArgs = {
 };
 
 const meta: Meta<RadioArgs> = {
-  title: 'Components/Radio',
+  title: 'Kitroom/Radio',
   component: 'fv-radio',
   argTypes: {
     checked: { control: 'boolean', description: 'aria-checked' },

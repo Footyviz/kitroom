@@ -11,7 +11,7 @@ type IconTextArgs = {
 };
 
 const meta: Meta<IconTextArgs> = {
-  title: 'Components/IconText',
+  title: 'Kitroom/IconText',
   component: 'fv-icon-text',
   argTypes: {
     label: { control: 'text' },

@@ -12,7 +12,7 @@ type ToggleArgs = {
 };
 
 const meta: Meta<ToggleArgs> = {
-  title: 'Components/Toggle',
+  title: 'Kitroom/Toggle',
   component: 'fv-toggle',
   argTypes: {
     checked: { control: 'boolean', description: 'aria-checked' },
