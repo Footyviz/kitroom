@@ -27,7 +27,10 @@ jobs:
 
       - name: Build Storybook
         env:
-          STORYBOOK_BASE_PATH: /home-ground/
+          # Pages URL is determined by the repo name, not the publish branch:
+          # the site is always served at https://footyviz.github.io/kitroom/
+          # regardless of whether Pages reads from `kitroom` or `home-ground`.
+          STORYBOOK_BASE_PATH: /kitroom/
         run: npm run build:storybook
 
       - name: Deploy to home-ground branch

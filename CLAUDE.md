@@ -33,7 +33,7 @@ npx changeset                # record a pending change (markdown in .changeset/)
 npm run version-packages     # consume changesets → bump versions + update CHANGELOGs
 ```
 
-`predev` / `prebuild` hooks in `@footyviz/storybook` build `@footyviz/kitroom` and `@footyviz/locker-room` first so their `dist/` exists when Storybook resolves the workspace deps. If you change components and want the new code in Storybook, restart `npm run storybook` (no HMR across the boundary yet).
+Storybook resolves `@footyviz/kitroom` and `@footyviz/locker-room` directly to their `src/*.ts` via Vite aliases in `packages/storybook/.storybook/main.ts`. No `dist/` is required to run dev, build Storybook, or run tests — the same source files are used everywhere. Edits to component source re-bundle on reload. The `dist/` directories are still produced when those packages are built explicitly (`npm run build -w @footyviz/kitroom`) — needed for npm publishing once that's wired up — but Storybook never reads from them.
 
 ## Design system
 
@@ -83,8 +83,8 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 **Storybook → GitHub Pages.**
 
-- `.github/workflows/deploy-storybook.yml` runs on every push to `main` (and `workflow_dispatch`). It builds Storybook with `STORYBOOK_BASE_PATH=/home-ground/` and force-pushes the static site to the `home-ground` branch as a single orphan commit (`force_orphan: true`, so the branch never accumulates history).
-- Pages is configured in repo Settings → Pages to serve from `home-ground` / `(root)`. Deployed URL: <https://footyviz.github.io/home-ground/>.
+- `.github/workflows/deploy-storybook.yml` runs on every push to `main` (and `workflow_dispatch`). It builds Storybook with `STORYBOOK_BASE_PATH=/kitroom/` and force-pushes the static site to the `home-ground` branch as a single orphan commit (`force_orphan: true`, so the branch never accumulates history). The base path is the repo name (`kitroom`), not the source branch — Pages always serves project sites at `https://<owner>.github.io/<repo>/`.
+- Pages is configured in repo Settings → Pages to serve from `home-ground` / `(root)`. Deployed URL: <https://footyviz.github.io/kitroom/>.
 - Subpath base path is wired through `viteFinal` in `packages/storybook/.storybook/main.ts` — only set when the `STORYBOOK_BASE_PATH` env var is present, so local `npm run storybook` is unaffected. To deploy under a different subpath (e.g. repo rename), change one env var in the workflow.
 
 ## What's been done (PR history)
@@ -96,7 +96,6 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 ## Known follow-ups (not yet done)
 
 - **Port the handoff's reference mocks to vanilla web components.** `design_handoff_footyviz/ui_kits/` has `.jsx` reference mocks for `MatchHeader`, `StatBar`, `EventTimeline`, `TabBar`, `PitchViz`. Read them as visual reference only — do not import or compile JSX into this repo.
-- **HMR across components ↔ storybook.** Today components must be rebuilt to `dist/` before Storybook sees them. Options: run `tsc --watch` in parallel, or repoint `exports` at `src/*.ts` for dev. Out of scope until friction is felt.
 - **Brand PNGs.** Three large PNGs in the handoff (`FootyVizIcon.png`, `FootyVizLogo.png`, `FootyVizTall.png`, ~4 MB total) are intentionally not in the package. Re-evaluate if a consumer needs raster logos.
 
 ## Worktree note
@@ -107,8 +106,8 @@ Active dev usually happens in a git worktree under `.claude/worktrees/`. The pri
 
 A new worktree starts with no `node_modules/` of its own. Node module resolution then walks up the directory tree and finds the primary checkout's `node_modules/`, where `@footyviz/kitroom` is symlinked to the **primary's** `packages/kitroom` — i.e. whatever's on `main`, not your worktree's edits.
 
-What this looks like in practice: you change `packages/kitroom/src/fv-button.ts` in the worktree, run `npm run storybook` (which runs `predev` → builds the worktree's `dist/`), open the story, and the page renders the **old** behavior. Worse: every component file does a `if (!customElements.get('fv-foo')) customElements.define(...)` registration guard, so once the primary's old class wins the registration race, your new class silently never registers — no error, just stale behavior. Symptoms: controls don't drive the rendered component, event handlers absent, `connectedCallback` apparently not running, attribute changes ignored.
+What this looks like in practice: you change `packages/kitroom/src/fv-button.ts` in the worktree, run `npm run storybook`, open the story, and the page renders the **old** behavior. Worse: every component file does a `if (!customElements.get('fv-foo')) customElements.define(...)` registration guard, so once the primary's old class wins the registration race, your new class silently never registers — no error, just stale behavior. Symptoms: controls don't drive the rendered component, event handlers absent, `connectedCallback` apparently not running, attribute changes ignored.
 
-Fix: run `npm install` once inside the worktree. That creates a worktree-local `node_modules/` whose `@footyviz/*` symlinks point at the worktree's own `packages/`. After that, the worktree is self-contained and `predev` builds and storybook reads the same `dist/`.
+Fix: run `npm install` once inside the worktree. That creates a worktree-local `node_modules/` whose `@footyviz/*` symlinks point at the worktree's own `packages/`. After that, the worktree is self-contained — Vite aliases resolve to the worktree's `src/`, no rebuild step needed.
 
 Bake this into the spawn ritual for any new worktree.

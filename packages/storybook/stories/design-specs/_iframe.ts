@@ -4,7 +4,7 @@
 // in an iframe. The directory is exposed via Storybook's `staticDirs` config
 // in .storybook/main.ts.
 //
-// `import.meta.env.BASE_URL` resolves to `/` in local dev and `/home-ground/` in
+// `import.meta.env.BASE_URL` resolves to `/` in local dev and `/kitroom/` in
 // the GitHub Pages build, so the iframe src works in both environments
 // without manual path rewriting.
 
