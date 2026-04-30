@@ -1,0 +1,109 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as StatRowStories from './fv-stat-row.stories';
+
+<Meta of={StatRowStories} />
+
+# fv-stat-row
+
+A single-stat comparison row: a 5-column grid (value, bar, label, bar,
+value) with mirrored proportion bars sized by inline custom properties.
+Used inside `<fv-match-card>` and standalone in stat-list pages.
+
+The component **does not** generate values, labels, or series. All
+content is supplied as children with `data-role` markers; the host's
+`::before` and `::after` pseudo-elements paint the bars.
+
+## Required HTML
+
+```html
+<fv-stat-row style="--home-pct: 67%; --away-pct: 33%">
+  <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+  <fv-text data-role="label" data-variant="caption">xG</fv-text>
+  <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
+</fv-stat-row>
+```
+
+## Host attributes
+
+| Attribute        | Required | Values                          | Effect                                            |
+|------------------|----------|---------------------------------|---------------------------------------------------|
+| `data-featured`  | no       | (boolean — presence)            | Hero metric. Tinted surface, straw home fill.     |
+| `data-density`   | no       | `default` (default) `compact`   | Compact tightens padding and column gap.          |
+| `data-layout`    | no       | (default) `form`                | Hides bars; lets `<fv-series>` fill the columns.  |
+
+## Inline custom properties
+
+| Property     | Default | Used by                                |
+|--------------|---------|----------------------------------------|
+| `--home-pct` | `50%`   | Left bar fill from the left            |
+| `--away-pct` | `50%`   | Right bar fill from the right (mirror) |
+
+Set these inline per row (`style="--home-pct: 67%; --away-pct: 33%"`).
+The two values do not have to sum to 100% — the rest of each bar is
+painted with the away tone.
+
+## Roles for child elements
+
+Default layout:
+
+| Selector                       | Cell                |
+|--------------------------------|---------------------|
+| `[data-role="home-value"]`     | left value          |
+| `[data-role="label"]`          | center label        |
+| `[data-role="away-value"]`     | right value         |
+
+Form layout (`data-layout="form"`):
+
+| Selector                       | Cell                                 |
+|--------------------------------|--------------------------------------|
+| `[data-role="home-form"]`      | `<fv-series>` filling the bar column |
+| `[data-role="label"]`          | center label                         |
+| `[data-role="away-form"]`      | `<fv-series>` filling the bar column |
+
+The component reads existing children — it does not synthesize them.
+Per ARCHITECTURE.md, anything beyond variant/size/density attributes
+arrives as DOM, not props.
+
+## Composition rule
+
+`fv-stat-row` does not import `fv-text` or `fv-series`. The consumer
+includes whichever primitives they want as children; CSS targets the
+`data-role` selector regardless of tag name. The examples use
+`<fv-text>` because it provides the typographic ramp, but a plain
+`<span data-role="home-value">` would render too — just without the
+mono numerics.
+
+## a11y behavior
+
+- The host gets `role="row"` (set on connect if not already present).
+- Each child with a known `data-role` gets `role="cell"`.
+- The component builds `aria-label` from child text content
+  (`"<label>: <home> vs <away>"`) and re-syncs via a `MutationObserver`
+  on subtree text changes. The observer is disconnected on
+  `disconnectedCallback`.
+- Bars are presentational — they convey the same comparison the values
+  already state. No bar text is read aloud.
+
+## Tokens used
+
+| Token             | Where                                       |
+|-------------------|---------------------------------------------|
+| `--neutral-1000`  | Default home bar fill                       |
+| `--neutral-300`   | Away bar fill (mirrored remainder)          |
+| `--neutral-100`   | Bar track background                        |
+| `--neutral-50`    | Featured row surface tint                   |
+| `--accent-dim`    | Featured home bar fill                      |
+| `--radius-full`   | Bar end caps                                |
+
+## Events dispatched
+
+None. The component is read-only: it observes content changes for
+aria-label updates but never mutates structure or emits events.
+
+## Stories
+
+<Story of={StatRowStories.Default} />
+<Story of={StatRowStories.Featured} />
+<Story of={StatRowStories.Compact} />
+<Story of={StatRowStories.FormLayout} />
+<Story of={StatRowStories.MultiRow} />
