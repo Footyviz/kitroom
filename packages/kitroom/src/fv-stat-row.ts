@@ -30,8 +30,8 @@
  *   - Build an `aria-label` like `"xG: 1.84 vs 0.92"` from child text and
  *     keep it in sync via a MutationObserver on subtree text changes.
  *
- * No `attachShadow`, no `innerHTML`, no markup generation. The component
- * reads existing children — it does not produce them.
+ * Light DOM only — no shadow root, no `innerHTML`, no markup generation.
+ * The component reads existing children — it does not produce them.
  */
 
 const VALUE_ROLES = ['home-value', 'away-value', 'home-form', 'away-form', 'label'] as const;
