@@ -47,6 +47,8 @@
 /* ----- Host shell ----- */
 fv-match-card {
   display: grid;
+  width: 100%;
+  max-width: 360px; /* spec — default card */
   background: var(--bg-elev);
   color: var(--fg);
   border: 1px solid var(--border);
@@ -54,6 +56,10 @@ fv-match-card {
   overflow: hidden;
   font-family: var(--font-sans);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); /* spec — no shadow token group */
+}
+
+fv-match-card[data-density="compact"] {
+  max-width: 320px; /* spec — compact card */
 }
 
 /* Inside the wrapper: claim 4 rows and inherit the parent's tracks
@@ -114,10 +120,12 @@ fv-match-card > [data-role="score"] {
 
 fv-match-card > [data-role="score"] > fv-team[data-side="home"] {
   justify-self: start;
+  min-width: 0; /* let team-name ellipsis engage instead of pushing the result aside */
 }
 
 fv-match-card > [data-role="score"] > fv-team[data-side="away"] {
-  justify-self: start; /* away mirrors via flex-direction; visual end-align is handled by the team */
+  justify-self: end; /* away anchors to the right edge of its 1fr cell */
+  min-width: 0;
 }
 
 fv-match-card > [data-role="score"] [data-role="result"] {
@@ -129,13 +137,20 @@ fv-match-card > [data-role="score"] [data-role="result"] {
   letter-spacing: -0.02em;
 }
 
+/* Score numerals — design spec is 28px default / 20px compact / 16px
+   upcoming. fv-text[data-variant="stat-lg"] is 40px in the typography
+   ramp, so override it here at the card level. */
+fv-match-card > [data-role="score"] [data-role="result"] fv-text {
+  font-size: 28px;
+}
+
 fv-match-card > [data-role="score"] [data-role="result"] [data-role="sep"] {
   font-weight: 400;
 }
 
 /* Upcoming match — the result slot is just "vs" rather than a
    numeric scoreline. Tone it down to match the spec. */
-fv-match-card[data-status="upcoming"] > [data-role="score"] [data-role="result"] {
+fv-match-card[data-status="upcoming"] > [data-role="score"] [data-role="result"] fv-text {
   color: var(--fg-subtle);
   font-size: 16px;
   letter-spacing: 0;
@@ -151,9 +166,14 @@ fv-match-card > [data-role="stats"] {
   padding: var(--space-3) 0 var(--space-3);
 }
 
-/* Tighten <fv-stat-row> padding inside a card so it matches the
-   card's own horizontal rhythm. */
+/* Tighten <fv-stat-row> when nested inside a card. The stat-row's
+   own grid (64 / 1fr / 140 / 1fr / 64 + 16px gaps = 332px fixed) was
+   sized for a ~460px stat-list surface; inside a 360px card it leaves
+   no room for the bars. Shrink the fixed tracks and the gaps so the
+   1fr bar columns get real width. */
 fv-match-card > [data-role="stats"] > fv-stat-row {
+  grid-template-columns: 44px 1fr 96px 1fr 44px;
+  column-gap: 10px;
   padding: var(--space-2) 18px;
 }
 
@@ -218,8 +238,11 @@ fv-match-card[data-density="compact"] > [data-role="score"] {
 }
 
 fv-match-card[data-density="compact"] > [data-role="score"] [data-role="result"] {
-  font-size: 20px;
   gap: var(--space-2);
+}
+
+fv-match-card[data-density="compact"] > [data-role="score"] [data-role="result"] fv-text {
+  font-size: 20px;
 }
 
 fv-match-card[data-density="compact"] > [data-role="stats"] > fv-stat-row {
