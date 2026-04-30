@@ -1,0 +1,124 @@
+/* ============================================================
+   <fv-stat-row> — single-stat comparison row
+   ============================================================
+   5-column grid: value | bar | label | bar | value. Bars are
+   pseudo-elements painted with a hard-stop linear-gradient that
+   reads the `--home-pct` / `--away-pct` custom properties set
+   inline on the host. The left bar fills toward the center from
+   the left, the right bar mirrors that motion from the right.
+
+   data-featured promotes the row to the "hero metric" treatment:
+   straw accent home fill on a faintly tinted surface, slightly
+   heavier value type. data-density="compact" tightens the row.
+   data-layout="form" collapses the bars so <fv-series> children
+   in the home/away columns can take over (upcoming-match form).
+   ============================================================ */
+
+fv-stat-row {
+  --home-pct: 50%;
+  --away-pct: 50%;
+
+  display: grid;
+  grid-template-columns: 64px 1fr 140px 1fr 64px;
+  align-items: center;
+  column-gap: 16px;
+  padding: 12px 18px;
+}
+
+fv-stat-row > [data-role="home-value"],
+fv-stat-row > [data-role="home-form"] {
+  grid-column: 1;
+  justify-self: end;
+  text-align: right;
+}
+
+fv-stat-row > [data-role="label"] {
+  grid-column: 3;
+  text-align: center;
+}
+
+fv-stat-row > [data-role="away-value"],
+fv-stat-row > [data-role="away-form"] {
+  grid-column: 5;
+  justify-self: start;
+  text-align: left;
+}
+
+/* In the form layout the series fills the bar column instead of
+   hugging the outer edge; relax the justify-self so it spans. */
+fv-stat-row[data-layout="form"] > [data-role="home-form"] {
+  grid-column: 2;
+  justify-self: end;
+}
+fv-stat-row[data-layout="form"] > [data-role="away-form"] {
+  grid-column: 4;
+  justify-self: start;
+}
+
+/* ----- Mirrored proportion bars as pseudo-elements ----- */
+
+fv-stat-row::before,
+fv-stat-row::after {
+  content: '';
+  height: 6px;
+  border-radius: var(--radius-full, 999px);
+  background: var(--neutral-100);
+  overflow: hidden;
+}
+
+/* Left bar: home fills from the left toward center; remainder is
+   the away tone. Hard-stop gradient gives a clean two-tone fill. */
+fv-stat-row::before {
+  grid-column: 2;
+  background:
+    linear-gradient(
+      to right,
+      var(--neutral-1000) 0,
+      var(--neutral-1000) var(--home-pct),
+      var(--neutral-300) var(--home-pct),
+      var(--neutral-300) 100%
+    );
+}
+
+/* Right bar mirrors: away fills from the right toward center. */
+fv-stat-row::after {
+  grid-column: 4;
+  background:
+    linear-gradient(
+      to left,
+      var(--neutral-1000) 0,
+      var(--neutral-1000) var(--away-pct),
+      var(--neutral-300) var(--away-pct),
+      var(--neutral-300) 100%
+    );
+}
+
+/* Featured row — hero metric with the straw accent on the home side
+   and a faint tinted surface. */
+fv-stat-row[data-featured] {
+  background: var(--neutral-50);
+}
+
+fv-stat-row[data-featured]::before {
+  background:
+    linear-gradient(
+      to right,
+      var(--accent-dim) 0,
+      var(--accent-dim) var(--home-pct),
+      var(--neutral-300) var(--home-pct),
+      var(--neutral-300) 100%
+    );
+}
+
+/* Density: compact row tightens vertical and horizontal rhythm. */
+fv-stat-row[data-density="compact"] {
+  padding: 8px 14px;
+  column-gap: 12px;
+}
+
+/* Form layout: hide the proportion bars so the <fv-series> children
+   in the home/away slots can take over those columns. */
+fv-stat-row[data-layout="form"]::before,
+fv-stat-row[data-layout="form"]::after {
+  display: none;
+}
