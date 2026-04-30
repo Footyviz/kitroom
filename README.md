@@ -8,7 +8,7 @@ shadow boundaries.
 ## Storybook
 
 The current set of components and their docs live at
-**<https://footyviz.github.io/home-ground/>**. Every story is also a
+**<https://footyviz.github.io/kitroom/>**. Every story is also a
 test — `play` functions run as real Vitest cases in headless Chromium.
 
 ## Workspaces
