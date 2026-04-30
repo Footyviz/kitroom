@@ -1,0 +1,57 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as SeriesStories from './fv-series.stories';
+
+<Meta of={SeriesStories} />
+
+# fv-series
+
+A horizontal row of small dots representing a sequence of recent
+results — typically wins (`pos`), draws (`warn`), and losses (`neg`).
+The host is `role="img"` with a consumer-supplied `aria-label`
+describing the sequence in words, because color is never the only
+signal: a screen reader has to be able to read the sequence even when
+the dots cannot be perceived.
+
+Children are bare `<span data-pip="...">` elements. The component does
+not generate them — consumers compose the row, which keeps the data
+shape ("five recent results") server-renderable as plain HTML.
+
+## Required HTML
+
+```html
+<fv-series aria-label="Last 5: W W D W W">
+  <span data-pip="pos"></span>
+  <span data-pip="pos"></span>
+  <span data-pip="warn"></span>
+  <span data-pip="pos"></span>
+  <span data-pip="pos"></span>
+</fv-series>
+```
+
+## Attributes
+
+| Attribute          | On    | Required | Effect                                                                                                                                                                |
+|--------------------|-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `aria-label`       | host  | yes      | Plain-text description of the sequence. Required for accessibility.                                                                                                   |
+| `data-max-visible` | host  | no       | Integer 1-10. When set, only the last N children are visible — earlier children are hidden by CSS (`:nth-last-child`), keeping the order semantic for assistive tech. |
+| `data-pip`         | child | yes (per child) | Pip color: `pos` (positive / win), `warn` (caution / draw), `neg` (negative / loss). Other values render as the neutral default.                                |
+
+## Tokens used
+
+| Token            | Where                       |
+|------------------|-----------------------------|
+| `--positive`     | `data-pip="pos"` background |
+| `--warning`      | `data-pip="warn"` background |
+| `--negative`     | `data-pip="neg"` background |
+| `--neutral-300`  | unknown / default pip        |
+| `--radius-full`  | dot shape                    |
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={SeriesStories.Playground} />
+<Story of={SeriesStories.FormVariants} />
+<Story of={SeriesStories.MaxVisible} />

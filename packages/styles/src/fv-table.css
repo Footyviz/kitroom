@@ -269,17 +269,20 @@ fv-table [role="row"][data-status="upcoming"] {
   border-bottom-style: dashed;
 }
 
-/* ---------- form-pip series stand-in --------------------- */
-/* Used until <fv-series> ships: <span data-role="series">
-   wraps a row of <span data-pip="pos|warn|neg"> dots. */
+/* ---------- form-pip series fallback --------------------- */
+/* Real markup uses <fv-series> (styled by fv-series.css). The
+   bare-span form below is kept as a fallback so consumers who
+   render a row of pips without the custom element still get
+   reasonable styling. The :not(fv-series *) guard prevents
+   double-styling when the spans live inside a real <fv-series>. */
 
-fv-table [data-role="series"] {
+fv-table [data-role="series"]:not(fv-series *) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-fv-table [data-pip] {
+fv-table [data-pip]:not(fv-series *) {
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -287,13 +290,15 @@ fv-table [data-pip] {
   background: var(--neutral-300);
 }
 
-fv-table [data-pip="pos"]  { background: var(--positive); }
-fv-table [data-pip="warn"] { background: var(--warning); }
-fv-table [data-pip="neg"]  { background: var(--negative); }
+fv-table [data-pip="pos"]:not(fv-series *)  { background: var(--positive); }
+fv-table [data-pip="warn"]:not(fv-series *) { background: var(--warning); }
+fv-table [data-pip="neg"]:not(fv-series *)  { background: var(--negative); }
 
-/* ---------- crest stand-in -------------------------------- */
-/* Used until <fv-crest> ships: <span data-role="crest"> wraps
-   a 3-letter team code. Renders as a 24px monogram badge. */
+/* ---------- crest fallback -------------------------------- */
+/* Real markup uses <fv-crest> (styled by fv-crest.css). The
+   bare-span form below is kept as a fallback so consumers who
+   render a 3-letter code without the custom element still get
+   the monogram badge. */
 
 fv-table [data-role="crest"] {
   display: inline-grid;
@@ -301,7 +306,7 @@ fv-table [data-role="crest"] {
   width: 24px;
   height: 24px;
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-mono);
@@ -312,9 +317,9 @@ fv-table [data-role="crest"] {
   flex-shrink: 0;
 }
 
-/* ---------- trend stand-in ------------------------------- */
-/* Used until <fv-trend> ships: <span data-role="trend"
-   data-direction="up|down|flat"> contains arrow + delta. */
+/* ---------- trend fallback ------------------------------- */
+/* Real markup uses <fv-trend> (styled by fv-trend.css). The
+   bare-span form below is kept as a fallback. */
 
 fv-table [data-role="trend"] {
   display: inline-flex;

@@ -1,0 +1,44 @@
+/* ============================================================
+   <fv-series> — horizontal form-pip row
+   ============================================================
+   The host is an inline-flex row of dot children. The dots are
+   bare spans with data-pip="pos|warn|neg" (or any other value
+   consumers want to style). data-max-visible enumerates the
+   common 1-10 values and hides everything past the last N
+   children declaratively via :nth-last-child.
+   ============================================================ */
+
+fv-series {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+fv-series > [data-pip] {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--neutral-300);
+  flex-shrink: 0;
+}
+
+fv-series > [data-pip="pos"]  { background: var(--positive); }
+fv-series > [data-pip="warn"] { background: var(--warning); }
+fv-series > [data-pip="neg"]  { background: var(--negative); }
+
+/* data-max-visible: keep only the last N children. Enumerated
+   1-10 because CSS selectors can't accept variables. Add more
+   if a consumer needs them. */
+
+fv-series[data-max-visible="1"]  > :not(:nth-last-child(-n+1))  { display: none; }
+fv-series[data-max-visible="2"]  > :not(:nth-last-child(-n+2))  { display: none; }
+fv-series[data-max-visible="3"]  > :not(:nth-last-child(-n+3))  { display: none; }
+fv-series[data-max-visible="4"]  > :not(:nth-last-child(-n+4))  { display: none; }
+fv-series[data-max-visible="5"]  > :not(:nth-last-child(-n+5))  { display: none; }
+fv-series[data-max-visible="6"]  > :not(:nth-last-child(-n+6))  { display: none; }
+fv-series[data-max-visible="7"]  > :not(:nth-last-child(-n+7))  { display: none; }
+fv-series[data-max-visible="8"]  > :not(:nth-last-child(-n+8))  { display: none; }
+fv-series[data-max-visible="9"]  > :not(:nth-last-child(-n+9))  { display: none; }
+fv-series[data-max-visible="10"] > :not(:nth-last-child(-n+10)) { display: none; }

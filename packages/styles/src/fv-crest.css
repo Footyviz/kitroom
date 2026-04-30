@@ -1,0 +1,58 @@
+/* ============================================================
+   <fv-crest> — team identity badge
+   ============================================================
+   Image-first: when data-src is supplied, the team logo renders
+   at the spec size and the host's border/background drop away so
+   the logo can speak for itself. The bordered 2-4 letter monogram
+   is the fallback when no data-src is provided or when the image
+   fails to load. Sizes scale via data-size; everything else comes
+   from tokens.
+   ============================================================ */
+
+fv-crest {
+  --_size: 24px;
+  --_radius: var(--radius-sm);
+  --_font-size: 9.5px;
+
+  display: inline-grid;
+  place-items: center;
+  width: var(--_size);
+  height: var(--_size);
+  border: 1px solid var(--border);
+  border-radius: var(--_radius);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--_font-size);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+fv-crest[data-size="sm"] {
+  --_size: 20px;
+  --_font-size: 8.5px;
+}
+
+fv-crest[data-size="lg"] {
+  --_size: 32px;
+  --_font-size: 11px;
+}
+
+/* Image mode — drop the chrome so the logo renders naturally at
+   the spec size. The size box is still enforced by the host. */
+fv-crest:has(> img) {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+fv-crest > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}

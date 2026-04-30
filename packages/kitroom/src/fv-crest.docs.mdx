@@ -1,0 +1,66 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as CrestStories from './fv-crest.stories';
+
+<Meta of={CrestStories} />
+
+# fv-crest
+
+A small badge that identifies a team. The team logo (`data-src`) is the
+primary content; a 2-4 letter monospace monogram (`data-code`) is the
+fallback when no image is supplied or when the image fails to load.
+Always provide `data-code` — it doubles as a graceful fallback for
+missing assets and as the accessible name when no `data-alt` is given.
+
+In image mode the bordered-box chrome drops away so the logo renders at
+its natural shape; in text mode the bordered monogram is shown. The
+host carries `role="img"` and an `aria-label` derived from `data-alt`
+(when present) or `data-code`, so the badge announces a meaningful name
+to assistive tech regardless of which mode it ends up in.
+
+## Required HTML
+
+```html
+<!-- image variant — primary use -->
+<fv-crest
+  data-src="https://media.api-sports.io/football/teams/33.png"
+  data-code="MUN"
+  data-alt="Manchester Utd"
+></fv-crest>
+
+<!-- text fallback (no image, or image will fail) -->
+<fv-crest data-code="HAR"></fv-crest>
+
+<!-- larger size -->
+<fv-crest data-code="KIN" data-size="lg"></fv-crest>
+```
+
+## Attributes
+
+| Attribute   | On   | Required | Effect                                                                                                                                              |
+|-------------|------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `data-src`  | host | no (but recommended) | URL of an SVG/PNG team logo. Renders at the size given by `data-size`. On load error the component falls back to the `data-code` text.    |
+| `data-code` | host | yes      | 2-4 letter team code. Uppercased on render. Used as the visible monogram in fallback mode and as the default accessible name. Always provide it. |
+| `data-alt`  | host | no       | Accessible name (forwards to `aria-label` on the host). Recommended whenever `data-src` is set; otherwise the code itself is announced.            |
+| `data-size` | host | no       | `sm` (20px) · default (24px, omit attribute) · `lg` (32px). The image fits the box via `object-fit: contain`.                                      |
+
+## Tokens used
+
+| Token            | Where                       |
+|------------------|-----------------------------|
+| `--bg`           | badge background            |
+| `--fg`           | monogram text               |
+| `--border`       | 1px hairline border         |
+| `--radius-sm`    | rounded corners             |
+| `--font-mono`    | monogram type face          |
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={CrestStories.Playground} />
+<Story of={CrestStories.WithLogos} />
+<Story of={CrestStories.Sizes} />
+<Story of={CrestStories.Codes} />
+<Story of={CrestStories.ImageWithFallback} />

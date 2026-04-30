@@ -1,0 +1,23 @@
+/* ============================================================
+   <fv-trend> — direction + delta badge
+   ============================================================
+   Inline-flex monospace badge. Arrow + signed delta is rendered
+   as text content by fv-trend.ts; CSS only owns layout, type,
+   and the color hook keyed off data-direction.
+   ============================================================ */
+
+fv-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+  vertical-align: middle;
+}
+
+fv-trend[data-direction="up"]   { color: var(--positive); }
+fv-trend[data-direction="down"] { color: var(--negative); }
+fv-trend[data-direction="flat"] { color: var(--fg-muted); }

@@ -40,22 +40,22 @@ semantics.
   <div role="rowgroup">
     <a role="row" href="/team/har" data-zone="champions" data-highlight>
       <span role="cell">
-        <span data-role="trend" data-direction="up">▲+2</span>
+        <fv-trend data-direction="up" data-delta="2"></fv-trend>
         1
       </span>
       <span role="cell" data-primary>
-        <span data-role="crest" aria-hidden="true">HAR</span>
+        <fv-crest data-code="HAR"></fv-crest>
         <fv-text>Harringate Utd</fv-text>
       </span>
       <span role="cell" data-numeric data-sign="pos">+18</span>
       <span role="cell" data-numeric>32</span>
       <span role="cell" data-numeric>14</span>
       <span role="cell">
-        <span data-role="series" aria-label="Last 5: pos, pos, warn, pos, pos">
+        <fv-series aria-label="Last 5: W W D W W">
           <span data-pip="pos"></span><span data-pip="pos"></span>
           <span data-pip="warn"></span><span data-pip="pos"></span>
           <span data-pip="pos"></span>
-        </span>
+        </fv-series>
       </span>
       <span role="cell" data-numeric data-strong>42</span>
     </a>
@@ -125,12 +125,13 @@ re-render rows in the new order (htmx swap, re-render from store, etc.).
 
 ## Composition
 
-Where the spec calls for the team crest, form-pip series, or trend
-arrow, this component currently uses inline `data-role="crest|series|trend"`
-spans styled by the table's stylesheet. These are stand-ins for
-`<fv-crest>`, `<fv-series>`, and `<fv-trend>` primitives that are being
-built in a separate session. When those land, swap the spans for the
-real elements — the visual contract is identical.
+The team crest, form-pip series, and trend arrow are dedicated
+primitives shipped from `@footyviz/kitroom`: `<fv-crest>`,
+`<fv-series>`, and `<fv-trend>`. The table's stylesheet still carries
+fallback rules for the bare `data-role="crest|series|trend"` markup so
+consumers who render those rows from a server template without the
+custom elements still get reasonable styling, but the canonical markup
+is the real elements as shown above.
 
 ## Tokens used
 
