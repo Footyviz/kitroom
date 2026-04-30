@@ -1,5 +1,6 @@
 /**
- * <fv-crest data-src="/crests/mufc.svg" data-code="MUN" data-alt="Manchester Utd"></fv-crest>
+ * <fv-crest data-src="https://media.api-sports.io/football/teams/33.png"
+ *           data-code="MUN" data-alt="Manchester Utd"></fv-crest>
  * <fv-crest data-code="HAR"></fv-crest>
  * <fv-crest data-code="KIN" data-size="lg"></fv-crest>
  *

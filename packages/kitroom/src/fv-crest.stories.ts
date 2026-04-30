@@ -37,20 +37,14 @@ const src = (code: string) => ({
 
 const labelStyle = 'font-family: var(--font-mono); font-size: 11px; color: var(--fg-subtle);';
 
-/* Sample logo data URIs. In production, data-src points at a real team
-   logo asset (SVG/PNG). These inline placeholders keep the stories
-   deterministic — no network, no copyrighted artwork, no asset folder. */
-const logoSvg = (bg: string, fg: string, text: string): string => {
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>` +
-    `<circle cx='16' cy='16' r='15' fill='${bg}' stroke='${fg}' stroke-width='1.5'/>` +
-    `<text x='16' y='20.5' text-anchor='middle' fill='${fg}' ` +
-    `font-family='system-ui, sans-serif' font-weight='800' font-size='11'>${text}</text>` +
-    `</svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-};
-const logoMUN = logoSvg('#DA291C', '#FBE122', 'MUN');
-const logoMCI = logoSvg('#6CABDD', '#FFFFFF', 'MCI');
-const logoARS = logoSvg('#EF0107', '#FFFFFF', 'ARS');
+/* Real team logos from api-sports.io. The numeric IDs are their team
+   IDs (33 = Manchester Utd, 50 = Manchester City, 42 = Arsenal). If the
+   network is unavailable the component falls back to data-code, which
+   doubles as a live demo of the fallback path. */
+const logoUrl = (id: number): string => `https://media.api-sports.io/football/teams/${id}.png`;
+const logoMUN = logoUrl(33);
+const logoMCI = logoUrl(50);
+const logoARS = logoUrl(42);
 
 export const Playground: Story = {
   args: { code: 'HAR', size: 'default', src: '', alt: '' },
@@ -127,7 +121,7 @@ export const WithLogos: Story = {
     </div>
   `,
   parameters: src(`<fv-crest
-  data-src="/crests/mufc.svg"
+  data-src="https://media.api-sports.io/football/teams/33.png"
   data-code="MUN"
   data-alt="Manchester Utd"
 ></fv-crest>`),
@@ -157,15 +151,19 @@ export const ImageWithFallback: Story = {
   render: (): TemplateResult => html`
     <div style="display: flex; flex-direction: column; gap: 16px;">
       <div style="display: inline-flex; align-items: center; gap: 12px;">
+        <fv-crest data-src=${logoMUN} data-code="MUN" data-alt="Manchester Utd"></fv-crest>
+        <span style="${labelStyle}">data-src loads → image renders, chrome drops</span>
+      </div>
+      <div style="display: inline-flex; align-items: center; gap: 12px;">
         <fv-crest data-src="/missing-crest.svg" data-code="HAR" data-alt="Harringate Utd"></fv-crest>
         <span style="${labelStyle}">data-src missing → falls back to data-code monogram</span>
       </div>
     </div>
   `,
   parameters: src(`<fv-crest
-  data-src="/crests/har.svg"
-  data-code="HAR"
-  data-alt="Harringate Utd"
+  data-src="https://media.api-sports.io/football/teams/33.png"
+  data-code="MUN"
+  data-alt="Manchester Utd"
 ></fv-crest>`),
 };
 
