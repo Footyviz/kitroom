@@ -83,8 +83,8 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 **Storybook → GitHub Pages.**
 
-- `.github/workflows/deploy-storybook.yml` runs on every push to `main` (and `workflow_dispatch`). It builds Storybook with `STORYBOOK_BASE_PATH=/home-ground/` and force-pushes the static site to the `home-ground` branch as a single orphan commit (`force_orphan: true`, so the branch never accumulates history).
-- Pages is configured in repo Settings → Pages to serve from `home-ground` / `(root)`. Deployed URL: <https://footyviz.github.io/home-ground/>.
+- `.github/workflows/deploy-storybook.yml` runs on every push to `main` (and `workflow_dispatch`). It builds Storybook with `STORYBOOK_BASE_PATH=/kitroom/` and force-pushes the static site to the `home-ground` branch as a single orphan commit (`force_orphan: true`, so the branch never accumulates history). The base path is the repo name (`kitroom`), not the source branch — Pages always serves project sites at `https://<owner>.github.io/<repo>/`.
+- Pages is configured in repo Settings → Pages to serve from `home-ground` / `(root)`. Deployed URL: <https://footyviz.github.io/kitroom/>.
 - Subpath base path is wired through `viteFinal` in `packages/storybook/.storybook/main.ts` — only set when the `STORYBOOK_BASE_PATH` env var is present, so local `npm run storybook` is unaffected. To deploy under a different subpath (e.g. repo rename), change one env var in the workflow.
 
 ## What's been done (PR history)
