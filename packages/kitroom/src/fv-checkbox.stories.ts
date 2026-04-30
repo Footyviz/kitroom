@@ -11,7 +11,7 @@ type CheckboxArgs = {
 };
 
 const meta: Meta<CheckboxArgs> = {
-  title: 'Components/Checkbox',
+  title: 'Kitroom/Checkbox',
   component: 'fv-checkbox',
   argTypes: {
     checked: { control: 'boolean', description: 'aria-checked' },

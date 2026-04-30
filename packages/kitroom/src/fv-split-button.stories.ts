@@ -5,7 +5,7 @@ import './fv-button.js';
 import './fv-icon.js';
 
 const meta: Meta = {
-  title: 'Components/SplitButton',
+  title: 'Kitroom/SplitButton',
   component: 'fv-split-button',
 };
 export default meta;

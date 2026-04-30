@@ -25,7 +25,7 @@ const PIXELS: Record<Exclude<GapSize, 'none'>, string> = {
 };
 
 const meta: Meta<GapArgs> = {
-  title: 'Components/Gap',
+  title: 'Kitroom/Gap',
   component: 'fv-gap',
   argTypes: {
     size: {
