@@ -3,7 +3,7 @@ import { html, nothing, type TemplateResult } from 'lit-html';
 import { expect } from 'storybook/test';
 import './fv-crest.js';
 
-type Size = 'default' | 'sm' | 'lg';
+type Size = 'default' | 'sm' | 'md' | 'lg';
 
 type CrestArgs = {
   code: string;
@@ -19,8 +19,8 @@ const meta: Meta<CrestArgs> = {
     code: { control: 'text', description: 'data-code — 2-4 letter team monogram' },
     size: {
       control: { type: 'inline-radio' },
-      options: ['default', 'sm', 'lg'],
-      description: 'data-size — sm (20px), default (24px), lg (32px)',
+      options: ['default', 'sm', 'md', 'lg'],
+      description: 'data-size — sm (20px), md (28px, default), lg (36px)',
     },
     src: { control: 'text', description: 'data-src — optional image URL' },
     alt: { control: 'text', description: 'data-alt — accessible name when data-src is used' },
@@ -81,17 +81,17 @@ export const Sizes: Story = {
         <span style="${labelStyle}">sm · 20px</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-        <fv-crest data-code="HAR"></fv-crest>
-        <span style="${labelStyle}">default · 24px</span>
+        <fv-crest data-code="HAR" data-size="md"></fv-crest>
+        <span style="${labelStyle}">md · 28px (default)</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
         <fv-crest data-code="HAR" data-size="lg"></fv-crest>
-        <span style="${labelStyle}">lg · 32px</span>
+        <span style="${labelStyle}">lg · 36px</span>
       </div>
     </div>
   `,
   parameters: src(`<fv-crest data-code="HAR" data-size="sm"></fv-crest>
-<fv-crest data-code="HAR"></fv-crest>
+<fv-crest data-code="HAR" data-size="md"></fv-crest>
 <fv-crest data-code="HAR" data-size="lg"></fv-crest>`),
 };
 
@@ -104,12 +104,12 @@ export const WithLogos: Story = {
           <span style="${labelStyle}">sm · 20px</span>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-          <fv-crest data-src=${logoMCI} data-code="MCI" data-alt="Manchester City"></fv-crest>
-          <span style="${labelStyle}">default · 24px</span>
+          <fv-crest data-src=${logoMCI} data-code="MCI" data-alt="Manchester City" data-size="md"></fv-crest>
+          <span style="${labelStyle}">md · 28px (default)</span>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
           <fv-crest data-src=${logoARS} data-code="ARS" data-alt="Arsenal" data-size="lg"></fv-crest>
-          <span style="${labelStyle}">lg · 32px</span>
+          <span style="${labelStyle}">lg · 36px</span>
         </div>
       </div>
       <div style="display: inline-flex; align-items: center; gap: 8px;">
