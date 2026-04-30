@@ -20,6 +20,7 @@
     "./fv-segmented.css": "./src/fv-segmented.css",
     "./fv-series.css": "./src/fv-series.css",
     "./fv-slider.css": "./src/fv-slider.css",
+    "./fv-stat-row.css": "./src/fv-stat-row.css",
     "./fv-tabbar.css": "./src/fv-tabbar.css",
     "./fv-text.css": "./src/fv-text.css",
     "./fv-toggle.css": "./src/fv-toggle.css",
