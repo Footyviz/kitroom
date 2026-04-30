@@ -37,6 +37,21 @@ const src = (code: string) => ({
 
 const labelStyle = 'font-family: var(--font-mono); font-size: 11px; color: var(--fg-subtle);';
 
+/* Sample logo data URIs. In production, data-src points at a real team
+   logo asset (SVG/PNG). These inline placeholders keep the stories
+   deterministic — no network, no copyrighted artwork, no asset folder. */
+const logoSvg = (bg: string, fg: string, text: string): string => {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>` +
+    `<circle cx='16' cy='16' r='15' fill='${bg}' stroke='${fg}' stroke-width='1.5'/>` +
+    `<text x='16' y='20.5' text-anchor='middle' fill='${fg}' ` +
+    `font-family='system-ui, sans-serif' font-weight='800' font-size='11'>${text}</text>` +
+    `</svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
+const logoMUN = logoSvg('#DA291C', '#FBE122', 'MUN');
+const logoMCI = logoSvg('#6CABDD', '#FFFFFF', 'MCI');
+const logoARS = logoSvg('#EF0107', '#FFFFFF', 'ARS');
+
 export const Playground: Story = {
   args: { code: 'HAR', size: 'default', src: '', alt: '' },
   render: (args): TemplateResult => html`
@@ -84,6 +99,38 @@ export const Sizes: Story = {
   parameters: src(`<fv-crest data-code="HAR" data-size="sm"></fv-crest>
 <fv-crest data-code="HAR"></fv-crest>
 <fv-crest data-code="HAR" data-size="lg"></fv-crest>`),
+};
+
+export const WithLogos: Story = {
+  render: (): TemplateResult => html`
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: inline-flex; align-items: center; gap: 16px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <fv-crest data-src=${logoMUN} data-code="MUN" data-alt="Manchester Utd" data-size="sm"></fv-crest>
+          <span style="${labelStyle}">sm · 20px</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <fv-crest data-src=${logoMCI} data-code="MCI" data-alt="Manchester City"></fv-crest>
+          <span style="${labelStyle}">default · 24px</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <fv-crest data-src=${logoARS} data-code="ARS" data-alt="Arsenal" data-size="lg"></fv-crest>
+          <span style="${labelStyle}">lg · 32px</span>
+        </div>
+      </div>
+      <div style="display: inline-flex; align-items: center; gap: 8px;">
+        <fv-crest data-src=${logoMUN} data-code="MUN" data-alt="Manchester Utd"></fv-crest>
+        <fv-crest data-src=${logoMCI} data-code="MCI" data-alt="Manchester City"></fv-crest>
+        <fv-crest data-src=${logoARS} data-code="ARS" data-alt="Arsenal"></fv-crest>
+        <span style="${labelStyle}">— inline row at default size</span>
+      </div>
+    </div>
+  `,
+  parameters: src(`<fv-crest
+  data-src="/crests/mufc.svg"
+  data-code="MUN"
+  data-alt="Manchester Utd"
+></fv-crest>`),
 };
 
 export const Codes: Story = {

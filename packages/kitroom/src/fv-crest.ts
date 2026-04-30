@@ -1,18 +1,21 @@
 /**
+ * <fv-crest data-src="/crests/mufc.svg" data-code="MUN" data-alt="Manchester Utd"></fv-crest>
  * <fv-crest data-code="HAR"></fv-crest>
  * <fv-crest data-code="KIN" data-size="lg"></fv-crest>
- * <fv-crest data-src="/crests/har.svg" data-alt="Harringate Utd"></fv-crest>
  *
- * Team identity badge — a small monospace monogram in a bordered box, or
- * an inline raster/SVG when data-src is provided. The host carries
- * role="img" with an aria-label sourced from data-alt (preferred) or
- * data-code, so the badge announces a meaningful name regardless of
- * whether it renders text or an image.
+ * Team identity badge. The team logo (data-src) is the primary content;
+ * a 2-4 letter monogram (data-code) is the fallback when no image is
+ * supplied or when the image fails to load. Always provide data-code so
+ * the badge says something meaningful even without an asset.
  *
- * If data-src loads successfully the image is shown; if loading errors,
- * the component falls back to the monogram text from data-code. The
- * fallback path is the same render the no-src case takes, so there is
- * exactly one shape of DOM the CSS targets.
+ * The host carries role="img" with an aria-label sourced from data-alt
+ * (preferred) or data-code, so the badge announces a meaningful name
+ * regardless of whether it ends up rendering image or text.
+ *
+ * In image mode the bordered-box chrome drops away so the logo renders
+ * at its natural shape. In text mode the bordered monogram is shown.
+ * The fallback render is the same path the no-src case takes, so there
+ * is exactly one shape of DOM the CSS targets.
  *
  * Sizes: data-size="sm" (20px) | default (24px) | "lg" (32px). Borders,
  * radius, font, and background come from tokens — no per-instance values.

@@ -5,38 +5,43 @@ import * as CrestStories from './fv-crest.stories';
 
 # fv-crest
 
-A small bordered badge that identifies a team — either a 2-4 letter
-monospace monogram or, when given `data-src`, an inline image. The host
-carries `role="img"` and an `aria-label` derived from `data-alt` (when
-present) or `data-code`, so the badge announces a meaningful name to
-assistive tech.
+A small badge that identifies a team. The team logo (`data-src`) is the
+primary content; a 2-4 letter monospace monogram (`data-code`) is the
+fallback when no image is supplied or when the image fails to load.
+Always provide `data-code` — it doubles as a graceful fallback for
+missing assets and as the accessible name when no `data-alt` is given.
 
-If `data-src` fails to load the component falls back to rendering the
-`data-code` monogram, so the badge still says something even when the
-asset is missing.
+In image mode the bordered-box chrome drops away so the logo renders at
+its natural shape; in text mode the bordered monogram is shown. The
+host carries `role="img"` and an `aria-label` derived from `data-alt`
+(when present) or `data-code`, so the badge announces a meaningful name
+to assistive tech regardless of which mode it ends up in.
 
 ## Required HTML
 
 ```html
+<!-- image variant — primary use -->
+<fv-crest
+  data-src="/crests/mufc.svg"
+  data-code="MUN"
+  data-alt="Manchester Utd"
+></fv-crest>
+
+<!-- text fallback (no image, or image will fail) -->
 <fv-crest data-code="HAR"></fv-crest>
 
+<!-- larger size -->
 <fv-crest data-code="KIN" data-size="lg"></fv-crest>
-
-<fv-crest
-  data-src="/crests/har.svg"
-  data-code="HAR"
-  data-alt="Harringate Utd"
-></fv-crest>
 ```
 
 ## Attributes
 
 | Attribute   | On   | Required | Effect                                                                                                                                              |
 |-------------|------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `data-code` | host | yes (unless `data-src` is set and resolves) | 2-4 letter team code. Uppercased on render. Used as the visible monogram and as the default accessible name. Always provide it; it doubles as the fallback when an image fails. |
-| `data-src`  | host | no       | URL of an SVG/PNG to render in place of the monogram. On error the component falls back to the `data-code` text.                                   |
+| `data-src`  | host | no (but recommended) | URL of an SVG/PNG team logo. Renders at the size given by `data-size`. On load error the component falls back to the `data-code` text.    |
+| `data-code` | host | yes      | 2-4 letter team code. Uppercased on render. Used as the visible monogram in fallback mode and as the default accessible name. Always provide it. |
 | `data-alt`  | host | no       | Accessible name (forwards to `aria-label` on the host). Recommended whenever `data-src` is set; otherwise the code itself is announced.            |
-| `data-size` | host | no       | `sm` (20px) · default (24px, omit attribute) · `lg` (32px).                                                                                        |
+| `data-size` | host | no       | `sm` (20px) · default (24px, omit attribute) · `lg` (32px). The image fits the box via `object-fit: contain`.                                      |
 
 ## Tokens used
 
@@ -55,6 +60,7 @@ None.
 ## Stories
 
 <Story of={CrestStories.Playground} />
+<Story of={CrestStories.WithLogos} />
 <Story of={CrestStories.Sizes} />
 <Story of={CrestStories.Codes} />
 <Story of={CrestStories.ImageWithFallback} />

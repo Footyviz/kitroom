@@ -1,9 +1,12 @@
 /* ============================================================
    <fv-crest> — team identity badge
    ============================================================
-   24px (default) bordered square holding a 2-4 letter monogram,
-   or an inline image when data-src is supplied. Sizes scale via
-   data-size; everything else comes from tokens.
+   Image-first: when data-src is supplied, the team logo renders
+   at the spec size and the host's border/background drop away so
+   the logo can speak for itself. The bordered 2-4 letter monogram
+   is the fallback when no data-src is provided or when the image
+   fails to load. Sizes scale via data-size; everything else comes
+   from tokens.
    ============================================================ */
 
 fv-crest {
@@ -37,6 +40,14 @@ fv-crest[data-size="sm"] {
 fv-crest[data-size="lg"] {
   --_size: 32px;
   --_font-size: 11px;
+}
+
+/* Image mode — drop the chrome so the logo renders naturally at
+   the spec size. The size box is still enforced by the host. */
+fv-crest:has(> img) {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
 }
 
 fv-crest > img {
