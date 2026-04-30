@@ -1,0 +1,60 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as CrestStories from './fv-crest.stories';
+
+<Meta of={CrestStories} />
+
+# fv-crest
+
+A small bordered badge that identifies a team — either a 2-4 letter
+monospace monogram or, when given `data-src`, an inline image. The host
+carries `role="img"` and an `aria-label` derived from `data-alt` (when
+present) or `data-code`, so the badge announces a meaningful name to
+assistive tech.
+
+If `data-src` fails to load the component falls back to rendering the
+`data-code` monogram, so the badge still says something even when the
+asset is missing.
+
+## Required HTML
+
+```html
+<fv-crest data-code="HAR"></fv-crest>
+
+<fv-crest data-code="KIN" data-size="lg"></fv-crest>
+
+<fv-crest
+  data-src="/crests/har.svg"
+  data-code="HAR"
+  data-alt="Harringate Utd"
+></fv-crest>
+```
+
+## Attributes
+
+| Attribute   | On   | Required | Effect                                                                                                                                              |
+|-------------|------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `data-code` | host | yes (unless `data-src` is set and resolves) | 2-4 letter team code. Uppercased on render. Used as the visible monogram and as the default accessible name. Always provide it; it doubles as the fallback when an image fails. |
+| `data-src`  | host | no       | URL of an SVG/PNG to render in place of the monogram. On error the component falls back to the `data-code` text.                                   |
+| `data-alt`  | host | no       | Accessible name (forwards to `aria-label` on the host). Recommended whenever `data-src` is set; otherwise the code itself is announced.            |
+| `data-size` | host | no       | `sm` (20px) · default (24px, omit attribute) · `lg` (32px).                                                                                        |
+
+## Tokens used
+
+| Token            | Where                       |
+|------------------|-----------------------------|
+| `--bg`           | badge background            |
+| `--fg`           | monogram text               |
+| `--border`       | 1px hairline border         |
+| `--radius-sm`    | rounded corners             |
+| `--font-mono`    | monogram type face          |
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={CrestStories.Playground} />
+<Story of={CrestStories.Sizes} />
+<Story of={CrestStories.Codes} />
+<Story of={CrestStories.ImageWithFallback} />

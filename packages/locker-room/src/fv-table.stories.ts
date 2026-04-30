@@ -66,14 +66,12 @@ const TEAMS: Team[] = [
   { pos: 10, trend: 'down', delta: 2, code: 'WTH', name: 'Witherton AFC',   gd: -12,gf: 10, ga: 22, form: ['neg','warn','neg','warn','neg'], pts: 14, zone: 'relegation' },
 ];
 
-const trendLabel = (t: Trend, delta: number): string => {
-  if (t === 'up') return `▲+${delta}`;
-  if (t === 'down') return `▼-${delta}`;
-  return '·';
-};
-
 const sign = (n: number): 'pos' | 'neg' | 'zero' => (n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero');
 const fmtSigned = (n: number): string => (n > 0 ? `+${n}` : `${n}`);
+const formLabel = (form: Pip[]): string => {
+  const word = (p: Pip) => (p === 'pos' ? 'W' : p === 'warn' ? 'D' : 'L');
+  return `Last 5: ${form.map(word).join(' ')}`;
+};
 
 const renderTable = (args: TableArgs, teams: Team[] = TEAMS): TemplateResult => html`
   <fv-table
@@ -104,20 +102,20 @@ const renderTable = (args: TableArgs, teams: Team[] = TEAMS): TemplateResult => 
             ?data-highlight=${!!t.highlight}
           >
             <span role="cell">
-              <span data-role="trend" data-direction=${t.trend}>${trendLabel(t.trend, t.delta)}</span>
+              <fv-trend data-direction=${t.trend} data-delta=${t.delta}></fv-trend>
               ${t.pos}
             </span>
             <span role="cell" data-primary>
-              <span data-role="crest" aria-hidden="true">${t.code}</span>
+              <fv-crest data-code=${t.code}></fv-crest>
               <fv-text>${t.name}</fv-text>
             </span>
             <span role="cell" data-numeric data-sign=${sign(t.gd)}>${fmtSigned(t.gd)}</span>
             <span role="cell" data-numeric>${t.gf}</span>
             <span role="cell" data-numeric>${t.ga}</span>
             <span role="cell">
-              <span data-role="series" aria-label=${`Last 5: ${t.form.join(', ')}`}>
+              <fv-series aria-label=${formLabel(t.form)}>
                 ${t.form.map((p) => html`<span data-pip=${p}></span>`)}
-              </span>
+              </fv-series>
             </span>
             <span role="cell" data-numeric data-strong>${t.pts}</span>
           </a>
@@ -210,20 +208,20 @@ export const Selected: Story = {
               aria-selected=${t.code === 'CDR' ? 'true' : 'false'}
             >
               <span role="cell">
-                <span data-role="trend" data-direction=${t.trend}>${trendLabel(t.trend, t.delta)}</span>
+                <fv-trend data-direction=${t.trend} data-delta=${t.delta}></fv-trend>
                 ${t.pos}
               </span>
               <span role="cell" data-primary>
-                <span data-role="crest" aria-hidden="true">${t.code}</span>
+                <fv-crest data-code=${t.code}></fv-crest>
                 <fv-text>${t.name}</fv-text>
               </span>
               <span role="cell" data-numeric data-sign=${sign(t.gd)}>${fmtSigned(t.gd)}</span>
               <span role="cell" data-numeric>${t.gf}</span>
               <span role="cell" data-numeric>${t.ga}</span>
               <span role="cell">
-                <span data-role="series" aria-label=${`Last 5: ${t.form.join(', ')}`}>
+                <fv-series aria-label=${formLabel(t.form)}>
                   ${t.form.map((p) => html`<span data-pip=${p}></span>`)}
-                </span>
+                </fv-series>
               </span>
               <span role="cell" data-numeric data-strong>${t.pts}</span>
             </a>

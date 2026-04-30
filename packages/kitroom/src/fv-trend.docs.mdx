@@ -1,0 +1,48 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TrendStories from './fv-trend.stories';
+
+<Meta of={TrendStories} />
+
+# fv-trend
+
+A direction badge: an arrow glyph plus a signed numeric delta. Used to
+indicate movement (e.g. "up 2 league positions since last week"). The
+host carries `role="img"` and an auto-generated `aria-label` so the
+arrow is meaningful to assistive tech without consumers having to write
+one. Color reinforces direction but is never the only signal — the
+text content and the aria-label both name the direction.
+
+## Required HTML
+
+```html
+<fv-trend data-direction="up" data-delta="2"></fv-trend>
+<fv-trend data-direction="down" data-delta="1"></fv-trend>
+<fv-trend data-direction="flat"></fv-trend>
+```
+
+## Attributes
+
+| Attribute        | On    | Required | Effect                                                                                                                                  |
+|------------------|-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `data-direction` | host  | yes      | `up` · `down` · `flat`. Drives the rendered glyph (`▲` / `▼` / `·`), the sign of the delta, and the color via tokens.                  |
+| `data-delta`     | host  | no       | Non-negative magnitude. Renders as `+N` for up, `-N` for down. Omitted (or non-numeric) renders only the arrow. Ignored when `flat`.   |
+| `aria-label`     | host  | no       | Override the auto-generated label (e.g. "Climbing fast"). When unset, the component generates "up N positions" / "down N positions" / "no change". |
+
+## Tokens used
+
+| Token         | Where                          |
+|---------------|--------------------------------|
+| `--positive`  | `data-direction="up"` color    |
+| `--negative`  | `data-direction="down"` color  |
+| `--fg-muted`  | `data-direction="flat"` color  |
+| `--font-mono` | type face                      |
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={TrendStories.Playground} />
+<Story of={TrendStories.Directions} />
+<Story of={TrendStories.InRow} />
