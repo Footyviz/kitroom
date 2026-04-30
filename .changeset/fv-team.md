@@ -11,4 +11,4 @@ Host carries `role="group"` with an `aria-label` synthesised from the team-name'
 
 - New `packages/kitroom/src/fv-team.ts` (registers `<fv-team>`).
 - New `packages/styles/src/fv-team.css`.
-- New Storybook entries under **Components / Team** (Home, Away, HomeAndAwayPair, Compact, LongName, MonogramFallback, Playground) plus behaviour tests for the role/aria-label sync.
+- New Storybook entries under **Kitroom / Team** (Home, Away, HomeAndAwayPair, Compact, LongName, MonogramFallback, Playground) plus behaviour tests for the role/aria-label sync.

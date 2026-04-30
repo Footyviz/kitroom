@@ -18,7 +18,7 @@ type TeamArgs = {
 };
 
 const meta: Meta<TeamArgs> = {
-  title: 'Components/Team',
+  title: 'Kitroom/Team',
   component: 'fv-team',
   argTypes: {
     name: { control: 'text', description: 'Team-name text content' },
