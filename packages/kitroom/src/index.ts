@@ -8,6 +8,7 @@ export { FvIcon } from './fv-icon.js';
 export { FvIconText } from './fv-icon-text.js';
 export { FvRadio } from './fv-radio.js';
 export { FvRadioGroup } from './fv-radio-group.js';
+export { FvRatioBar } from './fv-ratio-bar.js';
 export { FvSegmented } from './fv-segmented.js';
 export { FvSeries } from './fv-series.js';
 export { FvSlider } from './fv-slider.js';

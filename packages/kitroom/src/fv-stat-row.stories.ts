@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html, type TemplateResult } from 'lit-html';
 import { expect } from 'storybook/test';
 import './fv-stat-row.js';
+import './fv-ratio-bar.js';
 import './fv-text.js';
 import './fv-series.js';
 
@@ -52,16 +53,25 @@ const dividerStyle = 'border-bottom: 1px solid var(--border-subtle);';
 const renderRow = (args: StatRowArgs): TemplateResult => {
   const homePct = args.homePct;
   const awayPct = 100 - homePct;
-  const styleVar = `--home-pct: ${homePct}%; --away-pct: ${awayPct}%;`;
+  const homeBarTone = args.featured ? 'accent' : null;
   return html`
     <div style="${listStyle}">
       <fv-stat-row
-        style="${styleVar}"
         ?data-featured=${args.featured}
         data-density=${args.compact ? 'compact' : 'default'}
       >
         <fv-text data-role="home-value" data-variant="stat-sm">${args.homeValue}</fv-text>
+        <fv-ratio-bar
+          data-role="home-bar"
+          style="--pct: ${homePct}%"
+          data-tone=${homeBarTone ?? ''}
+        ></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">${args.label}</fv-text>
+        <fv-ratio-bar
+          data-role="away-bar"
+          style="--pct: ${awayPct}%"
+          data-direction="rtl"
+        ></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">${args.awayValue}</fv-text>
       </fv-stat-row>
     </div>
@@ -82,9 +92,11 @@ export const Default: Story = {
   render: renderRow,
   parameters: {
     controls: { disable: false },
-    ...src(`<fv-stat-row style="--home-pct: 58%; --away-pct: 42%">
+    ...src(`<fv-stat-row>
   <fv-text data-role="home-value" data-variant="stat-sm">58%</fv-text>
+  <fv-ratio-bar data-role="home-bar" style="--pct: 58%"></fv-ratio-bar>
   <fv-text data-role="label" data-variant="caption">Possession</fv-text>
+  <fv-ratio-bar data-role="away-bar" style="--pct: 42%" data-direction="rtl"></fv-ratio-bar>
   <fv-text data-role="away-value" data-variant="stat-sm">42%</fv-text>
 </fv-stat-row>`),
   },
@@ -102,9 +114,11 @@ export const Featured: Story = {
   render: renderRow,
   parameters: {
     controls: { disable: false },
-    ...src(`<fv-stat-row data-featured style="--home-pct: 67%; --away-pct: 33%">
+    ...src(`<fv-stat-row data-featured>
   <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+  <fv-ratio-bar data-role="home-bar" style="--pct: 67%" data-tone="accent"></fv-ratio-bar>
   <fv-text data-role="label" data-variant="caption">xG</fv-text>
+  <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
   <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
 </fv-stat-row>`),
   },
@@ -122,9 +136,11 @@ export const Compact: Story = {
   render: renderRow,
   parameters: {
     controls: { disable: false },
-    ...src(`<fv-stat-row data-density="compact" style="--home-pct: 63%; --away-pct: 37%">
+    ...src(`<fv-stat-row data-density="compact">
   <fv-text data-role="home-value" data-variant="stat-sm">12</fv-text>
+  <fv-ratio-bar data-role="home-bar" style="--pct: 63%"></fv-ratio-bar>
   <fv-text data-role="label" data-variant="caption">Shots</fv-text>
+  <fv-ratio-bar data-role="away-bar" style="--pct: 37%" data-direction="rtl"></fv-ratio-bar>
   <fv-text data-role="away-value" data-variant="stat-sm">7</fv-text>
 </fv-stat-row>`),
   },
@@ -174,47 +190,67 @@ export const FormLayout: Story = {
 export const MultiRow: Story = {
   render: (): TemplateResult => html`
     <div style="${listStyle}">
-      <fv-stat-row style="--home-pct: 58%; --away-pct: 42%; ${dividerStyle}">
+      <fv-stat-row style="${dividerStyle}">
         <fv-text data-role="home-value" data-variant="stat-sm">58%</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 58%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">Possession</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 42%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">42%</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 63%; --away-pct: 37%; ${dividerStyle}">
+      <fv-stat-row style="${dividerStyle}">
         <fv-text data-role="home-value" data-variant="stat-sm">12</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 63%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">Shots</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 37%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">7</fv-text>
       </fv-stat-row>
-      <fv-stat-row data-featured style="--home-pct: 67%; --away-pct: 33%; ${dividerStyle}">
+      <fv-stat-row data-featured style="${dividerStyle}">
         <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+        <fv-ratio-bar
+          data-role="home-bar"
+          style="--pct: 67%"
+          data-tone="accent"
+        ></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">xG</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 61%; --away-pct: 39%; ${dividerStyle}">
+      <fv-stat-row style="${dividerStyle}">
         <fv-text data-role="home-value" data-variant="stat-sm">486</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 61%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">Passes</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 39%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">312</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 43%; --away-pct: 57%; ${dividerStyle}">
+      <fv-stat-row style="${dividerStyle}">
         <fv-text data-role="home-value" data-variant="stat-sm">3</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 43%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">Corners</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 57%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">4</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 47%; --away-pct: 53%">
+      <fv-stat-row>
         <fv-text data-role="home-value" data-variant="stat-sm">8</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 47%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="caption">Fouls</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 53%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">9</fv-text>
       </fv-stat-row>
     </div>
   `,
   parameters: src(`<div class="statlist">
-  <fv-stat-row style="--home-pct: 58%; --away-pct: 42%">
+  <fv-stat-row>
     <fv-text data-role="home-value" data-variant="stat-sm">58%</fv-text>
+    <fv-ratio-bar data-role="home-bar" style="--pct: 58%"></fv-ratio-bar>
     <fv-text data-role="label" data-variant="caption">Possession</fv-text>
+    <fv-ratio-bar data-role="away-bar" style="--pct: 42%" data-direction="rtl"></fv-ratio-bar>
     <fv-text data-role="away-value" data-variant="stat-sm">42%</fv-text>
   </fv-stat-row>
-  <fv-stat-row data-featured style="--home-pct: 67%; --away-pct: 33%">
+  <fv-stat-row data-featured>
     <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+    <fv-ratio-bar data-role="home-bar" style="--pct: 67%" data-tone="accent"></fv-ratio-bar>
     <fv-text data-role="label" data-variant="caption">xG</fv-text>
+    <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
     <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
   </fv-stat-row>
   <!-- ... additional rows ... -->
@@ -225,27 +261,33 @@ export const MultiRow: Story = {
 
 export const StampsRowAndCellRoles: Story = {
   render: (): TemplateResult => html`
-    <fv-stat-row data-testid="row" style="--home-pct: 67%; --away-pct: 33%">
+    <fv-stat-row data-testid="row">
       <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+      <fv-ratio-bar data-role="home-bar" style="--pct: 67%"></fv-ratio-bar>
       <fv-text data-role="label" data-variant="caption">xG</fv-text>
+      <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
       <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
     </fv-stat-row>
   `,
-  parameters: src(`<fv-stat-row style="--home-pct: 67%; --away-pct: 33%">…</fv-stat-row>`),
+  parameters: src(`<fv-stat-row>…</fv-stat-row>`),
   play: async ({ canvasElement }) => {
     const row = canvasElement.querySelector<HTMLElement>('[data-testid="row"]')!;
     expect(row.getAttribute('role')).toBe('row');
     expect(row.querySelector('[data-role="home-value"]')?.getAttribute('role')).toBe('cell');
     expect(row.querySelector('[data-role="label"]')?.getAttribute('role')).toBe('cell');
     expect(row.querySelector('[data-role="away-value"]')?.getAttribute('role')).toBe('cell');
+    expect(row.querySelector('[data-role="home-bar"]')?.getAttribute('role')).toBe('presentation');
+    expect(row.querySelector('[data-role="away-bar"]')?.getAttribute('role')).toBe('presentation');
   },
 };
 
 export const BuildsAriaLabel: Story = {
   render: (): TemplateResult => html`
-    <fv-stat-row data-testid="aria" style="--home-pct: 67%; --away-pct: 33%">
+    <fv-stat-row data-testid="aria">
       <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+      <fv-ratio-bar data-role="home-bar" style="--pct: 67%"></fv-ratio-bar>
       <fv-text data-role="label" data-variant="caption">xG</fv-text>
+      <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
       <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
     </fv-stat-row>
   `,

@@ -1,0 +1,182 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as MatchCardStories from './fv-match-card.stories';
+
+<Meta of={MatchCardStories} />
+
+# fv-match-card
+
+A match summary card formation. Composes `<fv-team>`, `<fv-stat-row>`,
+`<fv-chip>`, `<fv-button-badge>`, `<fv-icon>`, and `<fv-text>`
+primitives into the canonical match-card layout from the design spec.
+
+`<fv-match-card>` is light-DOM and uses CSS subgrid so multiple cards
+laid out side-by-side share head/score/footer baselines. The card
+structure itself is a 4-row grid: head, score, stats (optional),
+footer.
+
+## Required HTML
+
+```html
+<fv-match-card data-status="live">
+  <header data-role="head">
+    <fv-chip data-variant="live">LIVE</fv-chip>
+    <fv-text data-role="time" data-variant="mono">73'</fv-text>
+    <fv-text data-role="meta" data-variant="caption" data-tone="muted">
+      Premier League<span data-role="dot"></span>Emirates
+    </fv-text>
+  </header>
+
+  <div data-role="score">
+    <fv-team data-side="home">
+      <fv-crest data-code="ARS" data-size="lg"></fv-crest>
+      <fv-text data-role="team-name" data-variant="body">Arsenal</fv-text>
+    </fv-team>
+    <div data-role="result">
+      <fv-text data-variant="stat-lg">2</fv-text>
+      <fv-text data-role="sep" data-variant="stat-lg" data-tone="subtle">–</fv-text>
+      <fv-text data-variant="stat-lg">1</fv-text>
+    </div>
+    <fv-team data-side="away">
+      <fv-crest data-code="CHE" data-size="lg"></fv-crest>
+      <fv-text data-role="team-name" data-variant="body">Chelsea</fv-text>
+    </fv-team>
+  </div>
+
+  <div data-role="stats" role="group" aria-label="Match stats">
+    <fv-stat-row data-featured>
+      <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+      <fv-ratio-bar data-role="home-bar" style="--pct: 67%" data-tone="accent"></fv-ratio-bar>
+      <fv-text data-role="label" data-variant="label" data-tone="muted">xG</fv-text>
+      <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
+      <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
+    </fv-stat-row>
+    <fv-stat-row>
+      <fv-text data-role="home-value" data-variant="stat-sm">58%</fv-text>
+      <fv-ratio-bar data-role="home-bar" style="--pct: 58%"></fv-ratio-bar>
+      <fv-text data-role="label" data-variant="label" data-tone="muted">Possession</fv-text>
+      <fv-ratio-bar data-role="away-bar" style="--pct: 42%" data-direction="rtl"></fv-ratio-bar>
+      <fv-text data-role="away-value" data-variant="stat-sm">42%</fv-text>
+    </fv-stat-row>
+  </div>
+
+  <footer data-role="more">
+    <fv-text data-variant="body-sm">View all stats</fv-text>
+    <fv-button-badge>32</fv-button-badge>
+    <fv-icon name="chevron-right"></fv-icon>
+  </footer>
+</fv-match-card>
+```
+
+## Slots
+
+The card has four positional slots, addressed by their direct child
+selector. Children are rendered in source order; slot order in the DOM
+matches visual order on the card.
+
+| Slot                              | Required | Purpose                                                                 |
+|-----------------------------------|----------|-------------------------------------------------------------------------|
+| `<header data-role="head">`       | yes      | status chip, kickoff time / match clock, meta line (competition · venue) |
+| `<div data-role="score">`         | yes      | home `<fv-team>`, `[data-role="result"]` block, away `<fv-team>`         |
+| `<div data-role="stats">`         | no       | column of `<fv-stat-row>` children. Compact variant typically omits this |
+| `<footer data-role="more">`       | yes      | leading label, optional `<fv-button-badge>` count, trailing chevron icon |
+
+The stats slot accepts any children. Typical content is one or more
+`<fv-stat-row>` elements (proportion bars for a live / final match,
+or `<fv-stat-row data-layout="form">` containing `<fv-series>` form
+pips for an upcoming match).
+
+## Host attributes
+
+| Attribute        | Required | Values                              | Effect                                                                 |
+|------------------|----------|-------------------------------------|------------------------------------------------------------------------|
+| `data-status`    | yes      | `live` \| `upcoming` \| `final`     | drives result-column treatment, sets `aria-live` for `live`            |
+| `data-density`   | no       | `default` \| `compact`              | tighter padding, smaller scoreline. Consumers also pick crest size     |
+
+Theme is inherited via `<html data-theme="dark">` (or any ancestor
+with that attribute) per the design system rule. The component does
+not expose a theme attribute of its own.
+
+## Cross-card alignment with `.fv-match-card-grid`
+
+The optional consumer wrapper `.fv-match-card-grid` aligns multiple
+cards side-by-side so their head, score and footer rows line up
+horizontally regardless of how many stat rows each card carries.
+
+```html
+<div class="fv-match-card-grid">
+  <fv-match-card>...</fv-match-card>
+  <fv-match-card>...</fv-match-card>
+  <fv-match-card>...</fv-match-card>
+</div>
+```
+
+The wrapper declares four shared row tracks:
+
+```css
+.fv-match-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-rows: auto auto 1fr auto; /* head | score | stats-fill | footer */
+  gap: var(--space-4);
+}
+```
+
+Each `<fv-match-card>` inside the wrapper claims those four rows via
+`grid-row: span 4` and inherits them via `grid-template-rows: subgrid`.
+The third (stats) track is the elastic `1fr` track — variable-height
+stats areas absorb the difference, leaving head/score/footer aligned.
+
+A standalone card (one not inside `.fv-match-card-grid`) falls back
+to its own row tracks via the `:not(.fv-match-card-grid > *)`
+selector, so the same component works in both layouts.
+
+The `Grid` story is the visual proof of this wiring.
+
+## Events
+
+| Event                    | When                                          | Detail   |
+|--------------------------|-----------------------------------------------|----------|
+| `fv-match-card-expand`   | Footer is clicked or activated via Space/Enter | `{}`    |
+
+The component does not navigate or fetch — it reports user intent.
+Consumers wire the rest by listening for the event or by adding
+`hx-*` attributes directly to the `<footer data-role="more">`
+element. The event bubbles, so a single listener at a parent
+container can serve a grid of cards.
+
+## Accessibility
+
+- Host gets `role="article"` if not already set.
+- The host's `aria-labelledby` is synthesised from the home and away
+  team-name elements; the component assigns stable ids where they're
+  missing. Screen readers announce both team names when the card
+  receives focus.
+- For `data-status="live"`, the host gets `aria-live="polite"` so
+  score updates are announced when the inner DOM swaps.
+- The footer is wired as a button: `role="button"`, `tabindex="0"`,
+  click + Space/Enter activate. Focus ring uses the accent token via
+  `:focus-visible`.
+- The stats slot carries `role="group"` (set by the consumer in the
+  markup); each `<fv-stat-row>` self-stamps `role="row"` and synthesises
+  its own `aria-label` (`"xG: 1.84 vs 0.92"`).
+
+## Tokens used
+
+| Token                              | Where                                |
+|------------------------------------|--------------------------------------|
+| `--bg-elev`, `--bg-alt`            | card surface, footer hover           |
+| `--fg`, `--fg-muted`, `--fg-subtle`| primary text, meta line, separators  |
+| `--border`, `--border-subtle`      | card outline, internal dividers      |
+| `--accent`                         | focus ring                           |
+| `--space-1` … `--space-4`          | padding + gaps                       |
+| `--radius-lg`, `--radius-full`     | card corners, meta-line dot          |
+| `--font-sans`, `--font-mono`       | UI text vs scoreline                 |
+
+## Stories
+
+<Story of={MatchCardStories.Live} />
+<Story of={MatchCardStories.Upcoming} />
+<Story of={MatchCardStories.Final} />
+<Story of={MatchCardStories.Compact} />
+<Story of={MatchCardStories.Dark} />
+<Story of={MatchCardStories.Grid} />

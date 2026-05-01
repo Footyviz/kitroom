@@ -6,19 +6,36 @@ import * as StatRowStories from './fv-stat-row.stories';
 # fv-stat-row
 
 A single-stat comparison row: a 5-column grid (value, bar, label, bar,
-value) with mirrored proportion bars sized by inline custom properties.
-Used inside `<fv-match-card>` and standalone in stat-list pages.
+value). Used inside `<fv-match-card>` and standalone in stat-list pages.
 
-The component **does not** generate values, labels, or series. All
-content is supplied as children with `data-role` markers; the host's
-`::before` and `::after` pseudo-elements paint the bars.
+The component **does not** generate values, labels, bars, or series.
+All content is supplied as children with `data-role` markers; the row's
+job is to place them in its grid and to synthesise an `aria-label` from
+their text. Bars are authored as `<fv-ratio-bar>` children carrying
+their own `--pct` — they're optional, so a row without bars renders a
+plain value/label/value comparison.
 
 ## Required HTML
 
 ```html
-<fv-stat-row style="--home-pct: 67%; --away-pct: 33%">
+<fv-stat-row>
   <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+  <fv-ratio-bar data-role="home-bar" style="--pct: 67%"></fv-ratio-bar>
   <fv-text data-role="label" data-variant="caption">xG</fv-text>
+  <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
+  <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
+</fv-stat-row>
+```
+
+For the featured (hero metric) row, add `data-featured` on the host and
+`data-tone="accent"` on the home-bar child:
+
+```html
+<fv-stat-row data-featured>
+  <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+  <fv-ratio-bar data-role="home-bar" style="--pct: 67%" data-tone="accent"></fv-ratio-bar>
+  <fv-text data-role="label" data-variant="caption">xG</fv-text>
+  <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
   <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
 </fv-stat-row>
 ```
@@ -27,30 +44,21 @@ content is supplied as children with `data-role` markers; the host's
 
 | Attribute        | Required | Values                          | Effect                                            |
 |------------------|----------|---------------------------------|---------------------------------------------------|
-| `data-featured`  | no       | (boolean — presence)            | Hero metric. Tinted surface, straw home fill.     |
+| `data-featured`  | no       | (boolean — presence)            | Hero metric. Tinted surface; pair with `data-tone="accent"` on the home bar. |
 | `data-density`   | no       | `default` (default) `compact`   | Compact tightens padding and column gap.          |
-| `data-layout`    | no       | (default) `form`                | Hides bars; lets `<fv-series>` fill the columns.  |
-
-## Inline custom properties
-
-| Property     | Default | Used by                                |
-|--------------|---------|----------------------------------------|
-| `--home-pct` | `50%`   | Left bar fill from the left            |
-| `--away-pct` | `50%`   | Right bar fill from the right (mirror) |
-
-Set these inline per row (`style="--home-pct: 67%; --away-pct: 33%"`).
-The two values do not have to sum to 100% — the rest of each bar is
-painted with the away tone.
+| `data-layout`    | no       | (default) `form`                | Lets `<fv-series>` children fill the bar columns. |
 
 ## Roles for child elements
 
 Default layout:
 
-| Selector                       | Cell                |
-|--------------------------------|---------------------|
-| `[data-role="home-value"]`     | left value          |
-| `[data-role="label"]`          | center label        |
-| `[data-role="away-value"]`     | right value         |
+| Selector                       | Cell                                                          |
+|--------------------------------|---------------------------------------------------------------|
+| `[data-role="home-value"]`     | left value                                                    |
+| `[data-role="home-bar"]`       | left proportion bar (optional `<fv-ratio-bar>`)               |
+| `[data-role="label"]`          | center label                                                  |
+| `[data-role="away-bar"]`       | right proportion bar (optional `<fv-ratio-bar data-direction="rtl">`) |
+| `[data-role="away-value"]`     | right value                                                   |
 
 Form layout (`data-layout="form"`):
 
@@ -66,17 +74,22 @@ arrives as DOM, not props.
 
 ## Composition rule
 
-`fv-stat-row` does not import `fv-text` or `fv-series`. The consumer
-includes whichever primitives they want as children; CSS targets the
-`data-role` selector regardless of tag name. The examples use
-`<fv-text>` because it provides the typographic ramp, but a plain
-`<span data-role="home-value">` would render too — just without the
-mono numerics.
+`fv-stat-row` does not import `fv-text`, `fv-ratio-bar`, or `fv-series`.
+The consumer includes whichever primitives they want as children; CSS
+targets the `data-role` selector regardless of tag name. The examples
+use `<fv-text>` for typographic ramp and `<fv-ratio-bar>` for the
+proportion bars, but a plain `<span data-role="home-value">` would
+render too — just without the mono numerics. Bars themselves are
+optional: a row without `home-bar` / `away-bar` children renders as a
+plain three-column value/label/value comparison.
 
 ## a11y behavior
 
 - The host gets `role="row"` (set on connect if not already present).
-- Each child with a known `data-role` gets `role="cell"`.
+- Each child with a known value/label `data-role` gets `role="cell"`.
+- Each child with a `home-bar` / `away-bar` data-role gets
+  `role="presentation"` (the `<fv-ratio-bar>` primitive also marks
+  itself `aria-hidden="true"`).
 - The component builds `aria-label` from child text content
   (`"<label>: <home> vs <away>"`) and re-syncs via a `MutationObserver`
   on subtree text changes. The observer is disconnected on
@@ -86,14 +99,12 @@ mono numerics.
 
 ## Tokens used
 
+The row itself uses tokens for its surface and layout only — bar fills
+live on `<fv-ratio-bar>`.
+
 | Token             | Where                                       |
 |-------------------|---------------------------------------------|
-| `--neutral-1000`  | Default home bar fill                       |
-| `--neutral-300`   | Away bar fill (mirrored remainder)          |
-| `--neutral-100`   | Bar track background                        |
 | `--neutral-50`    | Featured row surface tint                   |
-| `--accent-dim`    | Featured home bar fill                      |
-| `--radius-full`   | Bar end caps                                |
 
 ## Events dispatched
 
