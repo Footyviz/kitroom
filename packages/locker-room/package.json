@@ -1,7 +1,7 @@
 {
   "name": "@footyviz/locker-room",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,6 +18,20 @@
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Footyviz/kitroom.git",
+    "directory": "packages/locker-room"
+  },
+  "homepage": "https://footyviz.github.io/kitroom/",
+  "bugs": {
+    "url": "https://github.com/Footyviz/kitroom/issues"
+  },
+  "license": "UNLICENSED",
   "devDependencies": {
     "typescript": "^5.7.0"
   }

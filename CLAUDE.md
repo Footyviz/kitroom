@@ -72,15 +72,16 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 - `"sideEffects": ["**/*.css"]` on `@footyviz/tokens` — required so bundlers don't tree-shake bare `import '...css'` statements.
 - `"files": [...]` on every package — npm only publishes paths listed there. We use this to keep dev assets (fonts, `fonts.css`) in the repo without shipping them.
-- `"private": true` on `@footyviz/tokens` and `@footyviz/storybook` — neither is intended to publish to the registry today (tokens may flip to public later).
+- `"private": false` on `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens` — these publish to GitHub Packages. `@footyviz/styles` and `@footyviz/storybook` stay `private: true` (internal aggregator and showcase respectively).
 
 ## Releasing & deploying
 
-**Changesets (versioning + CHANGELOG only — no publish wired today).**
+**Changesets → GitHub Packages.**
 
-- Each meaningful change adds a markdown file under `.changeset/` via `npx changeset`. Commit the file with the change. Includes `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens`; `@footyviz/storybook` is in the `ignore` list (it's an internal showcase, not a release artifact).
-- When ready to cut versions, run `npm run version-packages`. Changesets bumps `package.json` versions and writes `CHANGELOG.md` in each affected package, then deletes the consumed changesets. Commit and push.
-- Publishing to npm is intentionally not wired. To enable it later: flip a package's `private: true` to `false`, add a `release` script (`changeset publish`), add a `release.yml` workflow, and add `NPM_TOKEN` as a repo secret.
+- Each meaningful change adds a markdown file under `.changeset/` via `npx changeset`. Commit the file with the change. Includes `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens`; `@footyviz/storybook` and `@footyviz/styles` stay private and are not released.
+- `.github/workflows/release.yml` runs on every push to `main`. When pending changesets exist, the workflow opens (or updates) a "chore: version packages" PR that bumps `package.json` versions and writes `CHANGELOG.md`. Merging that PR triggers the next run, which has no pending changesets and instead runs `changeset publish` — pushing every workspace whose disk version is newer than what's on the registry to `https://npm.pkg.github.com`.
+- Auth model: CI uses the auto-injected `secrets.GITHUB_TOKEN` (the workflow grants `packages: write`). Local devs and consumer apps export a PAT with `read:packages` (or `write:packages` for manual publish) — see the consume flow in [README.md](README.md).
+- One-time org setup: GitHub org → Settings → Actions → Workflow permissions must be "Read and write" for `release.yml` to call `npm publish`.
 
 **Storybook → GitHub Pages.**
 

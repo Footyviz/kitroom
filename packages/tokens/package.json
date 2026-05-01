@@ -1,7 +1,7 @@
 {
   "name": "@footyviz/tokens",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -16,5 +16,19 @@
     "src/tokens.css",
     "src/icons.svg",
     "src/assets"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Footyviz/kitroom.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://footyviz.github.io/kitroom/",
+  "bugs": {
+    "url": "https://github.com/Footyviz/kitroom/issues"
+  },
+  "license": "UNLICENSED"
 }
