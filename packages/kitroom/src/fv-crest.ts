@@ -20,7 +20,8 @@
  *
  * Sizes: data-size="sm" (20px) | "md" (28px, default) | "lg" (36px).
  * Borders, radius, font, and background come from tokens — no
- * per-instance values.
+ * per-instance values. Border-radius scales with size: sm uses
+ * --radius-sm (4px), md and lg use --radius-md (8px).
  */
 export class FvCrest extends HTMLElement {
   static observedAttributes = ['data-code', 'data-src', 'data-alt'];
