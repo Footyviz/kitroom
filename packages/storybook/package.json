@@ -13,7 +13,6 @@
   "dependencies": {
     "@footyviz/kitroom": "*",
     "@footyviz/locker-room": "*",
-    "@footyviz/styles": "*",
     "@footyviz/tokens": "*"
   },
   "devDependencies": {

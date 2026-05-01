@@ -52,12 +52,26 @@ const config: StorybookConfig = {
     // (./dist/index.js) and fails with "Failed to resolve import" on a
     // fresh clone or any time dist/ is stale.
     config.resolve = config.resolve ?? {};
-    config.resolve.alias = {
-      ...(config.resolve.alias as Record<string, string> | undefined),
-      '@footyviz/kitroom/icons.js': resolve(__dirname, '../../kitroom/src/icons.ts'),
-      '@footyviz/kitroom': resolve(__dirname, '../../kitroom/src/index.ts'),
-      '@footyviz/locker-room': resolve(__dirname, '../../locker-room/src/index.ts'),
-    };
+    // Use the array form (over the object form) so we can pin the bare
+    // `@footyviz/kitroom` alias to the exact specifier with a regex —
+    // otherwise prefix matching gobbles subpath imports like
+    // `/styles/...` and resolves them against `src/index.ts/...`.
+    const existingAlias = config.resolve.alias;
+    const existingArray = Array.isArray(existingAlias)
+      ? existingAlias
+      : existingAlias
+        ? Object.entries(existingAlias as Record<string, string>).map(
+            ([find, replacement]) => ({ find, replacement }),
+          )
+        : [];
+    config.resolve.alias = [
+      { find: '@footyviz/kitroom/styles.css', replacement: resolve(__dirname, '../../kitroom/styles/components.css') },
+      { find: '@footyviz/kitroom/styles/', replacement: resolve(__dirname, '../../kitroom/styles/') },
+      { find: '@footyviz/kitroom/icons.js', replacement: resolve(__dirname, '../../kitroom/src/icons.ts') },
+      { find: /^@footyviz\/kitroom$/, replacement: resolve(__dirname, '../../kitroom/src/index.ts') },
+      { find: /^@footyviz\/locker-room$/, replacement: resolve(__dirname, '../../locker-room/src/index.ts') },
+      ...existingArray,
+    ];
     return config;
   },
 };
