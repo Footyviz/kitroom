@@ -15,7 +15,7 @@ Repo: [Footyviz/kitroom](https://github.com/Footyviz/kitroom). npm workspaces mo
 
 | Package | Purpose | Build |
 |---|---|---|
-| `@footyviz/kitroom` | Published web components (`<fv-button>`, `<fv-checkbox>`, `<fv-chip>`, `<fv-icon>`, `<fv-icon-text>`, `<fv-radio>`, `<fv-radio-group>`, `<fv-segmented>`, `<fv-slider>`, `<fv-split-button>`, `<fv-button-badge>`, `<fv-tabbar>`, `<fv-toggle>`) | `tsc` → `dist/` |
+| `@footyviz/kitroom` | Published web components (`<fv-button>`, `<fv-checkbox>`, `<fv-chip>`, `<fv-icon>`, `<fv-icon-text>`, `<fv-radio>`, `<fv-radio-group>`, `<fv-segmented>`, `<fv-slider>`, `<fv-split-button>`, `<fv-button-badge>`, `<fv-tabbar>`, `<fv-toggle>`) **plus the global stylesheet** (`./styles.css` aggregate, per-component `./styles/fv-*.css`) | `tsc` → `dist/`; CSS shipped from `styles/` |
 | `@footyviz/locker-room` | Composed formations built on the kitroom primitives (`<fv-table>`) | `tsc` → `dist/` |
 | `@footyviz/tokens` | CSS tokens, type styles, brand SVGs, Geist fonts | None (CSS + static assets) |
 | `@footyviz/storybook` | Internal showcase. `private: true`. | `storybook build` |
@@ -70,15 +70,15 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 ## Package settings worth remembering
 
-- `"sideEffects": ["**/*.css"]` on `@footyviz/tokens` — required so bundlers don't tree-shake bare `import '...css'` statements.
-- `"files": [...]` on every package — npm only publishes paths listed there. We use this to keep dev assets (fonts, `fonts.css`) in the repo without shipping them.
-- `"private": false` on `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens` — these publish to GitHub Packages. `@footyviz/styles` and `@footyviz/storybook` stay `private: true` (internal aggregator and showcase respectively).
+- `"sideEffects": ["**/*.css"]` on `@footyviz/tokens` and `@footyviz/kitroom` — required so bundlers don't tree-shake bare `import '...css'` statements.
+- `"files": [...]` on every package — npm only publishes paths listed there. We use this to keep dev assets (fonts, `fonts.css`) in the repo without shipping them. `@footyviz/kitroom` ships both `dist` (JS) and `styles` (CSS).
+- `"private": false` on `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens` — these publish to GitHub Packages. `@footyviz/storybook` stays `private: true` (internal showcase).
 
 ## Releasing & deploying
 
 **Changesets → GitHub Packages.**
 
-- Each meaningful change adds a markdown file under `.changeset/` via `npx changeset`. Commit the file with the change. Includes `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens`; `@footyviz/storybook` and `@footyviz/styles` stay private and are not released.
+- Each meaningful change adds a markdown file under `.changeset/` via `npx changeset`. Commit the file with the change. Includes `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens`; `@footyviz/storybook` stays private and is not released.
 - `.github/workflows/release.yml` runs on every push to `main`. When pending changesets exist, the workflow opens (or updates) a "chore: version packages" PR that bumps `package.json` versions and writes `CHANGELOG.md`. Merging that PR triggers the next run, which has no pending changesets and instead runs `changeset publish` — pushing every workspace whose disk version is newer than what's on the registry to `https://npm.pkg.github.com`.
 - Auth model: CI uses the auto-injected `secrets.GITHUB_TOKEN` (the workflow grants `packages: write`). Local devs and consumer apps export a PAT with `read:packages` (or `write:packages` for manual publish) — see the consume flow in [README.md](README.md).
 - One-time org setup: GitHub org → Settings → Actions → Workflow permissions must be "Read and write" for `release.yml` to call `npm publish`.

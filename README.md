@@ -16,8 +16,7 @@ test — `play` functions run as real Vitest cases in headless Chromium.
 | Package | Purpose |
 |---|---|
 | [`@footyviz/tokens`](packages/tokens) | Design tokens (CSS variables, type styles, fonts, brand SVGs) |
-| [`@footyviz/styles`](packages/styles) | Global stylesheet for the components |
-| [`@footyviz/kitroom`](packages/kitroom) | The `<fv-*>` web components |
+| [`@footyviz/kitroom`](packages/kitroom) | The `<fv-*>` web components — JS + accompanying global stylesheet |
 | [`@footyviz/locker-room`](packages/locker-room) | Composed formations built on top of the components |
 | [`@footyviz/storybook`](packages/storybook) | Internal showcase + Vitest test harness |
 
@@ -74,8 +73,13 @@ npm install @footyviz/kitroom @footyviz/tokens
 
 ```ts
 import '@footyviz/tokens/tokens.css';
+import '@footyviz/kitroom/styles.css'; // global stylesheet for every <fv-*>
 import '@footyviz/kitroom';            // side-effect import; registers all <fv-*> elements
 ```
+
+Per-component CSS is also available à la carte — e.g.
+`import '@footyviz/kitroom/styles/fv-button.css';` — if you need to load
+only what you use.
 
 For the composed formations:
 

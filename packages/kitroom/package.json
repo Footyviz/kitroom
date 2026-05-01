@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": false,
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -13,10 +16,37 @@
     "./icons.js": {
       "types": "./dist/icons.d.ts",
       "default": "./dist/icons.js"
-    }
+    },
+    "./styles.css": "./styles/components.css",
+    "./styles/base.css": "./styles/base.css",
+    "./styles/components.css": "./styles/components.css",
+    "./styles/fv-button.css": "./styles/fv-button.css",
+    "./styles/fv-button-badge.css": "./styles/fv-button-badge.css",
+    "./styles/fv-checkbox.css": "./styles/fv-checkbox.css",
+    "./styles/fv-chip.css": "./styles/fv-chip.css",
+    "./styles/fv-crest.css": "./styles/fv-crest.css",
+    "./styles/fv-gap.css": "./styles/fv-gap.css",
+    "./styles/fv-icon.css": "./styles/fv-icon.css",
+    "./styles/fv-icon-text.css": "./styles/fv-icon-text.css",
+    "./styles/fv-match-card.css": "./styles/fv-match-card.css",
+    "./styles/fv-radio.css": "./styles/fv-radio.css",
+    "./styles/fv-radio-group.css": "./styles/fv-radio-group.css",
+    "./styles/fv-ratio-bar.css": "./styles/fv-ratio-bar.css",
+    "./styles/fv-segmented.css": "./styles/fv-segmented.css",
+    "./styles/fv-series.css": "./styles/fv-series.css",
+    "./styles/fv-slider.css": "./styles/fv-slider.css",
+    "./styles/fv-split-button.css": "./styles/fv-split-button.css",
+    "./styles/fv-stat-row.css": "./styles/fv-stat-row.css",
+    "./styles/fv-tabbar.css": "./styles/fv-tabbar.css",
+    "./styles/fv-table.css": "./styles/fv-table.css",
+    "./styles/fv-team.css": "./styles/fv-team.css",
+    "./styles/fv-text.css": "./styles/fv-text.css",
+    "./styles/fv-toggle.css": "./styles/fv-toggle.css",
+    "./styles/fv-trend.css": "./styles/fv-trend.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "styles"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
