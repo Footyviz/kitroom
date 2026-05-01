@@ -1,0 +1,85 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as RatioBarStories from './fv-ratio-bar.stories';
+
+<Meta of={RatioBarStories} />
+
+# fv-ratio-bar
+
+A pure visual primitive: a single horizontal bar with a hard-stop
+gradient fill. Used inside `<fv-stat-row>` as a mirrored pair, and
+suitable for any mini progress indicator or ratio display.
+
+The bar is decorative — it conveys the same proportion the surrounding
+values already state. Its parent component carries the `aria-label`;
+the bar itself is `aria-hidden`.
+
+## Required HTML
+
+```html
+<!-- Default: dark fill from left, 67% -->
+<fv-ratio-bar style="--pct: 67%"></fv-ratio-bar>
+
+<!-- Mirrored: dark fill from right -->
+<fv-ratio-bar style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
+
+<!-- Featured tone: straw accent fill -->
+<fv-ratio-bar style="--pct: 67%" data-tone="accent"></fv-ratio-bar>
+```
+
+## Inline custom property
+
+| Property | Default | Effect                                  |
+|----------|---------|-----------------------------------------|
+| `--pct`  | `50%`   | Fill stop position from the anchor edge |
+
+The percentage is **only** read from `--pct` set inline on the host.
+There is no `data-pct` attribute — the bar is pure CSS, no JS for
+layout.
+
+## Host attributes
+
+| Attribute        | Required | Values                          | Effect                                           |
+|------------------|----------|---------------------------------|--------------------------------------------------|
+| `data-direction` | no       | `ltr` (default) `rtl`           | Which side the fill anchors to                   |
+| `data-tone`      | no       | `default` `accent`              | Fill color (default neutral, accent straw gold)  |
+
+## Composition
+
+`fv-ratio-bar` is a leaf primitive — it has no children and produces
+no content. Its width comes from its container. Inside `<fv-stat-row>`
+it sits in the bar columns of a CSS grid; standalone it should be
+wrapped in a sized container.
+
+## a11y behavior
+
+- The host gets `aria-hidden="true"` (set on connect if not already
+  present). The bar conveys the same comparison the surrounding values
+  already state, so screen readers should skip it.
+- The host gets `role="presentation"` (set on connect if not already
+  present), reinforcing that the element is decorative.
+- Parents are responsible for the meaningful label — for example,
+  `<fv-stat-row>` synthesises `"xG: 1.84 vs 0.92"` from its child
+  text and stamps that on its host.
+
+## Tokens used
+
+| Token             | Where                                       |
+|-------------------|---------------------------------------------|
+| `--neutral-1000`  | Default fill                                |
+| `--neutral-300`   | Track (remainder of the bar past `--pct`)   |
+| `--accent-dim`    | Fill when `data-tone="accent"`              |
+| `--radius-full`   | End caps                                    |
+
+## Events dispatched
+
+None.
+
+## Stories
+
+<Story of={RatioBarStories.Default} />
+<Story of={RatioBarStories.LeftLeaning} />
+<Story of={RatioBarStories.RightLeaning} />
+<Story of={RatioBarStories.Mirrored} />
+<Story of={RatioBarStories.Accent} />
+<Story of={RatioBarStories.MirroredAccent} />
+<Story of={RatioBarStories.Pair} />

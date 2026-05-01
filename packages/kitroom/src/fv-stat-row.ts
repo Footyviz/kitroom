@@ -1,28 +1,36 @@
 /**
- * <fv-stat-row style="--home-pct: 67%; --away-pct: 33%"
- *              [data-featured]
+ * <fv-stat-row [data-featured]
  *              [data-density="default" | "compact"]
  *              [data-layout="form"]>
  *   <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+ *   <fv-ratio-bar data-role="home-bar" style="--pct: 67%"></fv-ratio-bar>
  *   <fv-text data-role="label" data-variant="label" data-tone="muted">xG</fv-text>
+ *   <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
  *   <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
  * </fv-stat-row>
  *
  * A single-stat comparison row: a 5-column grid (value, bar, label, bar,
- * value) with mirrored proportion bars sized by `--home-pct` / `--away-pct`
- * inline custom properties. Pure-CSS layout — the host's `::before` and
- * `::after` are the bars and read those custom properties.
+ * value). Bars are authored as `<fv-ratio-bar>` children carrying their
+ * own `--pct`; the row places them via grid columns. Bars are optional —
+ * a row without bars still renders a value/label/value comparison.
+ *
+ * For the featured (hero metric) row, place `data-tone="accent"` on the
+ * home-bar child to get the straw accent fill on a faintly tinted
+ * surface.
  *
  * Children are supplied by the consumer (per ARCHITECTURE.md composition
  * rule):
  *   - `[data-role="home-value"]`  — left value cell
+ *   - `[data-role="home-bar"]`    — left proportion bar (optional)
  *   - `[data-role="label"]`       — center label
+ *   - `[data-role="away-bar"]`    — right proportion bar (optional)
  *   - `[data-role="away-value"]`  — right value cell
  *
  * For the upcoming-match form layout, replace the value cells with
  * `<fv-series>` children carrying `data-role="home-form"` /
  * `data-role="away-form"`; setting `data-layout="form"` on the host
- * collapses the bars and lets the series fill the bar columns.
+ * lets the series fill the bar columns. Bars are usually omitted in
+ * this layout.
  *
  * JS responsibilities are minimal:
  *   - Stamp `role="row"` on the host and `role="cell"` on each child
@@ -35,6 +43,7 @@
  */
 
 const VALUE_ROLES = ['home-value', 'away-value', 'home-form', 'away-form', 'label'] as const;
+const BAR_ROLES = ['home-bar', 'away-bar'] as const;
 
 export class FvStatRow extends HTMLElement {
   #observer: MutationObserver | null = null;
@@ -64,6 +73,10 @@ export class FvStatRow extends HTMLElement {
     for (const role of VALUE_ROLES) {
       const child = this.querySelector<HTMLElement>(`:scope > [data-role="${role}"]`);
       if (child && !child.hasAttribute('role')) child.setAttribute('role', 'cell');
+    }
+    for (const role of BAR_ROLES) {
+      const child = this.querySelector<HTMLElement>(`:scope > [data-role="${role}"]`);
+      if (child && !child.hasAttribute('role')) child.setAttribute('role', 'presentation');
     }
   }
 

@@ -1,0 +1,61 @@
+/* ============================================================
+   <fv-ratio-bar> — single proportion bar primitive
+   ============================================================
+   A pure visual primitive: one horizontal bar with a hard-stop
+   linear-gradient driven by the inline `--pct` custom property.
+   Mirror direction via `data-direction="rtl"`; switch fill tone
+   via `data-tone="accent"`.
+
+   Used inside <fv-stat-row> as a mirrored pair; also suitable
+   for mini progress indicators, ratio displays.
+   ============================================================ */
+
+fv-ratio-bar {
+  --pct: 50%;
+
+  display: block;
+  width: 100%;
+  height: 6px; /* spec — no token at 6px; this is the primitive's intrinsic size */
+  border-radius: var(--radius-full);
+  background:
+    linear-gradient(
+      to right,
+      var(--neutral-1000) 0,
+      var(--neutral-1000) var(--pct),
+      var(--neutral-300) var(--pct),
+      var(--neutral-300) 100%
+    );
+}
+
+fv-ratio-bar[data-direction="rtl"] {
+  background:
+    linear-gradient(
+      to left,
+      var(--neutral-1000) 0,
+      var(--neutral-1000) var(--pct),
+      var(--neutral-300) var(--pct),
+      var(--neutral-300) 100%
+    );
+}
+
+fv-ratio-bar[data-tone="accent"] {
+  background:
+    linear-gradient(
+      to right,
+      var(--accent-dim) 0,
+      var(--accent-dim) var(--pct),
+      var(--neutral-300) var(--pct),
+      var(--neutral-300) 100%
+    );
+}
+
+fv-ratio-bar[data-direction="rtl"][data-tone="accent"] {
+  background:
+    linear-gradient(
+      to left,
+      var(--accent-dim) 0,
+      var(--accent-dim) var(--pct),
+      var(--neutral-300) var(--pct),
+      var(--neutral-300) 100%
+    );
+}

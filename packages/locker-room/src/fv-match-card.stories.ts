@@ -69,14 +69,22 @@ const liveCard = (): TemplateResult => html`
     </div>
 
     <div data-role="stats" role="group" aria-label="Match stats">
-      <fv-stat-row style="--home-pct: 67%; --away-pct: 33%" data-featured>
+      <fv-stat-row data-featured>
         <fv-text data-role="home-value" data-variant="stat-sm">1.84</fv-text>
+        <fv-ratio-bar
+          data-role="home-bar"
+          style="--pct: 67%"
+          data-tone="accent"
+        ></fv-ratio-bar>
         <fv-text data-role="label" data-variant="label" data-tone="muted">xG</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 33%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">0.92</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 58%; --away-pct: 42%">
+      <fv-stat-row>
         <fv-text data-role="home-value" data-variant="stat-sm">58%</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 58%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="label" data-tone="muted">Possession</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 42%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">42%</fv-text>
       </fv-stat-row>
     </div>
@@ -167,14 +175,18 @@ const finalCard = (): TemplateResult => html`
     </div>
 
     <div data-role="stats" role="group" aria-label="Match stats">
-      <fv-stat-row style="--home-pct: 41%; --away-pct: 59%">
+      <fv-stat-row>
         <fv-text data-role="home-value" data-variant="stat-sm">8</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 41%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="label" data-tone="muted">Shots</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 59%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">12</fv-text>
       </fv-stat-row>
-      <fv-stat-row style="--home-pct: 47%; --away-pct: 53%">
+      <fv-stat-row>
         <fv-text data-role="home-value" data-variant="stat-sm">47%</fv-text>
+        <fv-ratio-bar data-role="home-bar" style="--pct: 47%"></fv-ratio-bar>
         <fv-text data-role="label" data-variant="label" data-tone="muted">Possession</fv-text>
+        <fv-ratio-bar data-role="away-bar" style="--pct: 53%" data-direction="rtl"></fv-ratio-bar>
         <fv-text data-role="away-value" data-variant="stat-sm">53%</fv-text>
       </fv-stat-row>
     </div>
