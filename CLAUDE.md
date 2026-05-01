@@ -5,7 +5,7 @@ Repo: [Footyviz/kitroom](https://github.com/Footyviz/kitroom). npm workspaces mo
 ## Hard constraints
 
 - **Vanilla web components only.** Custom elements, **light DOM**. **No JSX, no React, no Lit, no Preact, no template engine.** Stories and any rendering glue build DOM with `document.createElement` and return `HTMLElement`. Full rules in [`ARCHITECTURE.md`](./ARCHITECTURE.md) — read it before authoring a component.
-- **Light DOM only (today).** No `attachShadow`, no declarative shadow DOM. Components enhance existing children in `connectedCallback` (find children, add listeners) — they do not generate primary content. CSS lives in the global stylesheet and targets tag name + `data-*` attributes. Per-instance dynamic values use CSS custom properties via inline style. Shadow DOM is a planned future direction — not yet introduced; do not pre-empt it. The lone holdout is `fv-button`, which predates this rule (see follow-ups).
+- **Light DOM only (today).** No `attachShadow`, no declarative shadow DOM. Components enhance existing children in `connectedCallback` (find children, add listeners) — they do not generate primary content. CSS lives in the global stylesheet and targets tag name + `data-*` attributes. Per-instance dynamic values use CSS custom properties via inline style. Shadow DOM is a planned future direction — not yet introduced; do not pre-empt it.
 - **TypeScript strict, ESM-only.** No CommonJS. `verbatimModuleSyntax: true` — use `import type { ... }` for type-only imports.
 - **No emoji in code, comments, or commit messages** unless the user explicitly asks.
 - **Tokens are the design contract.** New components consume `var(--*)` from `@footyviz/tokens`; never hardcode colors or sizes from the handoff. The few literal hex values that remain in component CSS (cream, destructive, info, warn, neg, pos chip variants) are spec values for which no token group exists yet — flag with a `/* spec */` comment and lift to tokens when the design system grows the relevant scale.
@@ -96,7 +96,6 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 ## Known follow-ups (not yet done)
 
-- **`fv-button` is legacy shadow DOM and hardcoded.** Predates both the light-DOM rule and the tokens package. Two follow-ups bundled here: port it to light DOM (so it matches the rest of the library and the rules in `ARCHITECTURE.md`), and switch its values to `var(--*)` tokens. Custom properties cross the shadow boundary so the tokens swap is doable without porting first, but doing both together is cleaner.
 - **Port the handoff's reference mocks to vanilla web components.** `design_handoff_footyviz/ui_kits/` has `.jsx` reference mocks for `MatchHeader`, `StatBar`, `EventTimeline`, `TabBar`, `PitchViz`. Read them as visual reference only — do not import or compile JSX into this repo.
 - **Brand PNGs.** Three large PNGs in the handoff (`FootyVizIcon.png`, `FootyVizLogo.png`, `FootyVizTall.png`, ~4 MB total) are intentionally not in the package. Re-evaluate if a consumer needs raster logos.
 

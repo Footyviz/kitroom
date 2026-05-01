@@ -17,10 +17,10 @@ fv-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 9px 15px;                /* spec medium */
-  border-radius: 12px;              /* spec medium — between --radius-md/lg */
+  padding: 9px 15px;                /* spec medium — outside the 4px scale */
+  border-radius: 12px;              /* spec medium — between --radius-md (8) and --radius-lg (14) */
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 14px;                  /* spec — between fv-body-sm (13) and fv-body (15) */
   font-weight: var(--fw-medium);
   line-height: 1;
   white-space: nowrap;
@@ -30,7 +30,7 @@ fv-button {
   background: var(--bg-elev);
   color: var(--fg);
   border: 1px solid var(--border);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03); /* spec hairline — --shadow-sm has different blur geometry */
   transition:
     background var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease),
@@ -42,7 +42,7 @@ fv-button {
 fv-button:hover { background: var(--neutral-100); }
 fv-button:active { transform: translateY(1px); }
 fv-button:focus-visible {
-  outline: 3px solid rgba(26, 26, 24, 0.35);
+  outline: 3px solid rgba(26, 26, 24, 0.35); /* spec — no focus-ring token yet */
   outline-offset: 2px;
 }
 
@@ -58,8 +58,8 @@ fv-button[data-loading] {
    opacity inside the dimmed button via its own currentColor stroke. */
 fv-button[data-loading]::before {
   content: "";
-  width: 12px;
-  height: 12px;
+  width: var(--space-3);
+  height: var(--space-3);
   border: 1.5px solid currentColor;
   border-top-color: transparent;
   border-radius: var(--radius-full);
@@ -79,10 +79,10 @@ fv-button[data-loading]::before {
    collapses the button into a square. */
 fv-button:has(fv-icon:only-child) {
   padding: 0;
-  width: 32px;
-  height: 32px;
+  width: var(--space-8);
+  height: var(--space-8);
   justify-content: center;
-  border-radius: 9px;
+  border-radius: 9px;             /* spec — between --radius-md (8) and --radius-lg (14) */
 }
 
 /* ---------- Variants ---------- */
@@ -93,15 +93,15 @@ fv-button[data-variant="primary"] {
   color: var(--fg-inverse);
   border-color: var(--neutral-1000);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 1px 0 rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), /* spec highlight */
+    0 1px 0 rgba(0, 0, 0, 0.18);            /* spec drop */
 }
 fv-button[data-variant="primary"]:hover {
   background: var(--neutral-700);
   border-color: var(--neutral-700);
 }
 fv-button[data-variant="primary"]:focus-visible {
-  outline-color: rgba(26, 26, 24, 0.55);
+  outline-color: rgba(26, 26, 24, 0.55); /* spec — no focus-ring token yet */
 }
 
 /* Cream — warm CTA. Hex literals match the spec; no token group exists yet. */
@@ -164,42 +164,42 @@ fv-button[data-variant="destructive"]:hover {
 /* ---------- Sizes ---------- */
 
 fv-button[data-size="xs"] {
-  padding: 4px 8px;
-  font-size: 11px;
-  border-radius: 7px;
-  gap: 5px;
+  padding: var(--space-1) var(--space-2);
+  font-size: 11px;                  /* spec — matches fv-caption ramp */
+  border-radius: 7px;               /* spec — between --radius-sm (4) and --radius-md (8) */
+  gap: 5px;                         /* spec — between --space-1 (4) and --space-2 (8) */
 }
 fv-button[data-size="xs"]:has(fv-icon:only-child) {
   padding: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
+  width: 22px;                      /* spec — outside the 4px scale */
+  height: 22px;                     /* spec */
+  border-radius: 6px;               /* spec — between --radius-sm and --radius-md */
 }
 
 fv-button[data-size="sm"] {
-  padding: 6px 11px;
-  font-size: 12px;
-  border-radius: 9px;
-  gap: 6px;
+  padding: 6px 11px;                /* spec — outside the 4px scale */
+  font-size: 12px;                  /* spec — matches fv-mono ramp */
+  border-radius: 9px;               /* spec — between --radius-md (8) and --radius-lg (14) */
+  gap: 6px;                         /* spec — between --space-1 and --space-2 */
 }
 fv-button[data-size="sm"]:has(fv-icon:only-child) {
   padding: 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: 26px;                      /* spec — outside the 4px scale */
+  height: 26px;                     /* spec */
+  border-radius: 7px;               /* spec */
 }
 
 fv-button[data-size="lg"] {
-  padding: 13px 20px;
-  font-size: 15px;
-  border-radius: 14px;
-  gap: 10px;
+  padding: 13px 20px;               /* spec — 13 outside scale; 20 = --space-5 but kept inline for shorthand clarity */
+  font-size: 15px;                  /* spec — matches fv-body ramp */
+  border-radius: var(--radius-lg);
+  gap: 10px;                        /* spec — between --space-2 (8) and --space-3 (12) */
 }
 fv-button[data-size="lg"]:has(fv-icon:only-child) {
   padding: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 42px;                      /* spec — outside the 4px scale */
+  height: 42px;                     /* spec */
+  border-radius: 12px;              /* spec — between --radius-md and --radius-lg */
 }
 
 /* ---------- Dark surface ---------- */
