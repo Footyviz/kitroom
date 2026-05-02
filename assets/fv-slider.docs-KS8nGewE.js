@@ -1,0 +1,33 @@
+import{n as e}from"./chunk-DnJy8xQt.js";import{r as t}from"./react-pjoPW_VL.js";import{a as n}from"./chunk-RD3KTAHR-5jBwdCYq.js";import{a as r,o as i,s as a}from"./blocks-9uEZZotF.js";import{t as o}from"./mdx-react-shim-DzZRHTHx.js";import{CustomRange as s,Default as c,Disabled as l,Playground as u,n as d,t as f}from"./fv-slider.stories-BAFjns-x.js";function p(e){let n={code:`code`,h1:`h1`,h2:`h2`,p:`p`,pre:`pre`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,...t(),...e.components};return(0,h.jsxs)(h.Fragment,{children:[(0,h.jsx)(r,{of:f}),`
+`,(0,h.jsx)(n.h1,{id:`fv-slider`,children:`fv-slider`}),`
+`,(0,h.jsx)(n.p,{children:`A single-thumb horizontal slider. Drag the thumb, click anywhere on
+the track to jump, or use keyboard arrows / Home / End / PageUp /
+PageDown.`}),`
+`,(0,h.jsx)(n.h2,{id:`required-html`,children:`Required HTML`}),`
+`,(0,h.jsx)(n.pre,{children:(0,h.jsx)(n.code,{className:`language-html`,children:`<fv-slider data-value="62" aria-label="Volume">
+  <span data-role="track"></span>
+  <span data-role="fill"></span>
+  <span data-role="thumb"></span>
+</fv-slider>
+`})}),`
+`,(0,h.jsxs)(n.p,{children:[`The track / fill / thumb spans must be present. The component
+positions `,(0,h.jsx)(n.code,{children:`fill.style.width`}),` and `,(0,h.jsx)(n.code,{children:`thumb.style.left`}),` (as percentages)
+in JS; CSS provides geometry and color.`]}),`
+`,(0,h.jsx)(n.h2,{id:`attributes`,children:`Attributes`}),`
+`,(0,h.jsxs)(n.table,{children:[(0,h.jsx)(n.thead,{children:(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.th,{children:`Attribute`}),(0,h.jsx)(n.th,{children:`Required`}),(0,h.jsx)(n.th,{children:`Default`}),(0,h.jsx)(n.th,{children:`Effect`})]})}),(0,h.jsxs)(n.tbody,{children:[(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`data-value`})}),(0,h.jsx)(n.td,{children:`yes`}),(0,h.jsx)(n.td,{children:`—`}),(0,h.jsx)(n.td,{children:`current value (numeric)`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`data-min`})}),(0,h.jsx)(n.td,{children:`no`}),(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`0`})}),(0,h.jsx)(n.td,{children:`range minimum`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`data-max`})}),(0,h.jsx)(n.td,{children:`no`}),(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`100`})}),(0,h.jsx)(n.td,{children:`range maximum`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`data-step`})}),(0,h.jsx)(n.td,{children:`no`}),(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`1`})}),(0,h.jsx)(n.td,{children:`snap increment`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`aria-disabled`})}),(0,h.jsx)(n.td,{children:`no`}),(0,h.jsx)(n.td,{children:`—`}),(0,h.jsx)(n.td,{children:`dims and ignores all input`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`aria-label`})}),(0,h.jsx)(n.td,{children:`yes`}),(0,h.jsx)(n.td,{children:`—`}),(0,h.jsx)(n.td,{children:`accessible name`})]})]})]}),`
+`,(0,h.jsxs)(n.p,{children:[`The component sets `,(0,h.jsx)(n.code,{children:`role="slider"`}),`, `,(0,h.jsx)(n.code,{children:`tabindex`}),`, and mirrors
+`,(0,h.jsx)(n.code,{children:`aria-valuenow`}),` / `,(0,h.jsx)(n.code,{children:`aria-valuemin`}),` / `,(0,h.jsx)(n.code,{children:`aria-valuemax`}),` from data-* on
+connection and after every change.`]}),`
+`,(0,h.jsx)(n.h2,{id:`keyboard`,children:`Keyboard`}),`
+`,(0,h.jsxs)(n.table,{children:[(0,h.jsx)(n.thead,{children:(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.th,{children:`Key`}),(0,h.jsx)(n.th,{children:`Effect`})]})}),(0,h.jsxs)(n.tbody,{children:[(0,h.jsxs)(n.tr,{children:[(0,h.jsxs)(n.td,{children:[(0,h.jsx)(n.code,{children:`ArrowRight`}),` / `,(0,h.jsx)(n.code,{children:`ArrowUp`})]}),(0,h.jsx)(n.td,{children:`+1 step`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsxs)(n.td,{children:[(0,h.jsx)(n.code,{children:`ArrowLeft`}),` / `,(0,h.jsx)(n.code,{children:`ArrowDown`})]}),(0,h.jsx)(n.td,{children:`−1 step`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsxs)(n.td,{children:[(0,h.jsx)(n.code,{children:`PageUp`}),` / `,(0,h.jsx)(n.code,{children:`PageDown`})]}),(0,h.jsx)(n.td,{children:`±max(step, range/10)`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsxs)(n.td,{children:[(0,h.jsx)(n.code,{children:`Home`}),` / `,(0,h.jsx)(n.code,{children:`End`})]}),(0,h.jsx)(n.td,{children:`jump to min / max`})]})]})]}),`
+`,(0,h.jsx)(n.h2,{id:`tokens-used`,children:`Tokens used`}),`
+`,(0,h.jsxs)(n.table,{children:[(0,h.jsx)(n.thead,{children:(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.th,{children:`Token`}),(0,h.jsx)(n.th,{children:`Where`})]})}),(0,h.jsxs)(n.tbody,{children:[(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`--neutral-0`})}),(0,h.jsx)(n.td,{children:`thumb fill`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`--neutral-200`})}),(0,h.jsx)(n.td,{children:`track background`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`--neutral-1000`})}),(0,h.jsx)(n.td,{children:`fill bar + thumb border`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`--radius-full`})}),(0,h.jsx)(n.td,{children:`track / fill / thumb radius`})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`--accent-soft`})}),(0,h.jsx)(n.td,{children:`focus halo around thumb`})]})]})]}),`
+`,(0,h.jsx)(n.h2,{id:`events-dispatched`,children:`Events dispatched`}),`
+`,(0,h.jsxs)(n.table,{children:[(0,h.jsx)(n.thead,{children:(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.th,{children:`Event`}),(0,h.jsx)(n.th,{children:`When`}),(0,h.jsx)(n.th,{children:`Detail`})]})}),(0,h.jsxs)(n.tbody,{children:[(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`input`})}),(0,h.jsx)(n.td,{children:`Continuously while dragging`}),(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`{ value: number }`})})]}),(0,h.jsxs)(n.tr,{children:[(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`change`})}),(0,h.jsx)(n.td,{children:`Once on commit (pointerup / keyup)`}),(0,h.jsx)(n.td,{children:(0,h.jsx)(n.code,{children:`{ value: number }`})})]})]})]}),`
+`,(0,h.jsx)(n.h2,{id:`store-interaction`,children:`Store interaction`}),`
+`,(0,h.jsx)(n.p,{children:`None.`}),`
+`,(0,h.jsx)(n.h2,{id:`stories`,children:`Stories`}),`
+`,(0,h.jsx)(i,{of:c}),`
+`,(0,h.jsx)(i,{of:s}),`
+`,(0,h.jsx)(i,{of:l}),`
+`,(0,h.jsx)(i,{of:u})]})}function m(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,h.jsx)(n,{...e,children:(0,h.jsx)(p,{...e})}):p(e)}var h;e((()=>{h=n(),o(),a(),d()}))();export{m as default};

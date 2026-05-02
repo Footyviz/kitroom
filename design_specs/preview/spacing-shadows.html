@@ -1,0 +1,70 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+<style>
+  .wash{background:#F4F3EE;border-radius:14px;padding:40px;border:1px solid #EBE9E2}
+  .tile{
+    aspect-ratio:1.2;
+    background:#FFFFFF;
+    border-radius:10px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:14px 16px;
+    position:relative;
+  }
+  .tile .tok{font-family:var(--font-mono);font-size:10px;color:#8F8B7E;letter-spacing:.06em;text-transform:uppercase}
+  .tile .nm{font-family:var(--font-sans);font-size:13px;font-weight:500;color:#1A1A18}
+  .tile .val{font-family:var(--font-mono);font-size:9px;color:#8F8B7E;margin-top:3px;max-width:140px;line-height:1.4}
+  .s-none{box-shadow:none;border:1px solid #EBE9E2}
+  .s-sm{box-shadow:0 1px 2px rgba(14,14,12,.06)}
+  .s-md{box-shadow:0 2px 6px rgba(14,14,12,.08), 0 1px 2px rgba(14,14,12,.05)}
+  .s-lg{box-shadow:0 8px 24px rgba(14,14,12,.10), 0 2px 6px rgba(14,14,12,.05)}
+  .s-pop{box-shadow:0 20px 48px rgba(14,14,12,.16), 0 4px 12px rgba(14,14,12,.08)}
+</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Elevation · shadows used sparingly</div>
+
+  <div class="wash">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:24px">
+      <div class="tile s-none">
+        <div>
+          <div class="tok">none</div>
+          <div class="val">flat, same plane</div>
+        </div>
+        <div class="nm">Flat</div>
+      </div>
+      <div class="tile s-sm">
+        <div>
+          <div class="tok">sm</div>
+          <div class="val">0 1px 2px / .06</div>
+        </div>
+        <div class="nm">Card resting</div>
+      </div>
+      <div class="tile s-md">
+        <div>
+          <div class="tok">md</div>
+          <div class="val">0 2px 6px / .08</div>
+        </div>
+        <div class="nm">Hover · raised</div>
+      </div>
+      <div class="tile s-lg">
+        <div>
+          <div class="tok">lg</div>
+          <div class="val">0 8px 24px / .10</div>
+        </div>
+        <div class="nm">Menu · popover</div>
+      </div>
+      <div class="tile s-pop">
+        <div>
+          <div class="tok">pop</div>
+          <div class="val">0 20px 48px / .16</div>
+        </div>
+        <div class="nm">Modal · dialog</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:#6B6860;max-width:640px;margin-top:4px">Five elevation levels against a warm stone wash (so the white tiles actually read). Used sparingly — most surfaces stay flat on a border; shadow is reserved for things that float (menus, modals, drag states).</div>
+</div>
+</body></html>

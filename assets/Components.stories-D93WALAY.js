@@ -1,0 +1,19 @@
+import{n as e}from"./chunk-DnJy8xQt.js";import{n as t,t as n}from"./_iframe-5Ne9SkBc.js";var r,i,a,o,s,c,l,u,d,f,p;e((()=>{n(),r={title:`Design Specs/Components`,parameters:{layout:`fullscreen`}},i={render:()=>t(`component-buttons.html`,1100)},a={render:()=>t(`component-chips.html`,950)},o={render:()=>t(`component-inputs.html`,1050)},s={render:()=>t(`component-events.html`,700)},c={render:()=>t(`component-tabbar.html`,950)},l={render:()=>t(`component-stat-row.html`,800)},u={render:()=>t(`component-match-card.html`,1300)},d={render:()=>t(`component-table.html`,4200)},f={render:()=>t(`component-viz-frame.html`,600)},i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-buttons.html', 1100)
+}`,...i.parameters?.docs?.source}}},a.parameters={...a.parameters,docs:{...a.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-chips.html', 950)
+}`,...a.parameters?.docs?.source}}},o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-inputs.html', 1050)
+}`,...o.parameters?.docs?.source}}},s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-events.html', 700)
+}`,...s.parameters?.docs?.source}}},c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-tabbar.html', 950)
+}`,...c.parameters?.docs?.source}}},l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-stat-row.html', 800)
+}`,...l.parameters?.docs?.source}}},u.parameters={...u.parameters,docs:{...u.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-match-card.html', 1300)
+}`,...u.parameters?.docs?.source}}},d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-table.html', 4200)
+}`,...d.parameters?.docs?.source}}},f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('component-viz-frame.html', 600)
+}`,...f.parameters?.docs?.source}}},p=[`Buttons`,`Chips`,`Inputs`,`Events`,`Tabbar`,`StatRow`,`MatchCard`,`Table`,`VizFrame`]}))();export{i as Buttons,a as Chips,s as Events,o as Inputs,u as MatchCard,l as StatRow,c as Tabbar,d as Table,f as VizFrame,p as __namedExportsOrder,r as default};

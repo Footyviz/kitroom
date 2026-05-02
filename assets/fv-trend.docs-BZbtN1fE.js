@@ -1,0 +1,23 @@
+import{n as e}from"./chunk-DnJy8xQt.js";import{r as t}from"./react-pjoPW_VL.js";import{a as n}from"./chunk-RD3KTAHR-5jBwdCYq.js";import{a as r,o as i,s as a}from"./blocks-9uEZZotF.js";import{t as o}from"./mdx-react-shim-DzZRHTHx.js";import{Directions as s,InRow as c,Playground as l,n as u,t as d}from"./fv-trend.stories-Cn_cnL6B.js";function f(e){let n={code:`code`,h1:`h1`,h2:`h2`,p:`p`,pre:`pre`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,...t(),...e.components};return(0,m.jsxs)(m.Fragment,{children:[(0,m.jsx)(r,{of:d}),`
+`,(0,m.jsx)(n.h1,{id:`fv-trend`,children:`fv-trend`}),`
+`,(0,m.jsxs)(n.p,{children:[`A direction badge: an arrow glyph plus a signed numeric delta. Used to
+indicate movement (e.g. "up 2 league positions since last week"). The
+host carries `,(0,m.jsx)(n.code,{children:`role="img"`}),` and an auto-generated `,(0,m.jsx)(n.code,{children:`aria-label`}),` so the
+arrow is meaningful to assistive tech without consumers having to write
+one. Color reinforces direction but is never the only signal — the
+text content and the aria-label both name the direction.`]}),`
+`,(0,m.jsx)(n.h2,{id:`required-html`,children:`Required HTML`}),`
+`,(0,m.jsx)(n.pre,{children:(0,m.jsx)(n.code,{className:`language-html`,children:`<fv-trend data-direction="up" data-delta="2"></fv-trend>
+<fv-trend data-direction="down" data-delta="1"></fv-trend>
+<fv-trend data-direction="flat"></fv-trend>
+`})}),`
+`,(0,m.jsx)(n.h2,{id:`attributes`,children:`Attributes`}),`
+`,(0,m.jsxs)(n.table,{children:[(0,m.jsx)(n.thead,{children:(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.th,{children:`Attribute`}),(0,m.jsx)(n.th,{children:`On`}),(0,m.jsx)(n.th,{children:`Required`}),(0,m.jsx)(n.th,{children:`Effect`})]})}),(0,m.jsxs)(n.tbody,{children:[(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`data-direction`})}),(0,m.jsx)(n.td,{children:`host`}),(0,m.jsx)(n.td,{children:`yes`}),(0,m.jsxs)(n.td,{children:[(0,m.jsx)(n.code,{children:`up`}),` · `,(0,m.jsx)(n.code,{children:`down`}),` · `,(0,m.jsx)(n.code,{children:`flat`}),`. Drives the rendered glyph (`,(0,m.jsx)(n.code,{children:`▲`}),` / `,(0,m.jsx)(n.code,{children:`▼`}),` / `,(0,m.jsx)(n.code,{children:`·`}),`), the sign of the delta, and the color via tokens.`]})]}),(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`data-delta`})}),(0,m.jsx)(n.td,{children:`host`}),(0,m.jsx)(n.td,{children:`no`}),(0,m.jsxs)(n.td,{children:[`Non-negative magnitude. Renders as `,(0,m.jsx)(n.code,{children:`+N`}),` for up, `,(0,m.jsx)(n.code,{children:`-N`}),` for down. Omitted (or non-numeric) renders only the arrow. Ignored when `,(0,m.jsx)(n.code,{children:`flat`}),`.`]})]}),(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`aria-label`})}),(0,m.jsx)(n.td,{children:`host`}),(0,m.jsx)(n.td,{children:`no`}),(0,m.jsx)(n.td,{children:`Override the auto-generated label (e.g. "Climbing fast"). When unset, the component generates "up N positions" / "down N positions" / "no change".`})]})]})]}),`
+`,(0,m.jsx)(n.h2,{id:`tokens-used`,children:`Tokens used`}),`
+`,(0,m.jsxs)(n.table,{children:[(0,m.jsx)(n.thead,{children:(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.th,{children:`Token`}),(0,m.jsx)(n.th,{children:`Where`})]})}),(0,m.jsxs)(n.tbody,{children:[(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`--positive`})}),(0,m.jsxs)(n.td,{children:[(0,m.jsx)(n.code,{children:`data-direction="up"`}),` color`]})]}),(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`--negative`})}),(0,m.jsxs)(n.td,{children:[(0,m.jsx)(n.code,{children:`data-direction="down"`}),` color`]})]}),(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`--fg-muted`})}),(0,m.jsxs)(n.td,{children:[(0,m.jsx)(n.code,{children:`data-direction="flat"`}),` color`]})]}),(0,m.jsxs)(n.tr,{children:[(0,m.jsx)(n.td,{children:(0,m.jsx)(n.code,{children:`--font-mono`})}),(0,m.jsx)(n.td,{children:`type face`})]})]})]}),`
+`,(0,m.jsx)(n.h2,{id:`events-dispatched`,children:`Events dispatched`}),`
+`,(0,m.jsx)(n.p,{children:`None.`}),`
+`,(0,m.jsx)(n.h2,{id:`stories`,children:`Stories`}),`
+`,(0,m.jsx)(i,{of:l}),`
+`,(0,m.jsx)(i,{of:s}),`
+`,(0,m.jsx)(i,{of:c})]})}function p(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,m.jsx)(n,{...e,children:(0,m.jsx)(f,{...e})}):f(e)}var m;e((()=>{m=n(),o(),a(),u()}))();export{p as default};

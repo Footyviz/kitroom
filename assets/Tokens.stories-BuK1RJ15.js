@@ -1,0 +1,3 @@
+import{n as e}from"./chunk-DnJy8xQt.js";import{n as t,t as n}from"./_iframe-5Ne9SkBc.js";var r,i,a;e((()=>{n(),r={title:`Design Specs/Tokens Reference`,parameters:{layout:`fullscreen`}},i={render:()=>t(`tokens-reference.html`,1e3)},i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  render: () => previewIframe('tokens-reference.html', 1000)
+}`,...i.parameters?.docs?.source}}},a=[`Reference`]}))();export{i as Reference,a as __namedExportsOrder,r as default};

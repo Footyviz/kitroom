@@ -1,0 +1,132 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .field{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;background:#FFFFFF;border:1px solid #DDDAD0;border-radius:12px;min-width:220px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .field.search{box-shadow:0 1px 2px rgba(14,14,12,.06), 0 4px 12px rgba(14,14,12,.08), inset 0 1px 0 rgba(255,255,255,.8);border-color:#DDDAD0}
+  .field input{border:none;background:transparent;outline:none;font-family:var(--font-sans);font-size:13px;color:#1A1A18;flex:1;min-width:0}
+  .field.focus{border-color:#1A1A18;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+  .kbd{font-family:var(--font-mono);font-size:10px;color:#6B6860;background:#F4F3EE;border:1px solid #EBE9E2;padding:1px 6px;border-radius:5px}
+
+  /* Toggle switch */
+  .sw{position:relative;display:inline-block;width:38px;height:22px;background:#C4C0B3;border-radius:999px;transition:background .18s;flex-shrink:0;cursor:pointer;box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+  .sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:999px;box-shadow:0 1px 2px rgba(0,0,0,.22), 0 0 0 .5px rgba(0,0,0,.06);transition:transform .18s}
+  .sw.on{background:#E8FF5A}
+  .sw.on::after{transform:translateX(16px)}
+  .sw.ink.on{background:#080807}
+  .sw.lg{width:48px;height:28px}
+  .sw.lg::after{width:24px;height:24px}
+  .sw.lg.on::after{transform:translateX(20px)}
+  .sw.disabled{opacity:.45;cursor:not-allowed}
+
+  /* Checkbox */
+  .cb{width:18px;height:18px;border-radius:6px;border:1.5px solid #C4C0B3;background:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+  .cb.on{background:#080807;border-color:#080807;color:#FAFAF7}
+  .cb.on svg{display:block}
+  .cb svg{display:none}
+  .cb.accent.on{background:#E8FF5A;border-color:#E8FF5A;color:#1A1F00}
+
+  /* Radio */
+  .rb{width:18px;height:18px;border-radius:999px;border:1.5px solid #C4C0B3;background:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+  .rb.on::after{content:"";width:8px;height:8px;background:#080807;border-radius:999px}
+
+  /* Select */
+  .sel{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #DDDAD0;font-family:var(--font-sans);font-size:13px;color:#1A1A18;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .sel .cg{color:#8F8B7E}
+
+  /* Slider */
+  .slider{position:relative;height:22px;width:180px;display:flex;align-items:center}
+  .slider .track{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:4px;background:#DDDAD0;border-radius:999px}
+  .slider .fill{position:absolute;left:0;top:50%;transform:translateY(-50%);height:4px;background:#080807;border-radius:999px}
+  .slider .thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:#fff;border:1.5px solid #080807;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+
+  /* Segmented */
+  .seg{display:inline-flex;padding:3px;background:#F4F3EE;border:1px solid #DDDAD0;border-radius:999px;gap:2px}
+  .seg > button{border:0;background:transparent;padding:5px 12px;font-size:12px;font-weight:500;border-radius:999px;color:#6B6860;cursor:pointer;font-family:var(--font-sans)}
+  .seg > button.on{background:#FFFFFF;color:#1A1A18;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .stack-lbl{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-subtle);min-width:90px}
+  .divider{height:1px;background:var(--border-subtle);margin:2px 0}
+  label{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:13px;color:var(--fg);cursor:pointer}
+</style>
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui,-apple-system,Segoe UI,sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Inputs · toggles · selects</div>
+
+  <!-- Text inputs -->
+  <div class="row">
+    <span class="stack-lbl">Text</span>
+    <div class="field search" style="width:260px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--fg-subtle)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input placeholder="Search matches, teams, players"/>
+      <span class="kbd">⌘K</span>
+    </div>
+    <div class="field focus" style="width:180px">
+      <input value="Saka" style="color:var(--fg)"/>
+      <span class="kbd" style="background:var(--neutral-1000);color:#FAFAF7;border:none">Enter</span>
+    </div>
+    <div class="sel">Premier League<svg class="cg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Switches -->
+  <div class="row">
+    <span class="stack-lbl">Switches</span>
+    <label><span class="sw on"></span>Notifications</label>
+    <label><span class="sw"></span>Auto-play highlights</label>
+    <label><span class="sw ink on"></span>Dark mode</label>
+    <label><span class="sw lg on"></span>Live alerts</label>
+    <label style="color:var(--fg-subtle)"><span class="sw disabled"></span>Stadium audio <span class="mono" style="font-size:10px;color:var(--fg-subtle);background:var(--neutral-100);padding:1px 6px;border-radius:4px;margin-left:2px">Pro</span></label>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Checkboxes + radios -->
+  <div class="row">
+    <span class="stack-lbl">Check / Radio</span>
+    <label><span class="cb on"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8 7 12 13 4"/></svg></span>Goals</label>
+    <label><span class="cb accent on"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8 7 12 13 4"/></svg></span>Big chances</label>
+    <label><span class="cb"></span>Yellow cards</label>
+    <label><span class="cb"></span>Subs</label>
+    <span style="width:1px;height:22px;background:var(--border-subtle);margin:0 6px"></span>
+    <label><span class="rb on"></span>All comps</label>
+    <label><span class="rb"></span>Followed only</label>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Segmented + Slider -->
+  <div class="row">
+    <span class="stack-lbl">Segmented</span>
+    <div class="seg">
+      <button class="on">Live</button>
+      <button>Today</button>
+      <button>Upcoming</button>
+    </div>
+    <div class="seg">
+      <button>All</button>
+      <button class="on">Followed</button>
+    </div>
+    <span class="stack-lbl" style="min-width:auto;margin-left:8px">Slider</span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="slider"><div class="track"></div><div class="fill" style="width:62%"></div><div class="thumb" style="left:62%"></div></div>
+      <span class="mono" style="font-size:11px;color:var(--fg-muted)">62%</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- On dark -->
+  <div style="background:#080807;border-radius:14px;padding:14px 16px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <span class="stack-lbl" style="color:#8F8B7E">On dark</span>
+    <div class="field" style="background:#1E1E1C;border-color:#302F2B;color:#FAFAF7">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:#8F8B7E"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input placeholder="Search…" style="color:#FAFAF7"/>
+      <span class="kbd" style="background:#302F2B;color:#FAFAF7;border-color:#40403B">⌘K</span>
+    </div>
+    <label style="color:#FAFAF7"><span class="sw on"></span>Notifications</label>
+    <label style="color:#FAFAF7"><span class="cb accent on"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8 7 12 13 4"/></svg></span>Big chances</label>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:var(--fg-muted);margin-top:4px;max-width:620px">Switches are 38×22 (default) / 48×28 (large). Accent green = user-valuable on (notifications, favorites). Ink black = mode/system on (dark mode). Subtle inner shadow on off state so the knob reads as resting in a slot.</div>
+</div>
+</body></html>
