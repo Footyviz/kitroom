@@ -70,7 +70,7 @@ The font resolution chain inside the monorepo: npm workspaces creates one symlin
 
 ## Package settings worth remembering
 
-- `"sideEffects": ["**/*.css"]` on `@footyviz/tokens` and `@footyviz/kitroom` — required so bundlers don't tree-shake bare `import '...css'` statements.
+- `"sideEffects"` on `@footyviz/tokens` and `@footyviz/kitroom` — required so bundlers don't tree-shake bare `import '...css'` statements. `@footyviz/tokens` ships only CSS, so `["**/*.css"]` is enough. `@footyviz/kitroom` also ships JS modules that self-register their tag at module top level (`customElements.define('fv-button', FvButton)` etc.), so it must list `["**/*.css", "**/*.js", "**/*.ts"]` — otherwise consumers that side-effect-import the package (`import '@footyviz/kitroom'`) tree-shake the registrations away and the global `:not(:defined)` FOUC rule keeps every `<fv-*>` invisible. `@footyviz/locker-room` has no `sideEffects` field today (defaults to "everything has side effects"), which is why its components survived even when kitroom's didn't.
 - `"files": [...]` on every package — npm only publishes paths listed there. We use this to keep dev assets (fonts, `fonts.css`) in the repo without shipping them. `@footyviz/kitroom` ships both `dist` (JS) and `styles` (CSS).
 - `"private": false` on `@footyviz/kitroom`, `@footyviz/locker-room`, and `@footyviz/tokens` — these publish to GitHub Packages. `@footyviz/storybook` stays `private: true` (internal showcase).
 
