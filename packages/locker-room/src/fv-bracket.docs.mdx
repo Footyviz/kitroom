@@ -1,0 +1,158 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as BracketStories from './fv-bracket.stories';
+
+<Meta of={BracketStories} />
+
+# fv-bracket
+
+A knockout-stage tournament bracket. Wraps `<fv-table>`-based match
+cards into round columns and lays them out as a horizontal bracket
+tree on desktop, collapsing to vertically stacked rounds on tablet
+and mobile.
+
+`<fv-bracket>` is light-DOM. It does not generate content — the
+consumer renders the rounds and matches as HTML; the component
+stamps a few ARIA roles, syncs `aria-label` from `data-label`, and
+otherwise lets CSS do all of the layout work.
+
+## Required HTML
+
+```html
+<fv-bracket data-label="Albion Cup 2026">
+  <header data-role="head">
+    <fv-text data-role="eyebrow" data-variant="caption" data-tone="muted">
+      Knockout stage · Quarter-finals · Day 12 of 18
+    </fv-text>
+    <h1 data-role="title">
+      <fv-text data-variant="display">Albion Cup</fv-text>
+      <fv-text data-variant="display" data-tone="muted">2026</fv-text>
+    </h1>
+    <fv-text data-role="meta" data-tone="muted">
+      Hosted in Westport · 32 teams · 8 groups
+    </fv-text>
+    <fv-chip data-role="live" data-variant="live">Bracket live</fv-chip>
+  </header>
+
+  <div data-role="rounds">
+    <section data-role="round" data-stage="r16" data-side="left">
+      <header>
+        <fv-text data-variant="caption">Round of 16</fv-text>
+        <fv-text data-variant="mono" data-tone="muted">Jun 28 – Jul 01</fv-text>
+      </header>
+      <div data-role="matches">
+        <article data-role="match">
+          <fv-table
+            data-density="compact"
+            data-columns="auto minmax(0, 1fr) auto auto"
+            aria-label="Harringate Utd 3, Wickenden FC 0">
+            <div role="rowgroup">
+              <div role="row" data-result="win">
+                <fv-crest data-code="HAR" data-size="sm" role="cell"></fv-crest>
+                <span role="cell" data-primary>Harringate Utd</span>
+                <span role="cell" data-strong>HAR</span>
+                <span role="cell" data-numeric data-strong>3</span>
+              </div>
+              <div role="row">
+                <fv-crest data-code="WCK" data-size="sm" role="cell"></fv-crest>
+                <span role="cell" data-primary>Wickenden FC</span>
+                <span role="cell" data-strong>WCK</span>
+                <span role="cell" data-numeric>0</span>
+              </div>
+            </div>
+          </fv-table>
+          <footer data-role="match-meta">
+            <fv-text data-variant="caption" data-tone="muted">
+              Jun 28 · Westport
+            </fv-text>
+          </footer>
+        </article>
+        <!-- ...3 more matches in this round... -->
+      </div>
+    </section>
+
+    <!-- ...more rounds... -->
+  </div>
+</fv-bracket>
+```
+
+## Slots
+
+| Slot                                          | Required | Purpose                                                              |
+|-----------------------------------------------|----------|----------------------------------------------------------------------|
+| `<header data-role="head">`                   | no       | tournament title, eyebrow line, meta line, live indicator            |
+| `<div data-role="rounds">`                    | yes      | flow container of round columns                                      |
+| `<section data-role="round">` (per round)     | yes      | one round; carries `data-stage` (`r16` \| `qf` \| `sf` \| `final` \| `third-place`) |
+| `<section data-role="round"> > <header>`      | yes      | round name + date range                                              |
+| `<div data-role="matches">`                   | yes      | flow container of match cards within a round                         |
+| `<article data-role="match">`                 | yes      | one match; wraps an `<fv-table>` plus a meta footer                  |
+| `<article> > <fv-table>`                      | yes      | the score table (two team rows + score)                              |
+| `<article> > <footer data-role="match-meta">` | no       | date · venue, plus optional `<span data-role="annotation">AET</span>` |
+
+The match-card body is **`<fv-table>`** — same component used for the
+standings table, with the same row/cell contract. Use
+`data-result="win"` on the winning team's row to get the accent rail
+on the left edge (this rule lives in `fv-table.css` and applies
+unchanged here).
+
+## Host attributes
+
+| Attribute       | Required | Effect                                                       |
+|-----------------|----------|--------------------------------------------------------------|
+| `data-label`    | no       | mirrors to `aria-label` so the bracket is a named landmark   |
+
+## Match card attributes
+
+| Attribute                              | Effect                                                                       |
+|----------------------------------------|------------------------------------------------------------------------------|
+| `data-status="upcoming"` on the match  | dashed border, muted row colors, transparent meta footer                     |
+| `data-stage="final"` on the match      | accent-tinted surface; pair with a `<header data-role="trophy">` block       |
+| `data-stage="third-place"` on the match| neutral header band; pair with a `<header data-role="third-place">` label    |
+
+## Responsive layout
+
+The bracket has three layouts, all driven by media queries:
+
+| Viewport       | Layout                                                                                                |
+|----------------|-------------------------------------------------------------------------------------------------------|
+| `<720px`       | rounds stack vertically; matches inside each round stack 1-col                                        |
+| `720–1099px`   | rounds stack vertically; matches inside each round flow in a 2-col grid                                |
+| `≥1100px`      | rounds become CSS-grid columns left-to-right; each round flex-stacks matches with `space-around`      |
+
+On desktop, `justify-content: space-around` is what creates the
+bracket-tree effect: a quarter-final round with two matches lands its
+matches at 25 % and 75 % of the column height, which exactly matches
+the centroids of its four round-of-16 feeders (12.5 / 37.5 / 62.5 /
+87.5 %). The geometry generalises — 1 / 2 / 4 / 8 matches all sit at
+the centroids of their feeders without any per-round CSS.
+
+## Accessibility
+
+- The host gets `role="region"` and `aria-label` from `data-label`,
+  so the bracket is announceable as a named landmark.
+- Each `<section data-role="round">` gets `role="group"`, with its
+  inner `<header>` providing the accessible name for the group.
+- Each `<article data-role="match">` gets `role="article"`. The
+  inner `<fv-table>` carries its own `role="table"` plus an
+  `aria-label` describing the matchup ("Harringate Utd 3, Wickenden
+  FC 0"), so screen-reader users hear the result without depending
+  on cell-by-cell traversal.
+- `<fv-table>`'s row-result rail (`data-result="win|loss"`) is a
+  visual cue only; the `aria-label` carries the full result.
+
+## Tokens used
+
+| Token                                            | Where                                    |
+|--------------------------------------------------|------------------------------------------|
+| `--bg`, `--bg-elev`, `--bg-alt`                  | page background, card surface, meta footer |
+| `--fg`, `--fg-muted`, `--fg-subtle`              | primary text, abbreviation, separators   |
+| `--border`, `--border-subtle`                    | card outline, row dividers               |
+| `--accent`, `--accent-soft`, `--accent-ink`, `--accent-dim` | winner rail, Final card surface, trophy ink, AET annotation |
+| `--space-1` … `--space-8`                        | padding, gap, grid gutters               |
+| `--radius-md`, `--radius-full`                   | match-card corners, trophy disc          |
+| `--font-sans`, `--font-mono`                     | UI text vs scoreline & abbreviations     |
+
+## Stories
+
+<Story of={BracketStories.AlbionCup} />
+<Story of={BracketStories.Mobile} />
+<Story of={BracketStories.Dark} />

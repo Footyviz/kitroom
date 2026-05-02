@@ -1,0 +1,336 @@
+/* ============================================================
+   <fv-bracket> — tournament bracket formation
+   ============================================================
+   Light-DOM. Wraps <fv-table>-based match cards into round
+   columns and lays them out as a knockout tree on desktop,
+   collapsing to a vertical list on tablet and mobile.
+
+   Selector contract:
+     - fv-bracket                           : host (region landmark)
+     - fv-bracket > header[data-role="head"]: tournament title block
+     - fv-bracket [data-role="rounds"]      : container of round columns
+     - fv-bracket [data-role="round"]       : one round (column on desktop)
+     - fv-bracket [data-role="round"] > header
+                                             : round name + date range
+     - fv-bracket [data-role="matches"]     : flow container of match cards
+     - fv-bracket [data-role="match"]       : <article> wrapping one
+                                              <fv-table> + meta footer
+     - fv-bracket [data-role="match-meta"]  : footer (date · venue)
+     - fv-bracket [data-stage="final"]      : centerpiece final card
+     - fv-bracket [data-stage="third-place"]: 3rd-place playoff card
+     - fv-bracket [data-status="upcoming"]  : not-yet-determined match
+                                              (dashed border, muted)
+
+   Spacing and color come from --space-* / --bg-* / --fg-* / --border-*
+   / --accent / --radius-* tokens. No raw pixel values for layout.
+   ============================================================ */
+
+/* ---------- Host shell ----------------------------------- */
+
+fv-bracket {
+  display: block;
+  width: 100%;
+  font-family: var(--font-sans);
+  color: var(--fg);
+}
+
+/* ---------- Tournament header --------------------------- */
+
+fv-bracket > header[data-role="head"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: var(--space-4);
+  row-gap: var(--space-2);
+  padding: var(--space-6) 0 var(--space-8);
+}
+
+fv-bracket > header[data-role="head"] [data-role="eyebrow"] {
+  grid-column: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+fv-bracket > header[data-role="head"] [data-role="title"] {
+  grid-column: 1;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+fv-bracket > header[data-role="head"] [data-role="meta"] {
+  grid-column: 1;
+}
+
+fv-bracket > header[data-role="head"] [data-role="live"] {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+/* ---------- Rounds container ---------------------------- */
+
+fv-bracket [data-role="rounds"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* ---------- A single round ------------------------------ */
+
+fv-bracket [data-role="round"] {
+  display: block;
+  min-width: 0;
+}
+
+fv-bracket [data-role="round"] > header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+}
+
+fv-bracket [data-role="round"] > header > :first-child {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* ---------- Matches container --------------------------- */
+
+fv-bracket [data-role="matches"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* ---------- A single match ------------------------------ */
+
+fv-bracket [data-role="match"] {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: clip;
+  min-width: 0;
+}
+
+/* The <fv-table> inside a match is a card-internal element: it should
+   not draw its own outer chrome (border, radius, background) since the
+   <article> wrapper already owns those. Row borders inside the table
+   stay intact — they separate the two team rows. */
+fv-bracket [data-role="match"] > fv-table {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  width: 100%;
+}
+
+/* Tighten the row-internal padding/height so the two-row card reads
+   as a compact match summary rather than a standings table snippet.
+   These overrides stay scoped to fv-bracket so the standalone
+   <fv-table> story is unaffected. */
+fv-bracket [data-role="match"] > fv-table {
+  --fv-table-row-h: 38px;
+  --fv-table-px: var(--space-3);
+  --fv-table-gap: var(--space-2);
+  font-size: 12.5px;
+}
+
+fv-bracket [data-role="match"] > fv-table [role="row"]:last-child {
+  border-bottom: 0;
+}
+
+/* Long team names truncate; the abbreviation cell + score stay
+   visible. */
+fv-bracket [data-role="match"] > fv-table [role="cell"][data-primary] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Mono-cased abbreviation column (HAR, WCK, …). */
+fv-bracket [data-role="match"] > fv-table [role="cell"][data-strong]:not([data-numeric]) {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+/* Numeric score cell, slightly larger. */
+fv-bracket [data-role="match"] > fv-table [role="cell"][data-numeric] {
+  font-size: 13px;
+  min-width: var(--space-6);
+  justify-content: flex-end;
+}
+
+/* ---------- Match meta footer (date · venue) ------------ */
+
+fv-bracket [data-role="match"] > footer[data-role="match-meta"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-subtle);
+  min-width: 0;
+}
+
+fv-bracket [data-role="match"] > footer[data-role="match-meta"] [data-role="annotation"] {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+}
+
+/* ---------- Upcoming / TBD matches ---------------------- */
+
+fv-bracket [data-role="match"][data-status="upcoming"] {
+  border-style: dashed;
+  background: transparent;
+}
+
+fv-bracket [data-role="match"][data-status="upcoming"] > footer[data-role="match-meta"] {
+  background: transparent;
+}
+
+fv-bracket [data-role="match"][data-status="upcoming"] [role="row"] {
+  color: var(--fg-muted);
+}
+
+/* ---------- Stage variants: final, third-place ---------- */
+
+fv-bracket [data-role="match"][data-stage="final"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+fv-bracket [data-role="match"][data-stage="final"] > header[data-role="trophy"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-3) var(--space-2);
+  color: var(--accent-ink);
+}
+
+fv-bracket [data-role="match"][data-stage="final"] > header[data-role="trophy"] [data-role="trophy-icon"] {
+  display: inline-grid;
+  place-items: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+fv-bracket [data-role="match"][data-stage="final"] > header[data-role="trophy"] [data-role="trophy-label"] {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+fv-bracket [data-role="match"][data-stage="final"] > footer[data-role="match-meta"] {
+  background: transparent;
+  border-top-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  justify-content: center;
+}
+
+fv-bracket [data-role="match"][data-stage="third-place"] > header[data-role="third-place"] {
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+/* ---------- Tablet (≥720px) ----------------------------- */
+/* Each round still stacks vertically (rounds gap-stacked), but the
+   matches inside each round flow 2-col so a round of 16 reads as a
+   2×4 grid rather than a 1×8 list. Per the user spec: "Tab view is
+   basically 2 column view of the mobile view." */
+
+@media (min-width: 720px) {
+  fv-bracket [data-role="matches"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  /* Single-match rounds (final, semi-finals before the bracket flips
+     to desktop) keep their natural width — let them span the whole
+     row so the centerpiece doesn't sit half-width. */
+  fv-bracket [data-role="round"][data-stage="final"] [data-role="matches"],
+  fv-bracket [data-role="round"][data-stage="sf"] [data-role="matches"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Desktop (≥1100px): bracket tree ------------- */
+/* Rounds become columns of a CSS grid laid out left-to-right.
+   Within each column, matches are flex-stacked with
+   `justify-content: space-around`, which auto-positions the
+   round's matches at the centroids of the next-deeper round's
+   feeders. Result: QF cards sit between their two RO16 feeders,
+   SF cards sit between their two QFs, etc.
+
+   The round count is variable — the consumer chooses 5 (QF→F),
+   7 (RO16→F mirrored), or 9 (RO32→F) rounds. Grid auto-flow
+   handles the column count automatically. */
+
+@media (min-width: 1100px) {
+  fv-bracket [data-role="rounds"] {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  fv-bracket [data-role="round"] {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  fv-bracket [data-role="round"] > header {
+    flex: 0 0 auto;
+  }
+
+  fv-bracket [data-role="matches"] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: var(--space-3);
+    flex: 1 1 auto;
+  }
+
+  /* Center round (final + 3rd place) — keep them stacked, not
+     space-around, so the trophy card sits at the top with the
+     3rd-place card directly below it. The space-around pattern
+     would push them apart. */
+  fv-bracket [data-role="round"][data-stage="final"] [data-role="matches"] {
+    justify-content: flex-start;
+    gap: var(--space-6);
+  }
+
+  /* Tighter row sizing on desktop where columns get narrow. */
+  fv-bracket [data-role="match"] > fv-table {
+    --fv-table-row-h: 36px;
+    --fv-table-px: var(--space-2);
+  }
+}

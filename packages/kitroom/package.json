@@ -22,6 +22,7 @@
     "./styles.css": "./styles/components.css",
     "./styles/base.css": "./styles/base.css",
     "./styles/components.css": "./styles/components.css",
+    "./styles/fv-bracket.css": "./styles/fv-bracket.css",
     "./styles/fv-button.css": "./styles/fv-button.css",
     "./styles/fv-button-badge.css": "./styles/fv-button-badge.css",
     "./styles/fv-checkbox.css": "./styles/fv-checkbox.css",
