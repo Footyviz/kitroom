@@ -1,5 +1,11 @@
 # @footyviz/locker-room
 
+## 0.1.1
+
+### Patch Changes
+
+- 22afafd: Add a `data-fluid` variant to `<fv-match-card>` — opts out of the 360px spec max-width (320px compact) so the card fills its container. The rule lives in the kitroom global stylesheet; the locker-room component doc block, docs table, and stories cover the new attribute (with a Fluid story asserting the computed width).
+
 ## 0.1.0
 
 ### Minor Changes
