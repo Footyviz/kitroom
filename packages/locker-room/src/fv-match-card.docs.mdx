@@ -91,6 +91,7 @@ pips for an upcoming match).
 |------------------|----------|-------------------------------------|------------------------------------------------------------------------|
 | `data-status`    | yes      | `live` \| `upcoming` \| `final`     | drives result-column treatment, sets `aria-live` for `live`            |
 | `data-density`   | no       | `default` \| `compact`              | tighter padding, smaller scoreline. Consumers also pick crest size     |
+| `data-fluid`     | no       | boolean attribute                   | opts out of the 360px spec width (320px compact) and fills the container |
 
 Theme is inherited via `<html data-theme="dark">` (or any ancestor
 with that attribute) per the design system rule. The component does

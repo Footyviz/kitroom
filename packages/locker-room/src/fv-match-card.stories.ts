@@ -97,8 +97,8 @@ const liveCard = (): TemplateResult => html`
   </fv-match-card>
 `;
 
-const upcomingCard = (): TemplateResult => html`
-  <fv-match-card data-status="upcoming">
+const upcomingCard = (fluid = false): TemplateResult => html`
+  <fv-match-card data-status="upcoming" ?data-fluid=${fluid}>
     <header data-role="head">
       <fv-chip data-variant="outline">UPCOMING</fv-chip>
       <fv-text data-role="time" data-variant="mono">SAT · 5:30 PM</fv-text>
@@ -282,6 +282,30 @@ export const Compact: Story = {
           'Compact density — smaller crests (`data-size="md"`), tighter padding, smaller scoreline. The stats slot is omitted entirely; the card collapses to head + score + footer.',
       },
     },
+  },
+};
+
+export const Fluid: Story = {
+  args: { status: 'upcoming', density: 'default' },
+  render: () => cardWrap(html`<div style="max-width: 720px;">${upcomingCard(true)}</div>`),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`data-fluid` opts out of the 360px spec width (320px compact) so the card fills whatever container it sits in — hero slots, full-width rails. Composes with `data-density`; everything else is identical to Upcoming.',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const card = canvasElement.querySelector<HTMLElement>('fv-match-card')!;
+    expect(card.hasAttribute('data-fluid')).toBe(true);
+    expect(getComputedStyle(card).maxWidth).toBe('none');
+    // Fills the (720px) container instead of stopping at the spec width.
+    const container = card.parentElement!;
+    expect(card.getBoundingClientRect().width).toBeCloseTo(
+      container.getBoundingClientRect().width,
+      0,
+    );
   },
 };
 

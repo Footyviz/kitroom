@@ -1,6 +1,7 @@
 /**
  * <fv-match-card data-status="live|upcoming|final"
- *                [data-density="default" | "compact"]>
+ *                [data-density="default" | "compact"]
+ *                [data-fluid]>
  *   <header data-role="head">
  *     <fv-chip data-variant="live">LIVE</fv-chip>
  *     <fv-text data-role="time" data-variant="mono">73'</fv-text>
@@ -51,7 +52,8 @@
  *
  * Composition rule (per ARCHITECTURE.md):
  *   - host attributes are limited to behaviour/variant: data-status,
- *     data-density.
+ *     data-density, data-fluid (opt out of the spec max-width and
+ *     fill the container).
  *   - everything else (chips, time, meta, teams, scores, stats,
  *     footer) is supplied as direct children. The component does
  *     not generate content.
