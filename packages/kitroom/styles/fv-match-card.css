@@ -50,6 +50,13 @@ fv-match-card[data-density="compact"] {
   max-width: 320px;
 }
 
+/* Fluid variant: opt out of the spec width and fill the container
+   (hero slots, full-width rails). Composes with data-density — a
+   fluid compact card keeps the compact type scale, minus the cap. */
+fv-match-card[data-fluid] {
+  max-width: none;
+}
+
 /* Inside the wrapper: claim 4 rows and inherit the parent's tracks
    so head/score/footer baseline-align across cards. */
 .fv-match-card-grid > fv-match-card {
