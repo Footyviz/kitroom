@@ -37,11 +37,39 @@ fv-table-pinned fv-table [role="row"] {
   background: var(--bg-elev);
 }
 
-/* The stuck columns. `left` is inert until position: sticky applies,
-   so the offsets can be declared unconditionally. */
-fv-table-pinned [role="row"] > :nth-child(1) { left: var(--fv-table-pinned-left-1, 0px); }
-fv-table-pinned [role="row"] > :nth-child(2) { left: var(--fv-table-pinned-left-2, 0px); }
-fv-table-pinned [role="row"] > :nth-child(3) { left: var(--fv-table-pinned-left-3, 0px); }
+/* Row tints must be OPAQUE here — stuck cells inherit them, and a
+   translucent tint lets scrolled columns bleed through. Zebra's tint
+   is color-mixed over transparent in the base sheet; re-mix it over
+   the host surface for the identical composite, opaque. (Caveat:
+   data-highlight's gradient stays translucent and repeats per stuck
+   cell — avoid combining it with this formation.) */
+fv-table-pinned fv-table[data-zebra] [role="rowgroup"]:not(:has([role="columnheader"])) [role="row"]:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-alt) 50%, var(--bg-elev));
+}
+
+/* The stuck columns. `left`/margin/padding are inert until position:
+   sticky applies... except margin/padding, which are safe here: each
+   pinned cell absorbs the strip to its left (the row's padding for the
+   first, the column gap for the rest) with a negative margin plus
+   equal padding, so the stuck boxes tile flush from the container edge
+   and no scrolled content leaks through between them. Content position
+   is unchanged (margin and padding cancel). */
+fv-table-pinned [role="row"] > :nth-child(1) {
+  left: calc(var(--fv-table-pinned-left-1, 0px) - var(--fv-table-px, 0px));
+  margin-left: calc(-1 * var(--fv-table-px, 0px));
+  padding-left: var(--fv-table-px, 0px);
+}
+fv-table-pinned[data-pin="2"] [role="row"] > :nth-child(2),
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(2) {
+  left: calc(var(--fv-table-pinned-left-2, 0px) - var(--fv-table-gap, 0px));
+  margin-left: calc(-1 * var(--fv-table-gap, 0px));
+  padding-left: var(--fv-table-gap, 0px);
+}
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(3) {
+  left: calc(var(--fv-table-pinned-left-3, 0px) - var(--fv-table-gap, 0px));
+  margin-left: calc(-1 * var(--fv-table-gap, 0px));
+  padding-left: var(--fv-table-gap, 0px);
+}
 
 fv-table-pinned[data-pin="1"] [role="row"] > :nth-child(-n + 1),
 fv-table-pinned[data-pin="2"] [role="row"] > :nth-child(-n + 2),
