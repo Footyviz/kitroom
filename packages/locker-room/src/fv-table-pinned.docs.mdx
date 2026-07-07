@@ -1,0 +1,52 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as TablePinnedStories from './fv-table-pinned.stories';
+
+<Meta of={TablePinnedStories} />
+
+# fv-table-pinned
+
+A horizontal-scroll formation for `<fv-table>` on narrow viewports.
+
+A grid table squeezed below its natural width compresses its column
+tracks until content overlaps — team names bleeding into the stat
+columns. Wrapped in `<fv-table-pinned>`, the inner table keeps a
+minimum width and the wrapper scrolls horizontally instead, while the
+first `data-pin` columns (default 2 — typically rank + team) stick to
+the left edge and ride over the columns scrolling beneath them.
+
+<Story of={TablePinnedStories.NarrowViewport} />
+
+## Required HTML
+
+Wrap an ordinary `<fv-table>` — its markup contract is unchanged:
+
+```html
+<fv-table-pinned data-pin="2" data-min-width="640px">
+  <fv-table data-columns="36px minmax(140px,1.4fr) 44px ..." aria-label="League table">
+    ...
+  </fv-table>
+</fv-table-pinned>
+```
+
+## Attributes
+
+| Attribute | Values | Meaning |
+| --- | --- | --- |
+| `data-pin` | `1` \| `2` \| `3` | How many lead columns stick. Defaults to `2`; the component stamps the default onto the host so CSS can key off it. |
+| `data-min-width` | any CSS length | The inner table never gets narrower than this — below it, the wrapper scrolls. |
+
+## Behavior notes
+
+- Enhancement-only: the component measures the pinned columns on the
+  first row and publishes their left offsets as
+  `--fv-table-pinned-left-N`; a `ResizeObserver` keeps the offsets true
+  through font loading and resizes. No content is generated.
+- Stuck cells inherit their row's background, so hover, zebra and
+  selection tints follow them.
+- `data-zone` accent rails are re-painted on the stuck first cell so
+  they stay visible while scrolled.
+- Give the team column a `minmax()` with a real floor (e.g.
+  `minmax(140px,1.4fr)`) — that floor plus the fixed tracks is what
+  `data-min-width` should roughly add up to.
+- When the container is wide enough no scrollbar appears and the
+  formation is visually identical to a bare `<fv-table>`.
