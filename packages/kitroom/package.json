@@ -41,6 +41,7 @@
     "./styles/fv-stat-row.css": "./styles/fv-stat-row.css",
     "./styles/fv-tabbar.css": "./styles/fv-tabbar.css",
     "./styles/fv-table.css": "./styles/fv-table.css",
+    "./styles/fv-table-pinned.css": "./styles/fv-table-pinned.css",
     "./styles/fv-team.css": "./styles/fv-team.css",
     "./styles/fv-text.css": "./styles/fv-text.css",
     "./styles/fv-toggle.css": "./styles/fv-toggle.css",
