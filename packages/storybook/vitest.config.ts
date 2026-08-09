@@ -32,7 +32,10 @@ export default defineConfig({
       {
         test: {
           name: 'unit',
-          include: [resolve(here, '../components/src/**/*.test.ts')],
+          // packages/components was renamed to packages/kitroom; the old
+          // path matched nothing, so store.test.ts silently never ran
+          // (a project with zero matching files still reports green).
+          include: [resolve(here, '../kitroom/src/**/*.test.ts')],
           browser: {
             enabled: true,
             provider,
