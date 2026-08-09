@@ -1,0 +1,104 @@
+/* ============================================================
+   <fv-table-pinned> — horizontal-scroll wrapper with stuck
+   lead columns for <fv-table>
+   ============================================================
+   Light-DOM. The wrapper is the scroll container; the inner
+   <fv-table> keeps --fv-table-pinned-min (from data-min-width)
+   so its column tracks stop compressing and the wrapper scrolls
+   instead. The first data-pin columns (1-3, default 2) are
+   position: sticky against the wrapper's left edge; their left
+   offsets are published by the component as
+   --fv-table-pinned-left-N.
+
+   Selector contract:
+     - fv-table-pinned[data-pin="1|2|3"]  : host (component stamps
+                                            the default "2")
+     - direct child fv-table              : the table being wrapped
+   ============================================================ */
+
+fv-table-pinned {
+  display: block;
+  overflow-x: auto;
+  /* Match the table's rounding so the corner clip looks intentional
+     while the inner table is wider than the viewport. */
+  border-radius: var(--radius-md);
+  -webkit-overflow-scrolling: touch;
+}
+
+fv-table-pinned > fv-table {
+  min-width: var(--fv-table-pinned-min, 0);
+}
+
+/* Rows get an explicit base background (they're transparent over the
+   table host by default) so stuck cells can inherit it — hover, zebra
+   and selection tints set the row background and flow into the stuck
+   cells automatically. Header rows already carry their own bg. */
+fv-table-pinned fv-table [role="row"] {
+  background: var(--bg-elev);
+}
+
+/* Row tints must be OPAQUE here — stuck cells inherit them, and a
+   translucent tint lets scrolled columns bleed through. Zebra's tint
+   is color-mixed over transparent in the base sheet; re-mix it over
+   the host surface for the identical composite, opaque. (Caveat:
+   data-highlight's gradient stays translucent and repeats per stuck
+   cell — avoid combining it with this formation.) */
+fv-table-pinned fv-table[data-zebra] [role="rowgroup"]:not(:has([role="columnheader"])) [role="row"]:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-alt) 50%, var(--bg-elev));
+}
+
+/* The stuck columns. `left`/margin/padding are inert until position:
+   sticky applies... except margin/padding, which are safe here: each
+   pinned cell absorbs the strip to its left (the row's padding for the
+   first, the column gap for the rest) with a negative margin plus
+   equal padding, so the stuck boxes tile flush from the container edge
+   and no scrolled content leaks through between them. Content position
+   is unchanged (margin and padding cancel). */
+fv-table-pinned [role="row"] > :nth-child(1) {
+  left: calc(var(--fv-table-pinned-left-1, 0px) - var(--fv-table-px, 0px));
+  margin-left: calc(-1 * var(--fv-table-px, 0px));
+  padding-left: var(--fv-table-px, 0px);
+}
+fv-table-pinned[data-pin="2"] [role="row"] > :nth-child(2),
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(2) {
+  left: calc(var(--fv-table-pinned-left-2, 0px) - var(--fv-table-gap, 0px));
+  margin-left: calc(-1 * var(--fv-table-gap, 0px));
+  padding-left: var(--fv-table-gap, 0px);
+}
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(3) {
+  left: calc(var(--fv-table-pinned-left-3, 0px) - var(--fv-table-gap, 0px));
+  margin-left: calc(-1 * var(--fv-table-gap, 0px));
+  padding-left: var(--fv-table-gap, 0px);
+}
+
+fv-table-pinned[data-pin="1"] [role="row"] > :nth-child(-n + 1),
+fv-table-pinned[data-pin="2"] [role="row"] > :nth-child(-n + 2),
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(-n + 3) {
+  position: sticky;
+  z-index: 1;
+  background: inherit;
+}
+
+/* Divider on the last stuck column so the boundary with the scrolling
+   columns reads (borders over shadows). */
+fv-table-pinned[data-pin="1"] [role="row"] > :nth-child(1),
+fv-table-pinned[data-pin="2"] [role="row"] > :nth-child(2),
+fv-table-pinned[data-pin="3"] [role="row"] > :nth-child(3) {
+  border-right: 1px solid var(--border);
+}
+
+/* Stuck header cells sit above stuck body cells (and both above the
+   scrolling plain cells); with data-sticky-head they are the corner
+   cells stuck on both axes. */
+fv-table-pinned[data-pin="1"] [role="row"] > [role="columnheader"]:nth-child(-n + 1),
+fv-table-pinned[data-pin="2"] [role="row"] > [role="columnheader"]:nth-child(-n + 2),
+fv-table-pinned[data-pin="3"] [role="row"] > [role="columnheader"]:nth-child(-n + 3) {
+  z-index: 3;
+}
+
+/* Zone accent rails live as an inset shadow on the row's left edge —
+   which scrolls away behind the stuck first cell. Re-paint the rail on
+   the stuck cell so it stays visible; at scroll 0 the two coincide. */
+fv-table-pinned [role="row"][data-zone] > :nth-child(1) {
+  box-shadow: inset 3px 0 0 0 var(--fv-table-zone-color, var(--accent));
+}
