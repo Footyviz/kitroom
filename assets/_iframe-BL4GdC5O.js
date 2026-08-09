@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-DnJy8xQt.js";var t,n=e((()=>{t=(e,t=800)=>{let n=document.createElement(`iframe`);return n.src=`/kitroom/design_specs/preview/${e}`,n.title=e,n.loading=`lazy`,n.style.cssText=[`display: block`,`width: 100%`,`height: ${t}px`,`border: 1px solid var(--border)`,`border-radius: var(--radius-md)`,`background: var(--bg)`].join(`;`),n}}));export{t as n,n as t};

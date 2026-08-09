@@ -1,0 +1,151 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .statlist{
+    display:flex;flex-direction:column;
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    width:460px;
+    background:var(--bg-elev);
+  }
+  .statrow{
+    display:grid;
+    grid-template-columns: 64px 1fr 140px 1fr 64px;
+    align-items:center;
+    column-gap:16px;
+    padding:12px 18px;
+    border-bottom:1px solid var(--border-subtle);
+  }
+  .statrow:last-child{border-bottom:0}
+
+  .statrow .v{
+    font-family:var(--font-mono);
+    font-size:14px;
+    font-variant-numeric:tabular-nums;
+    color:var(--fg);
+    font-weight:500;
+  }
+  .statrow .v.home{text-align:right}
+  .statrow .v.away{text-align:left}
+
+  .statrow .label{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--fg-muted);
+    text-align:center;
+    font-weight:500;
+  }
+
+  .statrow .bar{
+    display:flex;align-items:center;gap:0;
+    height:6px;
+    border-radius:999px;
+    overflow:hidden;
+    background:var(--neutral-100);
+  }
+  .statrow .bar > span{display:block;height:100%}
+  .statrow .bar .h{background:var(--neutral-1000)}
+  .statrow .bar .a{background:var(--neutral-300)}
+
+  .statrow.featured{background:var(--neutral-50)}
+  .statrow.featured .v{font-size:15px;font-weight:600}
+  .statrow.featured .label{color:var(--fg)}
+
+  /* Column headers — same grid as rows, team sits over its value column */
+  .stathead{
+    display:grid;
+    grid-template-columns: 64px 1fr 140px 1fr 64px;
+    align-items:center;
+    column-gap:16px;
+    padding:12px 18px;
+    background:#FAFAF7;
+    border-bottom:1px solid #DDDAD0;
+  }
+  .stathead .team{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--font-sans);font-size:11px;font-weight:600;
+    color:#1A1A18;
+    white-space:nowrap;
+  }
+  .stathead .team.home{grid-column:1;justify-self:end}
+  .stathead .team.away{grid-column:5;justify-self:start}
+  .stathead .crest{
+    width:20px;height:20px;border-radius:6px;
+    background:#F4F3EE;border:1px solid #DDDAD0;
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#1A1A18;
+  }
+  .stathead .vs{grid-column:3;text-align:center;font-family:var(--font-mono);font-size:10px;color:#8F8B7E;text-transform:uppercase;letter-spacing:.1em}
+
+  .card-wrap{display:flex;flex-direction:column;gap:16px}
+</style>
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui,-apple-system,Segoe UI,sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Stat row · dense comparison</div>
+
+  <div class="card-wrap">
+    <div class="statlist">
+      <div class="stathead">
+        <div class="team home"><span class="crest"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l7 2v6c0 4.5-3 8-7 10-4-2-7-5.5-7-10V5z"/></svg></span>Arsenal</div>
+        <div class="vs">vs</div>
+        <div class="team away">Chelsea<span class="crest"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l8 9-8 9-8-9z"/></svg></span></div>
+      </div>
+
+      <div class="statrow">
+        <div class="v home">58%</div>
+        <div class="bar"><span class="h" style="width:58%"></span><span class="a" style="width:42%"></span></div>
+        <div class="label">Possession</div>
+        <div class="bar"><span class="h" style="width:58%"></span><span class="a" style="width:42%"></span></div>
+        <div class="v away">42%</div>
+      </div>
+
+      <div class="statrow">
+        <div class="v home">12</div>
+        <div class="bar"><span class="h" style="width:63%"></span><span class="a" style="width:37%"></span></div>
+        <div class="label">Shots</div>
+        <div class="bar"><span class="h" style="width:63%"></span><span class="a" style="width:37%"></span></div>
+        <div class="v away">7</div>
+      </div>
+
+      <div class="statrow featured">
+        <div class="v home" style="color:var(--accent-dim)">1.84</div>
+        <div class="bar"><span class="h" style="width:67%;background:var(--accent-dim)"></span><span class="a" style="width:33%"></span></div>
+        <div class="label">xG</div>
+        <div class="bar"><span class="h" style="width:67%;background:var(--accent-dim)"></span><span class="a" style="width:33%"></span></div>
+        <div class="v away">0.92</div>
+      </div>
+
+      <div class="statrow">
+        <div class="v home">486</div>
+        <div class="bar"><span class="h" style="width:61%"></span><span class="a" style="width:39%"></span></div>
+        <div class="label">Passes</div>
+        <div class="bar"><span class="h" style="width:61%"></span><span class="a" style="width:39%"></span></div>
+        <div class="v away">312</div>
+      </div>
+
+      <div class="statrow">
+        <div class="v home">3</div>
+        <div class="bar"><span class="h" style="width:43%"></span><span class="a" style="width:57%"></span></div>
+        <div class="label">Corners</div>
+        <div class="bar"><span class="h" style="width:43%"></span><span class="a" style="width:57%"></span></div>
+        <div class="v away">4</div>
+      </div>
+
+      <div class="statrow">
+        <div class="v home">8</div>
+        <div class="bar"><span class="h" style="width:47%"></span><span class="a" style="width:53%"></span></div>
+        <div class="label">Fouls</div>
+        <div class="bar"><span class="h" style="width:47%"></span><span class="a" style="width:53%"></span></div>
+        <div class="v away">9</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:var(--fg-muted);margin-top:4px;max-width:620px">5-column grid with fixed-width value columns (64px) and a fixed label column (140px) so every row aligns to the same gridlines regardless of content. Mirrored proportion bars read inward toward the label. Featured row uses the straw accent to flag the hero metric.</div>
+</div>
+</body></html>

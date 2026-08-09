@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FVT — Tabular data spec · FootyViz</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<link rel="stylesheet" href="_table.css" />
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--neutral-100);
+    font-family: var(--font-sans);
+    color: var(--fg);
+  }
+
+  /* Document layout */
+  .doc {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 64px 32px 96px;
+  }
+
+  .doc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin: 0 0 12px;
+  }
+  .doc-title {
+    margin: 0 0 12px;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+  .doc-lede {
+    margin: 0 0 48px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--fg-muted);
+    max-width: 60ch;
+    text-wrap: pretty;
+  }
+
+  .doc h2 {
+    margin: 64px 0 8px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--fg-subtle);
+    font-weight: 600;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+  .doc h3 {
+    margin: 32px 0 12px;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+  .doc p {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-muted);
+    max-width: 65ch;
+    text-wrap: pretty;
+  }
+  .doc p strong { color: var(--fg); font-weight: 600; }
+  .doc code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--bg-alt);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--fg);
+    border: 1px solid var(--border-subtle);
+  }
+  .doc pre {
+    margin: 16px 0 24px;
+    padding: 16px 18px;
+    background: #0F0F0E;
+    color: var(--neutral-200);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .doc pre .k { color: #E8BE56; }   /* keyword */
+  .doc pre .s { color: #B5D396; }   /* string */
+  .doc pre .c { color: #6E6D63; }   /* comment */
+  .doc pre .p { color: #9C7A1E; }   /* property */
+
+  /* Demo frame */
+  .demo {
+    margin: 24px 0 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .demo-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--fg-subtle);
+    text-transform: uppercase;
+  }
+  .demo-bar-right { display: inline-flex; gap: 6px; align-items: center; }
+  .demo-resize-grip {
+    width: 16px; height: 8px;
+    background: linear-gradient(transparent 1px, currentColor 1px 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 7px, currentColor 7px 8px);
+    opacity: 0.4;
+  }
+  .demo-resize {
+    resize: horizontal;
+    overflow: auto;
+    min-width: 280px;
+    max-width: 100%;
+    background: var(--bg);
+  }
+
+  /* Pattern grid — quick visual TOC */
+  .patterns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 24px 0 0;
+  }
+  .pattern-card {
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 14px;
+    background: var(--bg-elev);
+  }
+  .pattern-card h4 {
+    margin: 0 0 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .pattern-card p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  /* Page nav */
+  .pagenav {
+    position: fixed;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: inline-flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(8,8,7,0.08), 0 1px 3px rgba(8,8,7,0.05);
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+  }
+  .pagenav a {
+    padding: 6px 14px;
+    border-radius: 999px;
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .pagenav a:hover { color: var(--fg); }
+  .pagenav a.active {
+    background: var(--fg);
+    color: var(--bg);
+  }
+</style>
+</head>
+<body>
+
+<main class="doc">
+
+  <p class="doc-eyebrow">FVT · v1.0 · Tabular data system</p>
+  <h1 class="doc-title">A primitive for ranked, scored, sequenced data.</h1>
+  <p class="doc-lede">
+    Extracted from the league table and tournament bracket, <code>fvt</code> is one
+    grid-based row primitive that handles standings, fixtures, brackets, leaderboards,
+    head-to-heads, and stats grids — all responsive by container size, not viewport.
+  </p>
+
+  <!-- ─── Anatomy ─────────────────────────────────────────── -->
+  <h2>1. Anatomy</h2>
+  <p>
+    Every FVT table is a stack of grid rows sharing a single column template
+    declared as <code>--fvt-cols</code>. Rows are <code>display: grid</code>, never
+    inline-flow — so spacing, alignment, and direct-manipulation edits stay clean.
+  </p>
+
+  <div class="patterns">
+    <div class="pattern-card"><h4>Index</h4><p>Numeric position with optional trend arrow. Mono, tabular nums.</p></div>
+    <div class="pattern-card"><h4>Identity</h4><p>Glyph + name + secondary code. Truncates with ellipsis. Code hides &lt; 480px.</p></div>
+    <div class="pattern-card"><h4>Numeric</h4><p>Right-aligned, mono, tabular. Sign-aware colour via <code>data-sign</code>.</p></div>
+    <div class="pattern-card"><h4>Series</h4><p>Inline pip sequence (form, recent results, sparkline). Truncates to 3 on narrow.</p></div>
+    <div class="pattern-card"><h4>Status</h4><p>Pill badge with state tokens: live, success, warn, upcoming.</p></div>
+    <div class="pattern-card"><h4>Heat</h4><p>Cell tinted by intensity (0–100). Use for stats grids.</p></div>
+  </div>
+
+  <!-- ─── Grid ─────────────────────────────────────────────── -->
+  <h2>2. The grid contract</h2>
+  <p>
+    The component sets the column template; the primitive doesn't care. Tracks that
+    should hide on narrow widths collapse to <code>0px</code> rather than
+    <code>display: none</code>, so cell-to-track alignment stays correct.
+  </p>
+<pre><span class="c">/* Component declares its template via custom property */</span>
+.lt-row, .lt-head { <span class="p">--fvt-cols</span>: 28px 1fr 32px 0px 0px 44px 22px; }
+
+<span class="c">/* Reveal hidden tracks at container width &gt;= 480px */</span>
+@container fvt (min-width: 480px) {
+  .lt-row, .lt-head { <span class="p">--fvt-cols</span>: 36px 1fr 52px 48px 48px 84px 40px; }
+}</pre>
+  <p>
+    Container queries — not viewport queries. A table inside a 320px sidebar stays
+    compact even on a 4K display.
+  </p>
+
+  <!-- ─── Responsiveness ──────────────────────────────────── -->
+  <h2>3. Responsive behaviour</h2>
+  <p>
+    Drag the resize handle at the bottom-right of the demo to see the table reflow.
+    Three things happen as it shrinks: the secondary code line under each name
+    disappears, the form sequence drops to its last 3 entries, and at the smallest
+    sizes optional tracks (Goals For, Goals Against) collapse entirely.
+  </p>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span>Demo · standings</span>
+      <span class="demo-bar-right"><span class="demo-resize-grip"></span> Drag corner to resize</span>
+    </div>
+    <div class="demo-resize" style="width: 720px;">
+      <div id="demo-standings"></div>
+    </div>
+  </div>
+
+  <!-- ─── Match card variant ──────────────────────────────── -->
+  <h2>4. Variant — match card</h2>
+  <p>
+    A match card is a 2-row FVT table with a meta strip below. Same row primitive,
+    different column template (no index, no series — just identity + score). Result
+    state (<code>data-result</code>) drives the win / loss / TBD treatment.
+  </p>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span>Demo · match cards</span>
+      <span class="demo-bar-right"><span class="demo-resize-grip"></span> Resize</span>
+    </div>
+    <div class="demo-resize" style="width: 720px;">
+      <div id="demo-matches"></div>
+    </div>
+  </div>
+
+  <!-- ─── Heatmap variant ─────────────────────────────────── -->
+  <h2>5. Variant — stat grid</h2>
+  <p>
+    For dense stats (head-to-heads, season heatmaps), the same row + identity cell
+    pair with heat cells whose intensity is set via <code>--fvt-heat</code>. The grid
+    template just changes track count.
+  </p>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span>Demo · h2h heatmap</span>
+      <span class="demo-bar-right"><span class="demo-resize-grip"></span> Resize</span>
+    </div>
+    <div class="demo-resize" style="width: 720px;">
+      <div id="demo-heat"></div>
+    </div>
+  </div>
+
+  <!-- ─── States ──────────────────────────────────────────── -->
+  <h2>6. State system</h2>
+  <p>
+    State lives on data attributes, never on classes — easier to change at runtime,
+    impossible to "forget" to remove. Five primitives cover everything observed
+    across the league + bracket:
+  </p>
+
+<pre><span class="c">/* Row-level */</span>
+&lt;a class="fvt-row" <span class="p">data-zone</span>=<span class="s">"champions"</span>&gt;       <span class="c">// Left-edge accent rail</span>
+&lt;a class="fvt-row" <span class="p">data-highlight</span>&gt;              <span class="c">// Favourite / featured</span>
+&lt;a class="fvt-row" <span class="p">data-result</span>=<span class="s">"win|loss|tbd"</span>&gt;   <span class="c">// Match outcome</span>
+
+<span class="c">/* Cell-level */</span>
+&lt;span class="fvt-cell-num" <span class="p">data-sign</span>=<span class="s">"pos|neg|zero"</span>&gt;
+&lt;span class="fvt-pip" <span class="p">data-state</span>=<span class="s">"pos|warn|neg|neutral"</span>&gt;
+&lt;span class="fvt-badge" <span class="p">data-state</span>=<span class="s">"live|success|warn|upcoming"</span>&gt;</pre>
+
+  <!-- ─── Density ─────────────────────────────────────────── -->
+  <h2>7. Density</h2>
+  <p>
+    Three density modes — <code>compact</code>, default, <code>comfortable</code> —
+    swap row height and horizontal padding via custom properties. Same column
+    template, same row code. Stack the table in a sidebar widget or as a full
+    desktop dashboard.
+  </p>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span>Demo · density · compact / default / comfortable</span>
+    </div>
+    <div id="demo-density"></div>
+  </div>
+
+  <!-- ─── Cheatsheet ──────────────────────────────────────── -->
+  <h2>8. Cheatsheet</h2>
+<pre><span class="c">// Container declares column template, density, theme</span>
+&lt;section class="fvt fvt-density-compact" data-theme="light"
+         style="<span class="p">--fvt-cols</span>: 28px 1fr 32px 44px 22px"&gt;
+
+  &lt;header class="fvt-header"&gt;
+    &lt;p class="fvt-eyebrow"&gt;…&lt;/p&gt;
+    &lt;h1 class="fvt-title"&gt;…&lt;/h1&gt;
+  &lt;/header&gt;
+
+  &lt;div class="fvt-table"&gt;
+    &lt;div class="fvt-head"&gt;…&lt;/div&gt;
+    &lt;div class="fvt-rows"&gt;
+      &lt;a class="fvt-row" data-zone="champions"&gt;
+        &lt;span class="fvt-cell-index"&gt;1&lt;/span&gt;
+        &lt;span class="fvt-cell-id"&gt;
+          &lt;span class="fvt-glyph"&gt;HAR&lt;/span&gt;
+          &lt;span class="fvt-id-text"&gt;
+            &lt;span class="fvt-id-name"&gt;Harringate Utd&lt;/span&gt;
+            &lt;span class="fvt-id-sub"&gt;HAR · home&lt;/span&gt;
+          &lt;/span&gt;
+        &lt;/span&gt;
+        &lt;span class="fvt-cell-num" data-sign="pos"&gt;+18&lt;/span&gt;
+        &lt;span class="fvt-cell-series"&gt;
+          &lt;span class="fvt-pip" data-state="pos"&gt;&lt;/span&gt;…
+        &lt;/span&gt;
+        &lt;span class="fvt-cell-num fvt-cell-num-strong"&gt;42&lt;/span&gt;
+      &lt;/a&gt;
+      …
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+
+  <p style="margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--fg-subtle); letter-spacing: 0.06em;">
+    FOOTYVIZ DESIGN SYSTEM · TABULAR PRIMITIVE · DERIVED FROM LEAGUE-TABLE.CSS + BRACKET.CSS
+  </p>
+</main>
+
+<!-- ─── Demo render scripts (vanilla, no React needed) ───── -->
+<script>
+(function(){
+  // Tiny crest renderer — just a 3-letter monogram for the demo
+  function glyph(code){ return '<span class="fvt-glyph">'+code+'</span>'; }
+
+  // ──── Standings demo ────────────────────────────────────
+  const standings = [
+    { pos: 1, code: 'HAR', name: 'Harringate Utd',  trend:  0, gd: '+18', gf: 32, ga: 14, form: ['pos','pos','warn','pos','pos'], pts: 42, zone: 'champions' },
+    { pos: 2, code: 'WST', name: 'Westport City',    trend:  1, gd: '+14', gf: 28, ga: 14, form: ['pos','warn','pos','pos','neg'], pts: 38, zone: 'champions' },
+    { pos: 3, code: 'ASH', name: 'Ashbourne FC',     trend: -1, gd: '+11', gf: 26, ga: 15, form: ['pos','pos','neg','warn','pos'], pts: 35, zone: 'champions' },
+    { pos: 4, code: 'BRC', name: 'Brackenmoor R.',   trend:  2, gd:  '+7', gf: 22, ga: 15, form: ['pos','pos','pos','warn','pos'], pts: 32, zone: 'continental', highlight: true },
+    { pos: 5, code: 'KIN', name: 'Kingsmere AFC',    trend:  0, gd:  '+5', gf: 20, ga: 15, form: ['warn','pos','neg','pos','pos'], pts: 30, zone: 'continental' },
+    { pos: 6, code: 'ELM', name: 'Elmsworth FC',     trend: -2, gd:  '+4', gf: 19, ga: 15, form: ['pos','neg','warn','pos','warn'], pts: 28, zone: 'continental' },
+    { pos: 7, code: 'MCT', name: 'Moorcroft Town',   trend:  1, gd:  '+1', gf: 17, ga: 16, form: ['warn','pos','warn','pos','neg'], pts: 24, zone: 'conference' },
+    { pos: 8, code: 'SVR', name: 'Severnford City',  trend:  0, gd:  '0',  gf: 16, ga: 16, form: ['pos','warn','warn','neg','pos'], pts: 22, zone: 'conference' },
+    { pos: 9, code: 'OAK', name: 'Oakvale City',     trend: -1, gd:  '-2', gf: 15, ga: 17, form: ['neg','pos','warn','warn','neg'], pts: 19 },
+    { pos: 10, code: 'DUN',name: 'Dunwich Athletic', trend:  0, gd:  '-3', gf: 14, ga: 17, form: ['warn','neg','pos','neg','warn'], pts: 17 },
+    { pos: 22, code: 'PNH',name: 'Penhaven Town',    trend: -1, gd:  '-9', gf: 11, ga: 20, form: ['neg','warn','neg','neg','pos'], pts:  8, zone: 'relegation' },
+    { pos: 23, code: 'EAS',name: 'Easthaven Rgrs',   trend:  0, gd: '-12', gf:  9, ga: 21, form: ['neg','neg','pos','neg','warn'], pts:  6, zone: 'relegation' },
+    { pos: 24, code: 'FLM',name: 'Flemingate AFC',   trend:  0, gd: '-18', gf:  6, ga: 24, form: ['neg','neg','neg','warn','neg'], pts:  3, zone: 'relegation' },
+  ];
+
+  function trendArrow(t) {
+    if (t > 0) return '<span class="fvt-trend fvt-trend-up">▲'+t+'</span>';
+    if (t < 0) return '<span class="fvt-trend fvt-trend-down">▼'+(-t)+'</span>';
+    return '<span class="fvt-trend fvt-trend-flat">·</span>';
+  }
+  function pips(arr) {
+    return '<span class="fvt-series">' + arr.map(s => '<span class="fvt-pip" data-state="'+s+'"></span>').join('') + '</span>';
+  }
+  function gdSign(s) {
+    if (s.startsWith('+')) return 'pos';
+    if (s.startsWith('-')) return 'neg';
+    return 'zero';
+  }
+
+  function renderStandings(target) {
+    const cols = '28px minmax(0,1fr) 36px 0px 0px 56px 24px';
+    const colsWide = '36px minmax(0,1fr) 52px 48px 48px 88px 40px';
+    const rows = standings.map(t => `
+      <a class="fvt-row" href="#" ${t.zone ? `data-zone="${t.zone}"` : ''} ${t.highlight ? 'data-highlight' : ''}>
+        <span class="fvt-cell-index">${t.pos}${trendArrow(t.trend)}</span>
+        <span class="fvt-cell-id">
+          ${glyph(t.code)}
+          <span class="fvt-id-text">
+            <span class="fvt-id-name">${t.name}</span>
+            <span class="fvt-id-sub">${t.code} · home</span>
+          </span>
+        </span>
+        <span class="fvt-cell-num" data-sign="${gdSign(t.gd)}">${t.gd}</span>
+        <span class="fvt-cell-num">${t.gf}</span>
+        <span class="fvt-cell-num">${t.ga}</span>
+        <span class="fvt-cell-series">${pips(t.form)}</span>
+        <span class="fvt-cell-num fvt-cell-num-strong">${t.pts}</span>
+      </a>`).join('');
+
+    target.innerHTML = `
+      <section class="fvt" data-theme="light" style="--fvt-cols: ${cols};">
+        <style>
+          #${target.id} .fvt-row, #${target.id} .fvt-head { --fvt-cols: ${cols}; }
+          @container fvt (min-width: 480px) {
+            #${target.id} .fvt-row, #${target.id} .fvt-head { --fvt-cols: ${colsWide}; }
+          }
+        </style>
+        <header class="fvt-header">
+          <div class="fvt-header-top">
+            <div>
+              <span class="fvt-eyebrow">Albion Premiership</span>
+              <span class="fvt-eyebrow-dot">·</span>
+              <span class="fvt-eyebrow fvt-eyebrow-mute">Matchday 18 of 38</span>
+            </div>
+            <span class="fvt-meta"><span style="width:6px;height:6px;border-radius:999px;background:var(--negative);display:inline-block"></span> Live · 21:43</span>
+          </div>
+          <h1 class="fvt-title">Standings <span class="fvt-title-suffix">25/26</span></h1>
+        </header>
+        <div class="fvt-table">
+          <div class="fvt-head">
+            <span></span>
+            <span class="fvt-head-pri">Team</span>
+            <span class="fvt-head-num">GD</span>
+            <span class="fvt-head-num">GF</span>
+            <span class="fvt-head-num">GA</span>
+            <span>Form</span>
+            <span class="fvt-head-num fvt-head-pri">Pts</span>
+          </div>
+          <div class="fvt-rows">${rows}</div>
+        </div>
+      </section>`;
+  }
+
+  // ──── Match cards demo ─────────────────────────────────
+  function renderMatches(target) {
+    const cols = '24px minmax(0,1fr) 28px';
+    const matches = [
+      { home:'HAR', hName:'Harringate Utd', away:'BRC', aName:'Brackenmoor R.', sH:2, sA:1, status:'complete', meta:'Jul 04 · Westport · AET' },
+      { home:'ASH', hName:'Ashbourne FC',   away:'WST', aName:'Westport City',  sH:0, sA:1, status:'complete', meta:'Jul 04 · Westport' },
+      { home:'ELM', hName:'Elmsworth FC',   away:'KIN', aName:'Kingsmere AFC',  sH:null, sA:null, status:'upcoming', meta:'Jul 05 · 17:00 · Westport' },
+      { home:'MCT', hName:'Moorcroft Town', away:'SVR', aName:'Severnford City', sH:null, sA:null, status:'upcoming', meta:'Jul 05 · 20:00 · Westport' },
+    ];
+    const grid = matches.map(m => {
+      const winnerH = m.sH !== null && m.sH > m.sA;
+      const winnerA = m.sA !== null && m.sA > m.sH;
+      const isUp = m.status === 'upcoming';
+      return `
+        <article class="fvt-match" data-status="${m.status}">
+          <a class="fvt-row" href="#" data-result="${winnerH ? 'win' : (m.sH !== null ? 'loss' : 'tbd')}" style="--fvt-cols: ${cols}; height: 38px;">
+            <span class="fvt-cell-index">H</span>
+            <span class="fvt-cell-id">${glyph(m.home)}<span class="fvt-id-text"><span class="fvt-id-name">${m.hName}</span></span></span>
+            <span class="fvt-cell-num fvt-cell-num-strong">${m.sH ?? '—'}</span>
+          </a>
+          <a class="fvt-row" href="#" data-result="${winnerA ? 'win' : (m.sA !== null ? 'loss' : 'tbd')}" style="--fvt-cols: ${cols}; height: 38px;">
+            <span class="fvt-cell-index">A</span>
+            <span class="fvt-cell-id">${glyph(m.away)}<span class="fvt-id-text"><span class="fvt-id-name">${m.aName}</span></span></span>
+            <span class="fvt-cell-num fvt-cell-num-strong">${m.sA ?? '—'}</span>
+          </a>
+          <div class="fvt-match-meta">
+            ${isUp ? '<span class="fvt-badge" data-state="upcoming">Upcoming</span>' : '<span class="fvt-badge" data-state="success">FT</span>'}
+            <span class="dot">·</span>${m.meta}
+          </div>
+        </article>`;
+    }).join('');
+    target.innerHTML = `
+      <section class="fvt" data-theme="light" style="padding: 16px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:10px;">${grid}</div>
+        <style>
+          @container fvt (min-width: 540px) {
+            #${target.id} > section > div { grid-template-columns: 1fr 1fr !important; }
+          }
+        </style>
+      </section>`;
+  }
+
+  // ──── Heatmap demo ─────────────────────────────────────
+  function renderHeat(target) {
+    const teams = ['HAR','WST','ASH','BRC','KIN','ELM'];
+    const labels = {HAR:'Harringate', WST:'Westport', ASH:'Ashbourne', BRC:'Brackenmoor', KIN:'Kingsmere', ELM:'Elmsworth'};
+    // synthetic xG-per-90 head-to-head matrix
+    const data = [
+      [null, 2.1, 1.6, 2.4, 1.9, 2.0],
+      [1.4, null, 1.8, 2.0, 1.5, 1.7],
+      [1.2, 1.5, null, 1.7, 1.3, 1.4],
+      [1.0, 1.4, 1.6, null, 1.2, 1.5],
+      [1.1, 1.3, 1.5, 1.7, null, 1.4],
+      [0.9, 1.2, 1.3, 1.5, 1.1, null],
+    ];
+    const cols = '90px repeat(6, minmax(0, 1fr))';
+    const head = '<div class="fvt-head" style="--fvt-cols: '+cols+'"><span></span>' +
+      teams.map(t => '<span class="fvt-head-num">'+t+'</span>').join('') + '</div>';
+    const rows = teams.map((t,i) => {
+      const cells = data[i].map((v,j) => {
+        if (v === null) return '<span class="fvt-cell-heat" style="background:var(--bg-alt);color:var(--fg-subtle)">—</span>';
+        const intensity = Math.round(((v - 0.8) / 1.7) * 100);
+        return '<span class="fvt-cell-heat" style="--fvt-heat: '+intensity+'" data-intensity="'+(intensity > 60 ? 'high' : 'mid')+'">'+v.toFixed(1)+'</span>';
+      }).join('');
+      return '<div class="fvt-row" style="--fvt-cols: '+cols+'; height: 36px; cursor: default;">' +
+        '<span class="fvt-cell-id"><span class="fvt-id-text"><span class="fvt-id-name" style="font-size:12px">'+labels[t]+'</span></span></span>' +
+        cells + '</div>';
+    }).join('');
+    target.innerHTML = `
+      <section class="fvt" data-theme="light" style="padding: 14px;">
+        <header class="fvt-header" style="margin-bottom: 12px;">
+          <span class="fvt-eyebrow">xG · per 90 · season-to-date</span>
+          <h1 class="fvt-title" style="font-size: 20px;">Head-to-head heatmap</h1>
+        </header>
+        <div class="fvt-table">${head}<div class="fvt-rows">${rows}</div></div>
+      </section>`;
+  }
+
+  // ──── Density demo ─────────────────────────────────────
+  function renderDensity(target) {
+    const cols = '28px minmax(0,1fr) 36px 24px';
+    const sample = standings.slice(0, 4);
+    function table(density, label) {
+      const rows = sample.map(t => `
+        <a class="fvt-row" href="#" ${t.zone ? `data-zone="${t.zone}"` : ''} style="--fvt-cols: ${cols};">
+          <span class="fvt-cell-index">${t.pos}</span>
+          <span class="fvt-cell-id">${glyph(t.code)}<span class="fvt-id-text"><span class="fvt-id-name">${t.name}</span></span></span>
+          <span class="fvt-cell-num" data-sign="${gdSign(t.gd)}">${t.gd}</span>
+          <span class="fvt-cell-num fvt-cell-num-strong">${t.pts}</span>
+        </a>`).join('');
+      return `
+        <section class="fvt ${density}" data-theme="light" style="padding: 14px; gap: 10px;">
+          <span class="fvt-eyebrow fvt-eyebrow-mute" style="font-size:9px;">${label}</span>
+          <div class="fvt-table"><div class="fvt-rows">${rows}</div></div>
+        </section>`;
+    }
+    target.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr;gap:1px;background:var(--border);">
+        ${table('fvt-density-compact', 'Compact · 38px rows')}
+        ${table('', 'Default · 52px rows')}
+        ${table('fvt-density-comfortable', 'Comfortable · 60px rows')}
+      </div>`;
+  }
+
+  // ──── Mount ────────────────────────────────────────────
+  renderStandings(document.getElementById('demo-standings'));
+  renderMatches(document.getElementById('demo-matches'));
+  renderHeat(document.getElementById('demo-heat'));
+  renderDensity(document.getElementById('demo-density'));
+})();
+</script>
+
+</body>
+</html>

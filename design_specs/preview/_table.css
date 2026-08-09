@@ -1,0 +1,691 @@
+/* ============================================================
+   FootyViz — Tabular Data System
+   A generic, responsive table primitive extracted from the
+   League Table + Tournament Bracket components.
+   ============================================================ */
+
+/* ─── Container ──────────────────────────────────────────── */
+.fvt {
+  font-family: var(--font-sans);
+  color: var(--fg);
+  background: var(--bg);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 18px 28px;
+  box-sizing: border-box;
+  container-type: inline-size;
+  container-name: fvt;
+}
+
+.fvt[data-theme="dark"] {
+  --bg: var(--neutral-1000);
+  --bg-alt: var(--neutral-900);
+  --bg-elev: #141412;
+  --fg: var(--neutral-50);
+  --fg-muted: var(--neutral-300);
+  --fg-subtle: var(--neutral-400);
+  --border: #26251F;
+  --border-subtle: #1A1A16;
+  --border-strong: #3A3930;
+}
+
+/* ─── Header (eyebrow / title / meta) ────────────────────── */
+.fvt-header { display: flex; flex-direction: column; gap: 8px; }
+.fvt-header-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.fvt-eyebrow {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg);
+}
+.fvt-eyebrow-mute { color: var(--fg-subtle); font-weight: 500; }
+.fvt-eyebrow-dot { color: var(--fg-subtle); margin: 0 4px; }
+.fvt-meta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
+}
+.fvt-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.fvt-title-suffix {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--fg-subtle);
+  letter-spacing: -0.01em;
+  margin-left: 4px;
+}
+.fvt-sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+/* ─── Table shell ────────────────────────────────────────── */
+.fvt-table {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Style variants — opt-in via class on .fvt-table.
+   default        → minimal: outer border + faint row dividers
+   fvt-outline    → full grid: heavier outer + every row divided + header sep
+   fvt-borderless → no outer border, no row dividers (use for nested tables)
+   fvt-inset      → flush with surrounding card (no border, no radius)            */
+.fvt-table.fvt-outline {
+  border-color: var(--border-strong, var(--border));
+}
+.fvt-table.fvt-outline .fvt-row {
+  border-bottom: 1px solid var(--border);
+}
+.fvt-table.fvt-outline .fvt-head {
+  border-bottom: 2px solid var(--border-strong, var(--border));
+  background: var(--bg-alt);
+}
+.fvt-table.fvt-borderless {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.fvt-table.fvt-borderless .fvt-row { border-bottom: 0; }
+.fvt-table.fvt-borderless .fvt-head { background: transparent; }
+.fvt-table.fvt-inset {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+/* Optional zebra striping — opt-in via class on .fvt-rows */
+.fvt-rows.fvt-zebra .fvt-row:nth-child(even) {
+  background: color-mix(in oklch, var(--bg-alt) 50%, transparent);
+}
+
+/* Sticky header — opt-in. Requires the table to live in a scrollable parent. */
+.fvt-table.fvt-sticky-head .fvt-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* The grid template is data-driven via custom property.
+   Component declares --fvt-cols (e.g. "28px 1fr 32px 44px 22px"). */
+.fvt-row, .fvt-head {
+  display: grid;
+  grid-template-columns: var(--fvt-cols);
+  align-items: center;
+  column-gap: var(--fvt-gap, 10px);
+  padding: 0 var(--fvt-px, 14px);
+  position: relative;
+}
+
+/* Header row */
+.fvt-head {
+  height: 32px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+.fvt-head-num   { text-align: right; }
+.fvt-head-start { text-align: left; }
+.fvt-head-center{ text-align: center; }
+.fvt-head-pri   { color: var(--fg); }
+
+/* Sortable header cell — implements the 3-state contract:
+   data-sort="none"  → muted, hover reveals indicator
+   data-sort="asc"   → strong, ▲ arrow
+   data-sort="desc"  → strong, ▼ arrow
+   The cell itself is a <button>; reset native button styles. */
+.fvt-head-sort {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  user-select: none;
+}
+.fvt-head-num.fvt-head-sort,
+.fvt-head-sort.fvt-head-num { justify-content: flex-end; }
+.fvt-head-sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.fvt-head-sort::after {
+  content: "";
+  width: 0; height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.fvt-head-sort:hover { color: var(--fg); }
+.fvt-head-sort:hover::after { opacity: 0.4; border-bottom: 4px solid currentColor; }
+.fvt-head-sort[data-sort="asc"]  { color: var(--fg); }
+.fvt-head-sort[data-sort="asc"]::after  { opacity: 1; border-bottom: 4px solid currentColor; }
+.fvt-head-sort[data-sort="desc"] { color: var(--fg); }
+.fvt-head-sort[data-sort="desc"]::after { opacity: 1; border-top: 4px solid currentColor; border-bottom: 0; }
+
+/* Body row */
+.fvt-rows { display: flex; flex-direction: column; }
+
+.fvt-row {
+  height: var(--fvt-row-h, 52px);
+  border-bottom: 1px solid var(--border-subtle);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 160ms ease-out;
+}
+.fvt-row:last-child { border-bottom: 0; }
+.fvt-row:hover { background: var(--bg-alt); }
+.fvt-row:active { background: var(--bg-inset, var(--bg-alt)); }
+.fvt-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* Selected row — checkbox-driven multi-select state */
+.fvt-row[data-selected] {
+  background: var(--accent-soft, color-mix(in oklch, var(--accent) 12%, var(--bg)));
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.fvt-row[data-selected]:hover {
+  background: color-mix(in oklch, var(--accent) 18%, var(--bg));
+}
+
+/* Disabled row — non-interactive, muted */
+.fvt-row[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Expanded row — when an inline detail panel is open below */
+.fvt-row[data-expanded] {
+  background: var(--bg-alt);
+  border-bottom-color: var(--border);
+}
+.fvt-row-detail {
+  padding: 14px var(--fvt-px, 14px) 18px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 12.5px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+
+/* Loading skeleton row */
+.fvt-row-skeleton {
+  pointer-events: none;
+}
+.fvt-row-skeleton .fvt-skeleton-bar {
+  display: block;
+  height: 10px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-alt) 0%,
+    color-mix(in oklch, var(--border) 50%, var(--bg-alt)) 50%,
+    var(--bg-alt) 100%
+  );
+  background-size: 200% 100%;
+  animation: fvt-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes fvt-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Density modifiers */
+.fvt-density-compact { --fvt-row-h: 38px; --fvt-px: 10px; }
+.fvt-density-comfortable { --fvt-row-h: 60px; --fvt-px: 18px; }
+
+/* ─── Footer / totals row ────────────────────────────────── */
+.fvt-foot {
+  display: grid;
+  grid-template-columns: var(--fvt-cols);
+  align-items: center;
+  column-gap: var(--fvt-gap, 10px);
+  padding: 0 var(--fvt-px, 14px);
+  height: var(--fvt-row-h, 52px);
+  border-top: 2px solid var(--border-strong, var(--border));
+  background: var(--bg-alt);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.fvt-foot-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  font-weight: 600;
+}
+
+/* ─── Empty state ────────────────────────────────────────── */
+.fvt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 6px;
+  text-align: center;
+}
+.fvt-empty-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+}
+.fvt-empty-detail {
+  font-size: 12px;
+  color: var(--fg-muted);
+  max-width: 32ch;
+  line-height: 1.5;
+}
+
+/* ─── Caption ────────────────────────────────────────────── */
+.fvt-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 var(--fvt-px, 14px) 8px;
+}
+.fvt-caption-text {
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+/* ─── Pagination ─────────────────────────────────────────── */
+.fvt-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elev);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+.fvt-pagination-range {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.fvt-pagination-range strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.fvt-pagination-nav { display: inline-flex; gap: 4px; }
+.fvt-pagination-btn {
+  all: unset;
+  width: 24px; height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+}
+.fvt-pagination-btn:hover { color: var(--fg); background: var(--bg-alt); }
+.fvt-pagination-btn:disabled,
+.fvt-pagination-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Cell types ─────────────────────────────────────────── */
+
+/* Index cell — position number, often with trend arrow */
+.fvt-cell-index {
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+.fvt-trend {
+  display: inline-flex; align-items: center;
+  font-family: var(--font-mono);
+  font-size: 9px; line-height: 1;
+}
+.fvt-trend-up   { color: var(--positive); }
+.fvt-trend-down { color: var(--negative); }
+.fvt-trend-flat { color: var(--fg-subtle); }
+
+/* Identity cell — crest + name + secondary code */
+.fvt-cell-id {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+}
+.fvt-glyph {
+  width: 24px; height: 24px;
+  border-radius: 5px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-subtle);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.fvt-id-text {
+  display: flex; flex-direction: column;
+  min-width: 0; gap: 0;
+}
+.fvt-id-name {
+  font-weight: 500;
+  font-size: 12.5px;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.fvt-id-sub {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--fg-subtle);
+  text-transform: uppercase;
+  display: none;
+}
+@container fvt (min-width: 480px) {
+  .fvt-id-sub { display: block; }
+  .fvt-id-text { gap: 2px; }
+}
+
+/* When a grid track collapses to 0 (mobile-first column hiding pattern),
+   the cell content must hide too so it doesn't leak into adjacent columns.
+   Identity + series cells set their own min-width / overflow rules above. */
+.fvt-row > *,
+.fvt-head > * {
+  min-width: 0;
+}
+.fvt-row > *:not(.fvt-cell-id):not(.fvt-cell-series),
+.fvt-head > * {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+/* Numeric cells */
+.fvt-cell-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+.fvt-cell-num[data-sign="pos"]  { color: var(--fg); }
+.fvt-cell-num[data-sign="neg"]  { color: var(--fg-muted); }
+.fvt-cell-num[data-sign="zero"] { color: var(--fg-subtle); }
+
+.fvt-cell-num-strong {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Plain text cell — for descriptions, notes, free-form strings */
+.fvt-cell-text {
+  font-size: 12.5px;
+  color: var(--fg);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.fvt-cell-text[data-emphasis="muted"]    { color: var(--fg-muted); }
+.fvt-cell-text[data-emphasis="subtle"]   { color: var(--fg-subtle); }
+.fvt-cell-text[data-emphasis="strong"]   { color: var(--fg); font-weight: 600; }
+
+/* Secondary line under a primary value (e.g. timestamp under a name) */
+.fvt-cell-meta {
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+}
+.fvt-cell-meta-pri  { font-size: 12.5px; color: var(--fg); font-weight: 500; line-height: 1.1; }
+.fvt-cell-meta-sub  {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--fg-subtle);
+  text-transform: uppercase;
+}
+
+/* Checkbox cell — for selection columns */
+.fvt-cell-check {
+  display: flex; align-items: center; justify-content: center;
+}
+.fvt-cell-check input[type="checkbox"] {
+  width: 14px; height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+/* Actions cell — trailing icon-button group */
+.fvt-cell-actions {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.fvt-row:hover .fvt-cell-actions,
+.fvt-row:focus-within .fvt-cell-actions { opacity: 1; }
+.fvt-icon-btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 4px;
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.fvt-icon-btn:hover { color: var(--fg); background: var(--bg); }
+.fvt-icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* kbd / chip — inline code-like marker (e.g. season tag, key shortcut) */
+.fvt-kbd {
+  display: inline-flex; align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+
+/* Series cell — small horizontal sequence (form, sparkline placeholders) */
+.fvt-cell-series { display: flex; justify-content: flex-start; }
+.fvt-series { display: inline-flex; align-items: center; gap: 4px; }
+.fvt-series > *:nth-child(n+4) { display: none; }
+@container fvt (min-width: 480px) {
+  .fvt-series > *:nth-child(n+4) { display: inline-flex; }
+}
+
+.fvt-pip {
+  width: 8px; height: 8px; border-radius: 999px;
+  background: var(--border-strong);
+  display: inline-block;
+}
+.fvt-pip[data-state="pos"]     { background: var(--positive); }
+.fvt-pip[data-state="warn"]    { background: var(--warning); }
+.fvt-pip[data-state="neg"]     { background: var(--negative); }
+.fvt-pip[data-state="neutral"] { background: var(--border-strong); }
+
+/* Status cell — badge */
+.fvt-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--bg-alt);
+  color: var(--fg-muted);
+  border: 1px solid var(--border-subtle);
+}
+.fvt-badge[data-state="live"]    { color: var(--negative); border-color: rgba(224,64,43,0.3); }
+.fvt-badge[data-state="success"] { color: var(--positive); border-color: rgba(60,140,80,0.3); }
+.fvt-badge[data-state="warn"]    { color: var(--warning); border-color: rgba(180,140,40,0.3); }
+.fvt-badge[data-state="upcoming"]{ color: var(--fg-subtle); border-style: dashed; }
+
+/* Zone accent — flush left edge, set via data-zone on row */
+.fvt-row[data-zone] {
+  box-shadow: inset 3px 0 0 var(--fvt-zone, transparent);
+}
+.fvt-row[data-zone="champions"]   { --fvt-zone: var(--accent); }
+.fvt-row[data-zone="continental"] { --fvt-zone: var(--info, #3b6cb8); }
+.fvt-row[data-zone="conference"]  { --fvt-zone: var(--positive); }
+.fvt-row[data-zone="relegation"]  { --fvt-zone: var(--negative); }
+
+/* Highlight row (favourite / featured) */
+.fvt-row[data-highlight] {
+  background: linear-gradient(90deg, var(--accent-soft), transparent 55%);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.fvt-row[data-highlight] .fvt-id-name { font-weight: 600; }
+.fvt-row[data-highlight]:hover {
+  background: linear-gradient(90deg, var(--accent-soft), var(--bg-alt) 70%);
+}
+
+/* Winner / loser pair (used in match-card mode) */
+.fvt-row[data-result="win"]  { box-shadow: inset 2px 0 0 var(--accent); }
+.fvt-row[data-result="win"] .fvt-id-name { font-weight: 600; }
+.fvt-row[data-result="loss"] .fvt-id-name { color: var(--fg-muted); }
+.fvt-row[data-result="loss"] .fvt-glyph { opacity: 0.6; }
+.fvt-row[data-result="loss"] .fvt-cell-num { color: var(--fg-muted); font-weight: 400; }
+.fvt-row[data-result="tbd"]  { font-style: normal; color: var(--fg-subtle); border-style: dashed; }
+
+/* ─── Legend ─────────────────────────────────────────────── */
+.fvt-legend {
+  list-style: none;
+  margin: 0; padding: 14px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+@container fvt (min-width: 720px) {
+  .fvt-legend { grid-template-columns: repeat(4, 1fr); }
+}
+.fvt-legend-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+.fvt-legend-swatch {
+  width: 8px; height: 8px; border-radius: 1px;
+}
+.fvt-legend-label {
+  font-size: 11px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fvt-legend-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-subtle);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Footer ─────────────────────────────────────────────── */
+.fvt-footer {
+  display: flex; justify-content: flex-end;
+}
+.fvt-footnote {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--fg-subtle);
+}
+
+/* ─── Match-card variant ─────────────────────────────────── */
+/* A 2-row "table" representing a single match, used in the bracket. */
+.fvt-match {
+  display: flex; flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.fvt-match[data-status="upcoming"] {
+  background: var(--bg);
+  border-style: dashed;
+  border-color: var(--border-subtle);
+}
+.fvt-match-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 5px;
+  padding: 6px 12px 8px;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--fg-subtle);
+  letter-spacing: 0.04em;
+}
+.fvt-match[data-status="upcoming"] .fvt-match-meta { background: transparent; }
+.fvt-match-meta .dot { opacity: 0.5; }
+
+/* ─── Heatmap variant ───────────────────────────────────── */
+.fvt-cell-heat {
+  display: flex; align-items: center; justify-content: center;
+  height: 28px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  background: color-mix(in oklch, var(--accent) calc(var(--fvt-heat, 0) * 1%), var(--bg-elev));
+}
+.fvt-cell-heat[data-intensity="0"] { color: var(--fg-subtle); }
+.fvt-cell-heat[data-intensity="high"] { color: var(--accent-ink); }

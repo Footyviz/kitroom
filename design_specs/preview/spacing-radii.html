@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+<style>
+  .wash{background:#F4F3EE;border-radius:14px;padding:36px;border:1px solid #EBE9E2}
+  .r-item{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .r-box{width:84px;height:84px;background:#1A1A18;display:flex;align-items:flex-end;justify-content:flex-start;padding:8px;box-sizing:border-box}
+  .r-box .inner{width:12px;height:12px;background:#FFFFFF;border-radius:inherit;opacity:.35}
+  .r-lbl{font-family:var(--font-mono);font-size:10px;color:#1A1A18;letter-spacing:.02em;text-align:center}
+  .r-val{font-family:var(--font-mono);font-size:9px;color:#8F8B7E;letter-spacing:.02em;text-align:center}
+</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Radius scale · 4px base</div>
+
+  <div class="wash">
+    <div style="display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap;justify-content:flex-start">
+      <div class="r-item"><div class="r-box" style="border-radius:2px"><div class="inner"></div></div><div><div class="r-lbl">xs</div><div class="r-val">2px</div></div></div>
+      <div class="r-item"><div class="r-box" style="border-radius:4px"><div class="inner"></div></div><div><div class="r-lbl">sm</div><div class="r-val">4px</div></div></div>
+      <div class="r-item"><div class="r-box" style="border-radius:8px"><div class="inner"></div></div><div><div class="r-lbl">md</div><div class="r-val">8px</div></div></div>
+      <div class="r-item"><div class="r-box" style="border-radius:14px"><div class="inner"></div></div><div><div class="r-lbl">lg</div><div class="r-val">14px</div></div></div>
+      <div class="r-item"><div class="r-box" style="border-radius:20px"><div class="inner"></div></div><div><div class="r-lbl">xl</div><div class="r-val">20px</div></div></div>
+      <div class="r-item"><div class="r-box" style="border-radius:999px"><div class="inner"></div></div><div><div class="r-lbl">full</div><div class="r-val">999px</div></div></div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:#6B6860;max-width:620px;margin-top:4px">Six-step radius scale on ink tiles so the corner profile reads clearly. sm/md are defaults for buttons and small controls; lg for cards; xl for modal and large surfaces; full for pills and avatars.</div>
+</div>
+</body></html>

@@ -1,0 +1,3 @@
+/* Deprecated alias. Kept for backwards compatibility with existing previews and kits.
+   The canonical file is `tokens.css` — update consumers to import that instead. */
+@import url('tokens.css');

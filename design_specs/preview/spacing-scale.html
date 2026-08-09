@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui, -apple-system, Segoe UI, sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+<style>
+  .wash{background:#F4F3EE;border-radius:14px;padding:24px 32px;border:1px solid #EBE9E2}
+  .sp-row{display:grid;grid-template-columns:60px 68px 1fr;align-items:center;gap:14px;padding:7px 0;border-bottom:1px dashed #DDDAD0}
+  .sp-row:last-child{border-bottom:0}
+  .sp-tok{font-family:var(--font-mono);font-size:11px;color:#1A1A18;font-weight:500;letter-spacing:.02em}
+  .sp-val{font-family:var(--font-mono);font-size:10px;color:#8F8B7E;letter-spacing:.02em}
+  .sp-bar{height:10px;background:#1A1A18;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:14px">
+  <div class="meta">Spacing · 4px base unit</div>
+
+  <div class="wash">
+    <div class="sp-row"><div class="sp-tok">1</div><div class="sp-val">4px</div><div class="sp-bar" style="width:4px"></div></div>
+    <div class="sp-row"><div class="sp-tok">2</div><div class="sp-val">8px</div><div class="sp-bar" style="width:8px"></div></div>
+    <div class="sp-row"><div class="sp-tok">3</div><div class="sp-val">12px</div><div class="sp-bar" style="width:12px"></div></div>
+    <div class="sp-row"><div class="sp-tok">4</div><div class="sp-val">16px</div><div class="sp-bar" style="width:16px"></div></div>
+    <div class="sp-row"><div class="sp-tok">6</div><div class="sp-val">24px</div><div class="sp-bar" style="width:24px"></div></div>
+    <div class="sp-row"><div class="sp-tok">8</div><div class="sp-val">32px</div><div class="sp-bar" style="width:32px"></div></div>
+    <div class="sp-row"><div class="sp-tok">12</div><div class="sp-val">48px</div><div class="sp-bar" style="width:48px"></div></div>
+    <div class="sp-row"><div class="sp-tok">16</div><div class="sp-val">64px</div><div class="sp-bar" style="width:64px"></div></div>
+    <div class="sp-row"><div class="sp-tok">24</div><div class="sp-val">96px</div><div class="sp-bar" style="width:96px"></div></div>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:#6B6860;max-width:620px;margin-top:4px">Nine-step spacing scale on a 4px base. Tokens 1–4 for tight internal spacing, 6–8 for component padding, 12–24 for section rhythm on pages.</div>
+</div>
+</body></html>

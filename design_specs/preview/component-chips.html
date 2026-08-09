@@ -1,0 +1,131 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  /* CHIP — dimensional, stadium-token vibe */
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:6px 12px;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:12px;font-weight:500;line-height:1;
+    background:#FFFFFF;
+    color:#1A1A18;
+    border:1px solid #DDDAD0;
+    box-shadow:0 1px 0 rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.6);
+    white-space:nowrap;
+  }
+  .chip .dot{width:6px;height:6px;border-radius:999px;background:currentColor;flex-shrink:0}
+  .chip.mono{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em}
+  .chip.strong{background:#080807;color:#FAFAF7;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.15), 0 1px 0 rgba(0,0,0,.15)}
+  .chip.accent{background:#E8FF5A;color:#1A1F00;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 1px 0 rgba(10,19,0,.18)}
+  .chip.info{background:#EAF3FB;color:#1D4F7A;border-color:#CFE1F1}
+  .chip.warn{background:#FFF6DD;color:#6E4E00;border-color:#F5E3A8}
+  .chip.neg{background:#FDE8E4;color:#84190D;border-color:#F5C8BF}
+  .chip.pos{background:#E5F3DD;color:#2F5214;border-color:#C9E4B8}
+  .chip.outline{background:transparent;box-shadow:none;border:1px dashed #C4C0B3;color:#6B6860}
+  .chip.closable{padding-right:4px}
+  .chip.closable .x{width:16px;height:16px;border-radius:999px;background:rgba(0,0,0,.08);display:inline-flex;align-items:center;justify-content:center;margin-left:2px;cursor:pointer}
+  .chip.closable.strong .x,.chip.closable.accent .x{background:rgba(255,255,255,.18)}
+
+  /* LIVE — with pulsing ring */
+  .chip.live{background:#E8FF5A;color:#1A1F00;border-color:transparent;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:5px 11px 5px 9px}
+  .chip.live::before{content:"";width:7px;height:7px;background:#1A1F00;border-radius:999px;position:relative;box-shadow:0 0 0 0 rgba(10,19,0,.55);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,19,0,.5)}70%{box-shadow:0 0 0 6px rgba(10,19,0,0)}100%{box-shadow:0 0 0 0 rgba(10,19,0,0)}}
+
+  /* Stat / count chip — split token */
+  .chip.count{padding:0 0 0 10px;gap:0;overflow:hidden}
+  .chip.count > span:first-child{padding-right:8px}
+  .chip.count > b{display:inline-flex;align-items:center;padding:6px 10px;background:#080807;color:#FAFAF7;font-family:var(--font-mono);font-weight:500;font-size:11px}
+  .chip.count.accent > b{background:#1A1F00;color:#E8FF5A}
+
+  /* Team chip with crest */
+  .chip.team{padding:3px 11px 3px 3px}
+  .chip.team .crest{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-size:9px;font-weight:600}
+
+  /* Stackable poker chips */
+  .stack{position:relative;display:inline-flex;align-items:center;height:28px}
+  .stack .chip{position:relative;margin-left:-10px;box-shadow:0 1px 0 rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.6), -1px 0 0 rgba(255,255,255,.8)}
+  .stack .chip:first-child{margin-left:0}
+
+  .row-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-subtle);min-width:92px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .divider{height:1px;background:#EBE9E2;margin:2px 0}
+</style>
+<style id="__fb-sans">html,body,div,span,p,h1,h2,h3,h4,h5,h6,section,article,header,footer,main,aside,nav,button,input,textarea,select,label,li,td,th,a{font-family:system-ui,-apple-system,Segoe UI,sans-serif}.mono,code,pre,kbd,samp,[class*="mono"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+</head>
+<body>
+<div class="card" style="padding:24px 28px;gap:12px">
+  <div class="meta">Chips · badges · tokens</div>
+
+  <!-- Status -->
+  <div class="row">
+    <span class="row-label">Status</span>
+    <span class="chip live">LIVE</span>
+    <span class="chip mono">73'</span>
+    <span class="chip mono">HT</span>
+    <span class="chip mono strong">FT</span>
+    <span class="chip info">VAR review</span>
+    <span class="chip warn"><span class="dot" style="background:#B88700"></span>Delay</span>
+    <span class="chip pos"><span class="dot" style="background:#3B7217"></span>Goal</span>
+    <span class="chip neg">Red card</span>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Filter / closable -->
+  <div class="row">
+    <span class="row-label">Filter</span>
+    <span class="chip closable accent">Premier League <span class="x"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.4"><path d="M1 1l6 6M7 1L1 7"/></svg></span></span>
+    <span class="chip closable">Arsenal <span class="x"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.4"><path d="M1 1l6 6M7 1L1 7"/></svg></span></span>
+    <span class="chip closable">Saka <span class="x"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.4"><path d="M1 1l6 6M7 1L1 7"/></svg></span></span>
+    <span class="chip outline">+ Add filter</span>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Teams with crest discs -->
+  <div class="row">
+    <span class="row-label">Teams</span>
+    <span class="chip team"><span class="crest" style="background:#DB0007">ARS</span>Arsenal</span>
+    <span class="chip team"><span class="crest" style="background:#034694">CHE</span>Chelsea</span>
+    <span class="chip team"><span class="crest" style="background:#6CABDD;color:#1C2C5B">MCI</span>Man City</span>
+    <span class="chip team"><span class="crest" style="background:#DA291C">LIV</span>Liverpool</span>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Count / split chips -->
+  <div class="row">
+    <span class="row-label">Counts</span>
+    <span class="chip count"><span>Followers</span><b>12.4k</b></span>
+    <span class="chip count accent"><span>Trending</span><b>+218%</b></span>
+    <span class="chip count"><span>xG</span><b>1.84</b></span>
+    <span class="chip count"><span>Possession</span><b>63%</b></span>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Stacked poker-chip tokens -->
+  <div class="row">
+    <span class="row-label">Stack</span>
+    <div class="stack">
+      <span class="chip team"><span class="crest" style="background:#DB0007">ARS</span></span>
+      <span class="chip team"><span class="crest" style="background:#034694">CHE</span></span>
+      <span class="chip team"><span class="crest" style="background:#6CABDD;color:#1C2C5B">MCI</span></span>
+      <span class="chip team"><span class="crest" style="background:#DA291C">LIV</span></span>
+      <span class="chip strong mono" style="margin-left:-10px;padding:6px 10px">+9</span>
+    </div>
+    <span class="chip mono" style="background:#F4F3EE">4 of 13 followed</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- On dark -->
+  <div style="background:#080807;border-radius:14px;padding:14px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="row-label" style="color:#8F8B7E">On dark</span>
+    <span class="chip live">LIVE</span>
+    <span class="chip mono" style="background:#1E1E1C;color:#FAFAF7;border-color:#302F2B;box-shadow:none">73'</span>
+    <span class="chip" style="background:#1E1E1C;color:#FAFAF7;border-color:#302F2B;box-shadow:none">VAR</span>
+    <span class="chip accent">Trending</span>
+    <span class="chip team" style="background:#1E1E1C;color:#FAFAF7;border-color:#302F2B;box-shadow:none"><span class="crest" style="background:#DB0007">ARS</span>Arsenal</span>
+  </div>
+
+  <div class="mono" style="font-size:10px;color:var(--fg-muted);margin-top:4px;max-width:620px">Chips sit on the surface with a 1px border + inner highlight so they read as physical tokens, not flat labels. Pill radius 999, 28px height nominal. Mono type for numeric/code chips; sans for editorial.</div>
+</div>
+</body></html>
